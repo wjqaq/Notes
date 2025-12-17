@@ -20,3 +20,8 @@ print(torch.cuda.is_available())
 - 将数据预处理、模型调用、结果后处理三部分组成的流水线；
 - 使我们能够直接输入文本直接获得答案。
 ![](assets/Transformers/file-20251217205431373.png)
+
+```python
+from transformers.pipelines import SUPPORTED_TASKS as sp_tasks
+print(sp_tasks.items())
+```
