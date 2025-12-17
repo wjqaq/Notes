@@ -11,6 +11,7 @@ date: 2025-12-17T16:36:00
 - Optimum：优化加速库，支持多种后端，如Onnxruntime、Openvino等；
 - Gradio：可视化部署库，几行代码可快速实现基于Web交互的算法演示系统。
 
-```
-
+```python
+import torch
+print(torch.cuda.is_available())
 ```
