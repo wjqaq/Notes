@@ -25,3 +25,5 @@ print(torch.cuda.is_available())
 from transformers.pipelines import SUPPORTED_TASKS as sp_tasks
 print(sp_tasks.items())
 ```
+
+arg
