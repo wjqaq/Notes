@@ -15,3 +15,8 @@ date: 2025-12-17T16:36:00
 import torch
 print(torch.cuda.is_available())
 ```
+
+##### Pipeline 
+- 将数据预处理、模型调用、结果后处理三部分组成的流水线；
+- 使我们能够直接输入文本直接获得答案。
+![](assets/Transformers/file-20251217205431373.png)
