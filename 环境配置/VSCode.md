@@ -13,6 +13,8 @@
 	2. 下载完成后解压到指定目录，如F:\Environments\mingw64
 	3. 配置环境变量，如图所示。![](assets/VSCode/file-20260112145619521.png)
 	4. 完成后打开cmd，输入gcc --version，看到如图所示即配置成功。![](assets/VSCode/file-20260112145740110.png)
-	5. C++插件，在插件市场搜索C++，安装，如图所示。![](assets/VSCode/file-20260112143425077.png)
-	6. 
+	5. C++插件，在插件市场搜索C++，安装，如图所示。![](assets/VSCode/file-20260112150228221.png)
+	6. 创建一个文件夹，并进行添加测试文件和代码。![](assets/VSCode/file-20260112150310061.png)
+	7. 点击运行。![](assets/VSCode/file-20260112150335442.png)
+	8. 选择编译器。![](assets/VSCode/file-20260112150405734.png)
 
