@@ -39,4 +39,5 @@
 		- 点击OK即可。![](assets/VSCode/file-20260112155112715.png)
 		- 选择自定义安装。![](assets/VSCode/file-20260112155707840.png)
 		- 在cuda中可以看到Visual Studio Integration，要安装这个选项需要确认自己是否有VisualStudio以及在VisualStudio中安装了这个Integration插件，如果没有就取消勾选，如果有就选。这里演示如何安装这个插件。来到VS中如图所示。![](assets/VSCode/file-20260112160016544.png)
-		- 安装完成后需要退出VS生效。
+		- 安装完成后需要退出VS生效。如果碰到无法安装成功的情况，这是因为Unity3D.x64为安装，这里需要安装一下Unity即可。![](assets/VSCode/file-20260112160659729.png)
+		- 
