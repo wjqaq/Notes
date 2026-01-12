@@ -32,3 +32,4 @@
 		如图所示。![](assets/VSCode/file-20260112153410909.png)
 	5. 打开cmd，输入conda env list，检验命令是否有效，如图。![](assets/VSCode/file-20260112153528116.png)
 
+4. 安装配置深度学习环境
