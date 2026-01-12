@@ -8,7 +8,7 @@
 #### 安装插件
 1. 汉化，在插件市场搜索Chinese，安装，如图所示，重启后生效。![](assets/VSCode/file-20260112142642696.png)
 
-2.   C++配置及插件
+2. C++配置及插件
 	1. -先下载mingw，配置C++基础环境，点击下载链接进行下载[Releases · niXman/mingw-builds-binaries](https://github.com/niXman/mingw-builds-binaries/releases)如图所示。![](assets/VSCode/file-20260112145042772.png)
 	2. 下载完成后解压到指定目录，如F:\Environments\mingw64
 	3. 配置环境变量，如图所示。![](assets/VSCode/file-20260112145619521.png)
@@ -19,3 +19,5 @@
 	8. 选择编译器。![](assets/VSCode/file-20260112150917701.png)
 	9. 在终端可以看见输出结果。![](assets/VSCode/file-20260112151013802.png)
 
+3. Anaconda环境
+	1. 
