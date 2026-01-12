@@ -8,5 +8,7 @@
 #### 安装插件
 1. 汉化，在插件市场搜索Chinese，安装，如图所示，重启后生效。
 ![](assets/VSCode/file-20260112142642696.png)
-2. C++插件，在插件市场搜索C++，安装，如图所示。
+2.   
+	- 先下载mingw，配置C++基础环境，点击下载链接进行下载[MinGW-w64 - for 32 and 64 bit Windows download | SourceForge.net](https://sourceforge.net/projects/mingw-w64/)如图所示。
+	- C++插件，在插件市场搜索C++，安装，如图所示。
 ![](assets/VSCode/file-20260112143425077.png)
