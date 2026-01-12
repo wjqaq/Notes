@@ -35,4 +35,5 @@
 4. 安装配置深度学习环境
 	1. cuda环境，使用nvidia-smi命令查看cuda版本。![](assets/VSCode/file-20260112154459544.png)
 	2. 下载链接，[CUDA Toolkit 12.4 Update 1 Downloads | NVIDIA 开发者](https://developer.nvidia.cn/cuda-downloads?target_os=Windows&target_arch=x86_64&target_version=11&target_type=exe_local)如图。![](assets/VSCode/file-20260112154749040.png)
-	3. 
+	3. 点击安装，第一个界面可以不用管，因为是零时文件安装完成后就删除了。![](assets/VSCode/file-20260112155112715.png)
+	4. 
