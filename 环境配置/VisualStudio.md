@@ -4,3 +4,4 @@
 ![](assets/VisualStudio/file-20260112140150883.png)
 3. 调整安装路径，根据自己具体情况调整
 ![](assets/VisualStudio/file-20260112140358357.png)
+4. 等待安装完成即可。
