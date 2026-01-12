@@ -20,4 +20,5 @@
 	9. 在终端可以看见输出结果。![](assets/VSCode/file-20260112151013802.png)
 
 3. Anaconda环境
-	1. 
+	1. 点击下载链接，登录账号，完成后下载。[Download Success | Anaconda](https://www.anaconda.com/download/success)
+	2. 
