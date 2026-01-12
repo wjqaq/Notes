@@ -41,4 +41,8 @@
 		- 在cuda中可以看到Visual Studio Integration，要安装这个选项需要确认自己是否有VisualStudio以及在VisualStudio中安装了这个Integration插件，如果没有就取消勾选，如果有就选。这里演示如何安装这个插件。来到VS中如图所示。![](assets/VSCode/file-20260112160016544.png)
 		- 安装完成后需要退出VS生效。如果碰到无法安装成功的情况，这是因为Unity3D.x64为安装，这里需要安装一下VS中的游戏开发组件即可（可能需要魔法）。![](assets/VSCode/file-20260112160659729.png)
 		- 点击下一步。![](assets/VSCode/file-20260112161400238.png)
-		- 选择安装路径
+		- 选择安装路径，然后安装即可。![](assets/VSCode/file-20260112161538648.png)
+		- 打开cmd输入nvcc -V![](assets/VSCode/file-20260112161642145.png)
+	4. 来到Pytorch官网，找到适合自己版本的Pytorch对应的命令。[Get Started](https://pytorch.org/get-started/locally/?_gl=1*16bqkdm*_up*MQ..*_ga*MTg0NjcyNTAxLjE3NjgyMDU4Nzc.*_ga_469Y0W5V62*czE3NjgyMDU4NzUkbzEkZzAkdDE3NjgyMDU4NzUkajYwJGwwJGgw)，如图。![](assets/VSCode/file-20260112161841833.png)
+	5. 在对应的conda虚拟环境内输入该命令，下载即可。![](assets/VSCode/file-20260112161921961.png)
+	6. 
