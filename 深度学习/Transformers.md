@@ -26,6 +26,8 @@ from transformers.pipelines import SUPPORTED_TASKS as sp_tasks
 print(sp_tasks.items())
 ```
 
-测试一下
+测试一下你好你好
 
-![](assets/Transformers/file-20260112133232404.png)
+你好你好
+
+
