@@ -45,4 +45,4 @@
 		- 打开cmd输入nvcc -V![](assets/VSCode/file-20260112161642145.png)
 	4. 来到Pytorch官网，找到适合自己版本的Pytorch对应的命令。[Get Started](https://pytorch.org/get-started/locally/?_gl=1*16bqkdm*_up*MQ..*_ga*MTg0NjcyNTAxLjE3NjgyMDU4Nzc.*_ga_469Y0W5V62*czE3NjgyMDU4NzUkbzEkZzAkdDE3NjgyMDU4NzUkajYwJGwwJGgw)，如图。![](assets/VSCode/file-20260112161841833.png)
 	5. 在对应的conda虚拟环境内输入该命令，下载即可。![](assets/VSCode/file-20260112161921961.png)
-	6. 
+	6. 运行测试文件，![](assets/VSCode/file-20260112163712833.png)
