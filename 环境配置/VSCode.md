@@ -23,4 +23,11 @@
 	1. 点击下载链接，登录账号，完成后下载。[Download Success | Anaconda](https://www.anaconda.com/download/success)
 	2. 点击安装，选择安装地址。![](assets/VSCode/file-20260112152130766.png)
 	3. 勾选安装选项。![](assets/VSCode/file-20260112152243265.png)
-	4. 完成后配置环境变量。
+	4. 完成后配置环境变量。将如下路径添加进环境变量中。
+		- F:\Software\Anaconda3
+		- F:\Software\Anaconda3\Scripts
+		- F:\Software\Anaconda3\Library\bin
+		- F:\Software\Anaconda3\Library\mingw-w64\bin
+		- F:\Software\Anaconda3\Library\usr\bin
+		如图所示。![](assets/VSCode/file-20260112153410909.png)
+	5. 打开cmd，输入conda env list，检验命令是否有效，如图。![](assets/VSCode/file-20260112153528116.png)
