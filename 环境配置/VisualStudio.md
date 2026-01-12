@@ -1,0 +1,3 @@
+1. 点击下载链接，下载安装程序[Visual Studio: 适用于软件开发的 IDE 和代码编辑器](https://visualstudio.microsoft.com/zh-hans/)
+![](assets/VisualStudio/file-20260112135932935.png)
+2. 
