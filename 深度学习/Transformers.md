@@ -26,8 +26,6 @@ from transformers.pipelines import SUPPORTED_TASKS as sp_tasks
 print(sp_tasks.items())
 ```
 
-测试一下你好你好
 
-你好你好
 
 
