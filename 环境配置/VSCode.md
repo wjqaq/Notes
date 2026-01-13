@@ -48,4 +48,4 @@
 	6. 运行测试文件。![](assets/VSCode/file-20260112163712833.png)
 	7. 结果如下。![](assets/VSCode/file-20260112163830040.png)
 	8. 安装Transformers库，使用命令pip install transformers即可。
-5. 与WSL联动，输入命令
+5. 与WSL联动，输入命令 code --install-extension ms-vscode-remote.remote-wsl安装即可
