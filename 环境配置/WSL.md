@@ -1,3 +1,4 @@
+使用命令wsl --list --online查看可用发行版本；![](assets/WSL/file-20260113100212015.png)
 方法1：
 - 使用命令wsl --install -d Ubuntu-24.04 --name Ubuntu-24.04 --location "E:\WSL\Ubuntu"，即可下载指定的发行版本到指定的路径下。
 这个方法是便利但是可能会下载很慢（需要魔法）。
