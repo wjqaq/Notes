@@ -50,4 +50,5 @@
 	8. 安装Transformers库，使用命令pip install transformers即可。
 5. 与WSL联动，输入命令 code --install-extension ms-vscode-remote.remote-wsl安装即可
 	- cuda环境[CUDA Toolkit 13.1 Update 1 Downloads | NVIDIA Developer]按照图中命令在wsl里输入命令即可(https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=WSL-Ubuntu&target_version=2.0&target_type=deb_local)![](assets/VSCode/file-20260113102503659.png)
+	- 安装好后使用命令#echo -e '\nexport PATH=/usr/local/cuda-13.1/bin:$PATH\nexport LD_LIBRARY_PATH=/usr/local/cuda-13.1/lib64:$LD_LIBRARY_PATH\nexport CUDA_HOME=/usr/local/cuda-13.1' >> ~/.bashrc，然后重启终端即可。
 	- 
