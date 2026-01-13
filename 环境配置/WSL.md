@@ -5,3 +5,4 @@
 方法2：
 - 先下载一个WSL发行版本，然后通过命令wsl --import Ubuntu2204 "E:\WSL\Ubuntu2204" "Ubuntu2204.tar.gz" --version 2，安装到指定路径下。
 验证：
+wsl --list --verbose![](assets/WSL/file-20260113100724588.png)
