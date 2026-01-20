@@ -1,4 +1,4 @@
-⌚2012:NeurIPS 
+⌚2012:NeurIPS [@krizhevskyImageNetClassificationDeep2017]
 ##### 👀研究背景
 此前图像分类多依赖人工设计特征（如 SIFT、HOG）+ 传统分类器，对大规模复杂数据集（如 ImageNet，含 120 万张图片、1000 个类别）的识别精度极低；浅层神经网络则存在梯度消失、训练效率低等问题，AlexNet 通过**深度 CNN + 工程优化**首次实现了大规模图像的高精度分类。
 ##### 💡核心方法
