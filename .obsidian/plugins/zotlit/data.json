@@ -3,7 +3,7 @@
   "citationEditorSuggester": true,
   "showCitekeyInSuggester": false,
   "literatureNoteFolder": "LiteratureNotes",
-  "enableServer": true,
+  "enableServer": false,
   "serverPort": 9091,
   "serverHostname": "127.0.0.1",
   "template": {
@@ -19,7 +19,7 @@
     false,
     false
   ],
-  "autoRefresh": true,
+  "autoRefresh": false,
   "zoteroDataDir": "E:\\Paper",
   "citationLibrary": 1,
   "imgExcerptImport": "copy",
