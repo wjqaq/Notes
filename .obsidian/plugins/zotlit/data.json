@@ -2,7 +2,7 @@
   "logLevel": "INFO",
   "citationEditorSuggester": true,
   "showCitekeyInSuggester": false,
-  "literatureNoteFolder": "LiteratureNotes",
+  "literatureNoteFolder": "深度学习",
   "enableServer": true,
   "serverPort": 9091,
   "serverHostname": "127.0.0.1",
