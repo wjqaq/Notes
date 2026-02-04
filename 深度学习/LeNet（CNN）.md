@@ -12,4 +12,6 @@
 - 空间位移神经网络（SDNN）：通过复制卷积网络扫描输入，避免显式字符分割。
 
 给定输入图像 $n_h、n_w$，卷积核$k_h、k_w$，padding$p_h、p_w$以及步幅$s_h、s_w$其输出形状为：
-$\lfloor (n_h - k_h + p_h + s_h) / s_h  \rfloor \times \lfloor (n_w - k_w + p_w + s_w) / s_w  \rfloor$
+$$
+\lfloor (n_h - k_h + p_h + s_h) / s_h  \rfloor \times \lfloor (n_w - k_w + p_w + s_w) / s_w  \rfloor
+$$
