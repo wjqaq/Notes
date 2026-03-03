@@ -31,6 +31,157 @@
 | 22     | Dropout | p=0.5                            | 4096      | 0              | 0           |
 | 23     | 全连接层    | in=4096, out=1000                | 1000      | 4,097,000      | 4,096,000   |
 | **总计** | -       | -                                | -         | **62,378,344** | **1.135B**  |
+```python
+import torch
+
+from torch import nn
+
+from torchinfo import summary as torchinfo_summary
+
+  
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+test_input_size = (1,3,224,224)
+
+class AlexNet(nn.Module):
+
+    def __init__(self, num_classes=1000):
+
+        super(AlexNet,self).__init__()
+
+        self.c1 = nn.Sequential(
+
+            nn.Conv2d(in_channels=3,out_channels=96,kernel_size=11,stride=4,padding=2),
+
+            nn.ReLU(inplace=True),
+
+            nn.LocalResponseNorm(size=5,alpha=1e-4,beta=0.75,k=2),
+
+            nn.MaxPool2d(kernel_size=3,stride=2)
+
+        )
+
+        self.c2 = nn.Sequential(
+
+            nn.Conv2d(in_channels=96,out_channels=256,kernel_size=5,padding=2),
+
+            nn.ReLU(inplace=True),
+
+            nn.LocalResponseNorm(size=5,alpha=1e-4,beta=0.75,k=2),
+
+            nn.MaxPool2d(kernel_size=3,stride=2)
+
+        )
+
+        self.c3 = nn.Sequential(
+
+            nn.Conv2d(in_channels=256,out_channels=384,kernel_size=3,stride=1,padding=1),
+
+            nn.ReLU(inplace=True),
+
+        )
+
+        self.c4 = nn.Sequential(
+
+            nn.Conv2d(in_channels=384,out_channels=384,kernel_size=3,stride=1,padding=1),
+
+            nn.ReLU(inplace=True),
+
+        )
+
+        self.c5 = nn.Sequential(
+
+            nn.Conv2d(in_channels=384,out_channels=256,kernel_size=3,stride=1,padding=1),
+
+            nn.ReLU(inplace=True),
+
+            nn.MaxPool2d(kernel_size=3,stride=2)
+
+        )
+
+        self.features = nn.Sequential(
+
+            self.c1,
+
+            self.c2,
+
+            self.c3,
+
+            self.c4,
+
+            self.c5
+
+        )
+
+        self.classifier = nn.Sequential(
+
+            nn.Dropout(p=0.5,inplace=True),
+
+            nn.Linear(in_features=256*6*6,out_features=4096),
+
+            nn.ReLU(inplace=True),
+
+  
+
+            nn.Dropout(p=0.5,inplace=True),
+
+            nn.Linear(in_features=4096,out_features=4096),
+
+            nn.ReLU(inplace=True),
+
+  
+
+            nn.Linear(4096,num_classes)
+
+        )
+
+    def forward(self,x):
+
+        x = self.features(x)
+
+        x = torch.flatten(x,1)
+
+        x = self.classifier(x)
+
+        return x
+
+    def summary(self,input_size=(1,3,224,224),device=None):
+
+        """
+
+        打印模型的详细结构、参数量和计算量。
+
+        Args:
+
+            input_size (tuple): 输入张量的尺寸 (Batch, Channel, Height, Width)
+
+            device (str): 设备，例如 'cuda' 或 'cpu'。如果为 None，则自动检测。
+
+        """
+
+        if device == None:
+
+            device = next(self.parameters()).device
+
+        torchinfo_summary(
+
+            self,
+
+            input_size=input_size,
+
+            device=str(device),
+
+        )
+
+  
+
+if __name__ == '__main__':
+
+    model = AlexNet().to(device)
+
+    model.summary()
+```
 ##### 💡核心方法
 共**8 层可训练层**（5 层卷积层 + 3 层全连接层）。
 - 卷积层（5 层）：逐步提取从低级（边缘、纹理）到高级（形状、物体部件）的图像特征，配合**重叠最大池化**（池化步长小于核大小）提升特征提取的丰富性；
