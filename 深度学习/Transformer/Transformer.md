@@ -5,7 +5,7 @@
 
 ##### 🤖模型架构
 ![](assets/Transformer/file-20260310113034781.png)
-
+- Transformer采用Encoder - Decoder 的自回归的架构，
 ##### 💡核心方法
 
 
