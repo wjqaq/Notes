@@ -1,3 +1,4 @@
+
 #### ⌚偏好对齐
 ##### 🤺RLHF（Reinforcement Learning from Human Feedback，基于人类反馈的强化学习）
 ###### 1. 有监督微调（SFT）
