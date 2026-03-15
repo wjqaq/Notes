@@ -4,5 +4,3 @@
 幻觉生成的原因：
 
 #### 💡方法
-- MSFT（Multimodal Supervised Fine-Tuning，多模态监督微调）：
-- 
