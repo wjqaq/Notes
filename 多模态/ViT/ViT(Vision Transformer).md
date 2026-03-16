@@ -16,3 +16,7 @@ $$
 $$
 y=LN(z_{L}^{0}) (4)
 $$
+- 将图像分块投影后 + [class]token 后 加上位置编码信息作为Transformer Encoder输入；$E \in \mathbb{R}^{(P^2 \cdot C) \times D}$ 线性投影层的维度
+- Encoder复用Transformer的编码器层，MSA为多头注意力机制，MLP是放大缩小（通常放大4倍）这里Transformer 输出维度  $\mathbb{R}^{(1)\times D}$将[class]作为整体特征输出。
+
+- 
