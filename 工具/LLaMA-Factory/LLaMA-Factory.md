@@ -11,3 +11,8 @@ cd LLaMA-Factory
 pip install -e .
 pip install -r requirements/metrics.txt
 ```
+- 启动验证
+	llamafactory-cli webui
+![](assets/LLaMA-Factory/file-20260316212118749.png)
+- 重装PyTorch支持cuda版本:
+	pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu128
