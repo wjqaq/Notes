@@ -27,3 +27,7 @@
 - 全流程采用 LoRA 低秩适配进行微调，大幅降低显存开销，实现大模型的 RLHF 训练落地。
 #### 🎓创新
 ##### 事实信息增强
+![](assets/ALIGNING%20LARGE%20MULTIMODAL%20MODELS%20%20WITH%20FACTUALLY%20AUGMENTED%20RLHF/file-20260316100524109.png)
+- 传统的RLHF的奖励模型仅用于$[图像 + 用户问题 + 模型回复]$打分；
+![](assets/ALIGNING%20LARGE%20MULTIMODAL%20MODELS%20%20WITH%20FACTUALLY%20AUGMENTED%20RLHF/file-20260316100620912.png)
+- Fact-RLHF为奖励模型额外补充图像的真实信息：COCO图像拼接5条人工标注描述，A-QKVQA问题拼接标注的推理过程；
