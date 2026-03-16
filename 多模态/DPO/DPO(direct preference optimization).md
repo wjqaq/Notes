@@ -10,5 +10,8 @@
 ![](assets/DPO(Direct%20Preference%20Optimization)/file-20260316170557336.png)/file-20260316170557336.png)
 - **SFT**：由大模型进行fine-tuning 得到$\pi^{SFT}$并**构建偏好数据**：用SFT模型对每个prompt（x） 生成的回复对，由人类标注出偏好回复$y_w$和非偏好回复$y_l$，构建数据集$\mathcal{D} = \{(x,y_w,y_l)\}$ ; 
 - **单阶段 DPO 微调**：以监督学习的方式，用 DPO 损失函数直接微调语言模型πθ​，全程无需训练独立奖励模型，也无需 PPO 强化学习循环。
+$$
+\mathcal{L}_{DPO}(\pi_\theta;\pi_{ref}) = -\mathbb{E}_{(x,y_w,y_l)\sim\mathcal{D}}[log\sigma(\beta log \frac{\pi_\theta(y_w|x)}{\pi_{ref}(y_w|x)} - \beta log \frac{\pi_\theta(y_l|x)}{\pi_{ref}(y_l|x)})]
+$$
 #### 🧠总结
 将传统 RLHF 带 KL 约束的奖励最大化目标转化为简单的二元交叉熵损失。
