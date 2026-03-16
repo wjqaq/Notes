@@ -45,3 +45,8 @@ $$R(y) = \sum_{i=1}^{N_y}R(s_i)$$
 - 循环上述过程，直到生成响应结束符eos，完成完整响应的生成；
 - 计算每一条完整响应的累积校准奖励。
 ###### 偏好数据构建与 DPO 微调
+- 对每个输入图文 prompt，将**累积校准奖励最高的响应**标记为偏好响应$y_w$​，**累积校准奖励最低的响应**标记为非偏好响应$y_l$​，构建成对的偏好数据集$\mathcal{D}_t = \{(x^{(i)},y_w^{(i)},y_l^{(i)})\}_{i=1}^{N}$ ；
+- 采用直接偏好优化（DPO）作为微调目标，每一轮迭代$t$，用上一轮微调后的模型作为参考模型$\pi_{ref}$，损失函数为：
+$$
+\mathcal{L}_{DPO}(\pi_\theta;\pi_{ref}) = -\mathbb{E}_{(x,y_w,t,y_l,t)\sim\mathcal{D}}[log\sigma(\alpha log \frac{\pi_\theta(y_w|x)}{\pi_{ref}(y_w|x)} - \alpha log \frac{\pi_\theta(y_l|x)}{\pi_{ref}(y_l|x)})]
+$$​
