@@ -4,3 +4,15 @@
 - 卷积神经网络具有两个归纳偏置（**Inductive Bias**，局部性：相邻图片具有相似特征，和平移不变性：无论是先做平移或者先做卷积得到的结果是不变的），因此卷积神经网络自带这样的先验信息，而Transformer需要自己去学习视觉信息，但CV任务是否必须依赖这些归纳偏置？
 #### 🤖结构
 ![](assets/ViT(Vision%20Transformer)/file-20260316134223045.png)/file-20260316134223045.png)
+$$
+z_{0}=\left[x_{class } ; x_{p}^{1} E ; x_{p}^{2} E ; \cdots ; x_{p}^{N} E\right]+E_{pos }, E \in \mathbb{R}^{\left(P^{2} \cdot C\right) × D}, E_{pos } \in \mathbb{R}^{(N+1) × D} (1)
+$$
+$$
+z_{\ell}'=MSA\left(LN\left(z_{\ell-1}\right)\right)+z_{\ell-1}, \ell=1 ... L (2)
+$$
+$$
+z_{\ell}=MLP\left(LN\left(z_{\ell}'\right)\right)+z_{\ell}', \ell=1 ... L (3)
+$$
+$$
+y=LN(z_{L}^{0}) (4)
+$$
