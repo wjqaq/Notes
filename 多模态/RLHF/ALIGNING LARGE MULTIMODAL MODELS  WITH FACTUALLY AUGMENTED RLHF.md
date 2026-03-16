@@ -14,7 +14,7 @@
 在原始 150K GPT-4 合成视觉指令数据的基础上，融入三类高质量人工标注多模态数据，并转换为对话式指令格式：
 - VQA-v2 [VQA-v2](../../数据集/VQA/VQA-v2.md) 的 83K 是非类问答数据；
 - A-OKVQA [A-OKVQA(Augmented OK-VQA)](../../数据集/VQA/A-OKVQA(Augmented%20OK-VQA).md)的 16K 多选类视觉问答数据；
-- Flickr30k 的 23K grounded caption 数据；
+- Flickr30k [Flickr30k](../../数据集/Flickr/Flickr30k.md)的 23K grounded caption 数据；
 ##### 多模态RLHF
 ###### 多模态SFT
 输出上述的 LLaVA-SFT + 模型，作为 RLHF 的初始策略模型；
@@ -31,3 +31,4 @@
 - 传统的RLHF的奖励模型仅用于$[图像 + 用户问题 + 模型回复]$打分；
 ![](assets/ALIGNING%20LARGE%20MULTIMODAL%20MODELS%20%20WITH%20FACTUALLY%20AUGMENTED%20RLHF/file-20260316100620912.png)
 - Fact-RLHF为奖励模型额外补充图像的真实信息：COCO图像拼接5条人工标注描述，A-QKVQA问题拼接标注的推理过程；
+- 奖励模型在训练和推理阶段均可访问这些事实信息，能精准识别与事实冲突的幻觉内容，从根源上避免奖励黑客。
