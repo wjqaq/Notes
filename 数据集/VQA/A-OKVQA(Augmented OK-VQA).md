@@ -1,6 +1,6 @@
 知识增强型视觉问答（VQA）基准数据集。
 #### ⌚背景
-作为首个开放域知识型 VQA 数据集，OK-VQA[OK-VQA](OK-VQA.md) 的问题仍偏向简单的事实类查询（如「这个国家的首都是什么」），缺乏对通用常识、多步逻辑推理的要求，且无推理过程的标注，无法支撑可解释性 VQA 研究。
+作为首个开放域知识型 VQA 数据集，OK-VQA[OK-VQA（Outside Knowledge Visual Question Answering）](OK-VQA（Outside%20Knowledge%20Visual%20Question%20Answering）.md) 的问题仍偏向简单的事实类查询（如「这个国家的首都是什么」），缺乏对通用常识、多步逻辑推理的要求，且无推理过程的标注，无法支撑可解释性 VQA 研究。
 #### 🧬结构
 ![](assets/A-OKVQA(Augmented%20OK-VQA)/file-20260316112032226.png)/file-20260316112032226.png)
 A-OKVQA 同时支持 **选择题（Multiple-Choice, MC）** 和 **开放式直接回答（Direct Answer, DA）** 两大评测范式，配套对应的答案标注：
