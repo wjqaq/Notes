@@ -12,8 +12,8 @@
 ##### 高质量多模态监督微调增强：LLaVA-SFT+
 
 在原始 150K GPT-4 合成视觉指令数据的基础上，融入三类高质量人工标注多模态数据，并转换为对话式指令格式：
-- VQA-v2[VQA-v2](../../数据集/VQA/VQA-v2.md) 的 83K 是非类问答数据；
-- A-OKVQA 的 16K 多选类视觉问答数据；
+- VQA-v2 [VQA-v2](../../数据集/VQA/VQA-v2.md) 的 83K 是非类问答数据；
+- A-OKVQA [A-OKVQA(Augmented OK-VQA)](../../数据集/VQA/A-OKVQA(Augmented%20OK-VQA).md)的 16K 多选类视觉问答数据；
 - Flickr30k 的 23K grounded caption 数据；
 ##### 多模态RLHF
 ###### 多模态SFT
