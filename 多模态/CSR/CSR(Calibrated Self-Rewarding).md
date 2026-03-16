@@ -49,4 +49,6 @@ $$R(y) = \sum_{i=1}^{N_y}R(s_i)$$
 - 采用直接偏好优化（DPO）作为微调目标，每一轮迭代$t$，用上一轮微调后的模型作为参考模型$\pi_{ref}$，损失函数为：
 $$
 \mathcal{L}_{DPO}(\pi_\theta;\pi_{ref}) = -\mathbb{E}_{(x,y_w,t,y_l,t)\sim\mathcal{D}}[log\sigma(\alpha log \frac{\pi_\theta(y_w|x)}{\pi_{ref}(y_w|x)} - \alpha log \frac{\pi_\theta(y_l|x)}{\pi_{ref}(y_l|x)})]
-$$​
+$$​完成一轮微调后，更新模型作为下一轮迭代的基础模型；
+
+#### 
