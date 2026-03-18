@@ -37,7 +37,7 @@ $$R(y) = \sum_{i=1}^{N_y}R(s_i)$$
 其中$N_y$是响应y的句子总数。
 ##### 阶段二：偏好策划和微调阶段
 ###### 句子级候选响应生成
-![](assets/CSR(Calibrated%20Self-Rewarding)/file-20260316174713258.png)/file-20260316174713258.png)
+![](assets/CSR(Calibrated%20Self-Rewarding)/file-20260316174713258.png)
 采用句子级束搜索策略：
 - 以句子结束符（如“."）为分隔，并行采样多个候选句子；
 - 每个句子计算$R(s)$分数；
