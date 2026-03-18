@@ -237,4 +237,4 @@ report_to: tensorboard
 - 1.flash-attn 在windows端和linux端需要找到对应的PyTorch和Python版本；
 - 2.数据集COCO国内服务器下载太慢，去租了一个国外的服务器；
 - 3.为了方便操作，配置了vscode SSH Remote 插件，但是安装不上.vscode_server在服务器，需要手动下载；
-- 4.用国外服务器scp 文件后有问题（具体来说是本地windows能跑，scp过去后跑不了，应该是服务器编码和大小端
+- 4.用国外服务器scp 文件后有问题（具体来说是本地windows能跑，scp过去后跑不了，应该是服务器编码等因素，包括zip文件传过去也是有问题的，暂时方法是在服务器内下载）。
