@@ -7,5 +7,6 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 - 如果出现提示，需要将其配置环境变量：
 ```bash
-$HOME/.local/bin
+$HOME/.local/bin/.env
 ```
+检查最后一行出现这句没，如果出现了，就source ~/.bashrc即可，没出现先添加进去，再执行source ~/.bashrc
