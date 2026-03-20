@@ -16,5 +16,5 @@ uv venv --python 3.11 --seed --managed-python
 ```
 - 安装并指定cuda环境：
 ```bash
-uv pip install vllm --torch-backend=128
+uv pip install vllm --torch-backend=cu128
 ```
