@@ -14,6 +14,10 @@ $HOME/.local/bin/.env
 ```bash
 uv venv --python 3.11 --seed --managed-python
 ```
+- 激活虚拟环境
+```bash
+source .venv/bin/activate
+```
 - 安装并指定cuda环境：
 ```bash
 uv pip install vllm --torch-backend=cu128
