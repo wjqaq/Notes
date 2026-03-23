@@ -7,5 +7,3 @@
 验证：
 wsl --list --verbose![](assets/WSL/file-20260113100724588.png)
 
-
-#### xpu
