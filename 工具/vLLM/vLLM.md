@@ -22,3 +22,16 @@ source .venv/bin/activate
 ```bash
 uv pip install vllm --torch-backend=cu128
 ```
+
+
+#### 适配vllm cuda pytorch flash-attn
+```bash
+uv pip install vllm torch==2.9.0 torchvision==0.24.0 torchaudio==2.9.0   --index-url https://pypi.tuna.tsinghua.edu.cn/simple   --extra-index-url https://download.pytorch.org/whl/cu128   --index-strategy unsafe-best-match
+```
+```bash
+uv pip install -e . --index-url https://pypi.tuna.tsinghua.edu.cn/simple
+```
+```bash
+uv pip install 
+-r requirements/metrics.txt --index-url https://pypi.tuna.tsinghua.edu.cn/simple
+```
