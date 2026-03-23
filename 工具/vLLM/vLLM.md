@@ -35,3 +35,7 @@ uv pip install -e . --index-url https://pypi.tuna.tsinghua.edu.cn/simple
 uv pip install 
 -r requirements/metrics.txt --index-url https://pypi.tuna.tsinghua.edu.cn/simple
 ```
+```bash
+uv pip install 
+ bitsandbytes --index-url https://pypi.tuna.tsinghua.edu.cn/simple
+```
