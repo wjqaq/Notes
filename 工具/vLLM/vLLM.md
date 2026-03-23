@@ -25,6 +25,7 @@ uv pip install vllm --torch-backend=cu128
 
 
 #### 适配vllm cuda pytorch flash-attn
+注意其版本适配。
 ```bash
 uv pip install vllm torch==2.9.0 torchvision==0.24.0 torchaudio==2.9.0   --index-url https://pypi.tuna.tsinghua.edu.cn/simple   --extra-index-url https://download.pytorch.org/whl/cu128   --index-strategy unsafe-best-match
 ```
@@ -38,4 +39,10 @@ uv pip install
 ```bash
 uv pip install 
  bitsandbytes --index-url https://pypi.tuna.tsinghua.edu.cn/simple
+```
+```bash
+wget -c https://ghfast.top/https://github.com/Dao-AILab/flash-attention/releases/download/v2.8.3/flash_attn-2.8.3+cu12torch2.9cxx11abiTRUE-cp312-cp312-linux_x86_64.whl
+```
+```bash
+uv pip install flash_attn-2.8.3+cu12torch2.9cxx11abiTRUE-cp312-cp312-linux_x86_64.whl 
 ```
