@@ -728,15 +728,15 @@ report_to: tensorboard
 # 成功运行截图
 
 ## 数据处理
-![](assets/CSR任务/file-20260324164012497.png)
+![](assets/CSR任务一/file-20260324210441128.png)
 ## 训练
-![](assets/CSR任务/file-20260324163047169.png)
+![](assets/CSR任务一/file-20260324210441129.png)
 ## POPE评估
 
 ### VLLM成功部署
-![](assets/CSR任务/file-20260324164054786.png)
+![](assets/CSR任务一/file-20260324210441115.png)
 ### 成功请求
-![](assets/CSR任务/file-20260324164033456.png)
+![](assets/CSR任务一/file-20260324210441116.png)
 # 遇到的困难以及解决方法
 
 - 1.flash-attn 在windows端和linux端需要找到对应的PyTorch和Python版本；
