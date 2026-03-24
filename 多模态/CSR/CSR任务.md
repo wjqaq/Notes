@@ -222,7 +222,7 @@ report_to: tensorboard
 
 ## 训练
 ![](assets/CSR任务/file-20260318133027834.png)
-
+![](assets/CSR任务/file-20260324163047169.png)
 ## POPE评估
 
 ### VLLM成功部署
