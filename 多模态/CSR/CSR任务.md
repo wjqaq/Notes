@@ -351,6 +351,116 @@ async def process_sample(sample: dict, coco_dir: str, base_client: AsyncOpenAI,
 
   
 
+def print_metrics_table(base_metrics: Dict, trained_metrics: Dict):
+
+    """打印美观的横向对比表格，含提升幅度Δ"""
+
+    # ANSI颜色代码
+
+    GREEN = "\033[92m"
+
+    RED = "\033[91m"
+
+    RESET = "\033[0m"
+
+    BOLD = "\033[1m"
+
+    # 表格标题
+
+    print("\n" + "="*120)
+
+    print(f"{BOLD}📊 POPE 模型对比评估结果{RESET}".center(120))
+
+    print("="*120)
+
+    # 表头
+
+    header = (
+
+        f"| {'Category':<12} | {'Model':<10} | {'Accuracy':<10} | {'Precision':<10} | {'Recall':<10} | {'F1':<10} |"
+
+    )
+
+    print(header)
+
+    print("|" + "-"*14 + "|" + "-"*12 + "|" + "-"*12 + "|" + "-"*12 + "|" + "-"*12 + "|" + "-"*12 + "|")
+
+    # 按顺序处理所有类别
+
+    categories = ["random", "popular", "adversarial", "overall"]
+
+    for cat in categories:
+
+        base_m = base_metrics.get(cat, {})
+
+        trained_m = trained_metrics.get(cat, {})
+
+        # 跳过无数据的类别
+
+        if base_m.get("count", 0) == 0 or trained_m.get("count", 0) == 0:
+
+            continue
+
+        # 打印Base模型行
+
+        print(
+
+            f"| {cat.upper():<12} | {'Base':<10} | "
+
+            f"{base_m['accuracy']:.4f}{'':<6} | "
+
+            f"{base_m['precision']:.4f}{'':<6} | "
+
+            f"{base_m['recall']:.4f}{'':<6} | "
+
+            f"{base_m['f1']:.4f}{'':<6} |"
+
+        )
+
+        # 计算提升幅度Δ
+
+        def format_delta(base_val, trained_val):
+
+            delta = trained_val - base_val
+
+            if delta > 0:
+
+                return f"{trained_val:.4f} {GREEN}(+{delta:.4f}){RESET}"
+
+            elif delta < 0:
+
+                return f"{trained_val:.4f} {RED}({delta:.4f}){RESET}"
+
+            else:
+
+                return f"{trained_val:.4f} ( - )"
+
+        # 打印Trained模型行（含Δ）
+
+        print(
+
+            f"| {'':<12} | {'Trained':<10} | "
+
+            f"{format_delta(base_m['accuracy'], trained_m['accuracy']):<18} | "
+
+            f"{format_delta(base_m['precision'], trained_m['precision']):<18} | "
+
+            f"{format_delta(base_m['recall'], trained_m['recall']):<18} | "
+
+            f"{format_delta(base_m['f1'], trained_m['f1']):<18} |"
+
+        )
+
+        # 类别间分隔线
+
+        if cat != categories[-1]:
+
+            print("|" + "-"*14 + "|" + "-"*12 + "|" + "-"*12 + "|" + "-"*12 + "|" + "-"*12 + "|" + "-"*12 + "|")
+
+    print("="*120 + "\n")
+
+  
+
 async def main():
 
     import argparse
@@ -475,49 +585,13 @@ async def main():
 
   
 
-    # 格式化输出结果
+    # 打印美观的对比表格
 
-    print("\n" + "="*50)
-
-    print("Base Model Metrics:")
-
-    for cat, metrics in base_metrics.items():
-
-        if metrics["count"] > 0:
-
-            print(f"\n{cat.upper()}:")
-
-            print(f"  Accuracy: {metrics['accuracy']:.4f}")
-
-            print(f"  Precision: {metrics['precision']:.4f}")
-
-            print(f"  Recall: {metrics['recall']:.4f}")
-
-            print(f"  F1: {metrics['f1']:.4f}")
+    print_metrics_table(base_metrics, trained_metrics)
 
   
 
-    print("\n" + "="*50)
-
-    print("Trained Model Metrics:")
-
-    for cat, metrics in trained_metrics.items():
-
-        if metrics["count"] > 0:
-
-            print(f"\n{cat.upper()}:")
-
-            print(f"  Accuracy: {metrics['accuracy']:.4f}")
-
-            print(f"  Precision: {metrics['precision']:.4f}")
-
-            print(f"  Recall: {metrics['recall']:.4f}")
-
-            print(f"  F1: {metrics['f1']:.4f}")
-
-  
-
-    print(f"\nTotal processing time: {end_time - start_time:.2f} seconds")
+    print(f"Total processing time: {end_time - start_time:.2f} seconds")
 
   
 
@@ -671,17 +745,12 @@ OVERALL:
 
 ## 数据处理
 ![](assets/CSR任务/file-20260324164012497.png)
-  
-
 ## 训练
-![](assets/CSR任务/file-20260318133027834.png)
 ![](assets/CSR任务/file-20260324163047169.png)
 ## POPE评估
 
 ### VLLM成功部署
 ![](assets/CSR任务/file-20260324164054786.png)
-  
-
 ### 成功请求
 ![](assets/CSR任务/file-20260324164033456.png)
 # 遇到的困难以及解决方法
