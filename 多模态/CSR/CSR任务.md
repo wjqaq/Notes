@@ -129,14 +129,414 @@ if __name__ == "__main__":
 
 ## 评估代码
 ```python
+import asyncio
 
+from datasets import load_dataset
+
+from openai import AsyncOpenAI
+
+import base64
+
+import os
+
+from typing import List, Dict
+
+import time
+
+  
+
+class PopeEvaluator:
+
+    """Class for Evaluating MLLMs on POPE dataset."""
+
+    def __init__(self, *args, **kwargs):
+
+        pass
+
+    def evaluate(self, records: List[Dict]) -> Dict:
+
+        """Evaluate the records and return metrics."""
+
+        metrics = {
+
+            key: {
+
+                "tp": 0, "tn": 0, "fp": 0, "fn": 0,
+
+                "count": 0, "accuracy": 0.0,
+
+                "precision": 0.0, "recall": 0.0, "f1": 0.0,
+
+            }
+
+            for key in ["random", "popular", "adversarial", "overall"]
+
+        }
+
+        for record in records:
+
+            answer = record["answer"].strip().lower()
+
+            response = record["response"].strip().lower()
+
+            category = record["category"]
+
+            # 鲁棒的标签判断（适配不同的回答格式）
+
+            ans_pos = 1 if answer == "yes" else 0
+
+            # 处理否定词：no/not/n't/否/不是/没有 等
+
+            neg_words = {"no", "not", "n't", "否", "不是", "没有"}
+
+            resp_pos = 0 if any(word in response for word in neg_words) else 1
+
+            # 更新分类指标
+
+            metrics[category]["tp"] += ans_pos * resp_pos
+
+            metrics[category]["tn"] += (1 - ans_pos) * (1 - resp_pos)
+
+            metrics[category]["fp"] += (1 - ans_pos) * resp_pos
+
+            metrics[category]["fn"] += ans_pos * (1 - resp_pos)
+
+            metrics[category]["count"] += 1
+
+            # 更新整体指标
+
+            metrics["overall"]["tp"] += ans_pos * resp_pos
+
+            metrics["overall"]["tn"] += (1 - ans_pos) * (1 - resp_pos)
+
+            metrics["overall"]["fp"] += (1 - ans_pos) * resp_pos
+
+            metrics["overall"]["fn"] += ans_pos * (1 - resp_pos)
+
+            metrics["overall"]["count"] += 1
+
+        # 计算最终指标
+
+        for cat in metrics:
+
+            count = metrics[cat]["count"]
+
+            if count == 0:
+
+                continue
+
+            tp, tn, fp, fn = (metrics[cat]["tp"], metrics[cat]["tn"],
+
+                             metrics[cat]["fp"], metrics[cat]["fn"])
+
+            metrics[cat]["accuracy"] = (tp + tn) / count
+
+            metrics[cat]["precision"] = tp / (tp + fp) if (tp + fp) > 0 else 0.0
+
+            metrics[cat]["recall"] = tp / (tp + fn) if (tp + fn) > 0 else 0.0
+
+            metrics[cat]["f1"] = 2 * metrics[cat]["precision"] * metrics[cat]["recall"] / (
+
+                metrics[cat]["precision"] + metrics[cat]["recall"]
+
+            ) if (metrics[cat]["precision"] + metrics[cat]["recall"]) > 0 else 0.0
+
+        return metrics
+
+  
+
+async def get_model_response(client: AsyncOpenAI, model_name: str, content: list):
+
+    """封装模型请求，统一错误处理"""
+
+    try:
+
+        response = await client.chat.completions.create(
+
+            model=model_name,
+
+            messages=[{"role": "user", "content": content}],
+
+            max_tokens=100,
+
+            temperature=0.0,
+
+            timeout=120
+
+        )
+
+        return response.choices[0].message.content.strip()
+
+    except Exception as e:
+
+        print(f"Model request error: {str(e)[:100]}")
+
+        return ""
+
+  
+
+async def process_sample(sample: dict, coco_dir: str, base_client: AsyncOpenAI,
+
+                        trained_client: AsyncOpenAI, base_model_name: str,
+
+                        trained_model_name: str, semaphore: asyncio.Semaphore):
+
+    """并行处理单个样本，同时请求两个模型（带并发限制，支持不同模型名）"""
+
+    async with semaphore:
+
+        # 基础字段提取
+
+        question = sample["question"]
+
+        answer = sample["answer"]
+
+        category = sample["category"]
+
+        image_source = sample["image_source"]
+
+  
+
+        # 直接用image_source生成文件名，和本地COCO图片完全匹配
+
+        image_filename = f"{image_source}.jpg"
+
+        # 校验图片路径
+
+        image_path = os.path.join(coco_dir, image_filename)
+
+        if not os.path.exists(image_path):
+
+            print(f"Image not found: {image_path}")
+
+            return None, None
+
+  
+
+        # 编码图片为base64
+
+        with open(image_path, "rb") as f:
+
+            base64_image = base64.b64encode(f.read()).decode("utf-8")
+
+        content = [
+
+            {"type": "text", "text": question},
+
+            {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}}
+
+        ]
+
+  
+
+        # 并行请求两个模型（分别传入对应的模型名）
+
+        base_resp, trained_resp = await asyncio.gather(
+
+            get_model_response(base_client, base_model_name, content),
+
+            get_model_response(trained_client, trained_model_name, content)
+
+        )
+
+  
+
+        # 构造评估记录
+
+        base_record = {"answer": answer, "response": base_resp, "category": category}
+
+        trained_record = {"answer": answer, "response": trained_resp, "category": category}
+
+        return base_record, trained_record
+
+  
+
+async def main():
+
+    import argparse
+
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("--coco-dir", type=str, required=True,
+
+                        help="Path to COCO val2014 images directory (e.g., ./data/coco2014_val)")
+
+    parser.add_argument("--base-model-url", type=str, default="http://localhost:8000/v1")
+
+    parser.add_argument("--trained-model-url", type=str, default="http://localhost:8001/v1")
+
+    # 关键修改：新增分别指定Base和Trained模型名的参数
+
+    parser.add_argument("--base-model-name", type=str, required=True,
+
+                        help="Model name for base model (from curl /v1/models)")
+
+    parser.add_argument("--trained-model-name", type=str, required=True,
+
+                        help="Model name for trained model (from curl /v1/models)")
+
+    parser.add_argument("--limit", type=int, default=None, help="Limit number of samples (for test)")
+
+    parser.add_argument("--max-concurrent", type=int, default=20, help="Max concurrent requests")
+
+    args = parser.parse_args()
+
+  
+
+    # 初始化OpenAI客户端
+
+    base_client = AsyncOpenAI(base_url=args.base_model_url, api_key="dummy")
+
+    trained_client = AsyncOpenAI(base_url=args.trained_model_url, api_key="dummy")
+
+  
+
+    # 加载POPE数据集
+
+    print("Loading POPE dataset...")
+
+    dataset = load_dataset("lmms-lab/POPE", split="test")
+
+    # 打印数据集字段和第一个样本的文件名，提前验证匹配
+
+    if len(dataset) > 0:
+
+        first_sample = dataset[0]
+
+        print(f"Dataset loaded successfully, sample fields: {list(first_sample.keys())}")
+
+        print(f"First sample expected filename: {first_sample['image_source']}.jpg")
+
+    # 测试时限制样本数
+
+    if args.limit:
+
+        dataset = dataset.select(range(args.limit))
+
+  
+
+    # 构造任务（带并发限制）
+
+    base_records = []
+
+    trained_records = []
+
+    tasks = []
+
+    semaphore = asyncio.Semaphore(args.max_concurrent)
+
+    for sample in dataset:
+
+        task = process_sample(sample, args.coco_dir, base_client, trained_client,
+
+                            args.base_model_name, args.trained_model_name, semaphore)
+
+        tasks.append(task)
+
+  
+
+    # 执行所有任务
+
+    print(f"Start processing {len(tasks)} samples...")
+
+    start_time = time.time()
+
+    results = await asyncio.gather(*tasks)
+
+    end_time = time.time()
+
+  
+
+    # 整理有效结果
+
+    valid_count = 0
+
+    for base_rec, trained_rec in results:
+
+        if base_rec and trained_rec:
+
+            base_records.append(base_rec)
+
+            trained_records.append(trained_rec)
+
+            valid_count += 1
+
+    print(f"Valid samples processed: {valid_count}/{len(tasks)}")
+
+  
+
+    # 执行评估
+
+    evaluator = PopeEvaluator()
+
+    base_metrics = evaluator.evaluate(base_records)
+
+    trained_metrics = evaluator.evaluate(trained_records)
+
+  
+
+    # 格式化输出结果
+
+    print("\n" + "="*50)
+
+    print("Base Model Metrics:")
+
+    for cat, metrics in base_metrics.items():
+
+        if metrics["count"] > 0:
+
+            print(f"\n{cat.upper()}:")
+
+            print(f"  Accuracy: {metrics['accuracy']:.4f}")
+
+            print(f"  Precision: {metrics['precision']:.4f}")
+
+            print(f"  Recall: {metrics['recall']:.4f}")
+
+            print(f"  F1: {metrics['f1']:.4f}")
+
+  
+
+    print("\n" + "="*50)
+
+    print("Trained Model Metrics:")
+
+    for cat, metrics in trained_metrics.items():
+
+        if metrics["count"] > 0:
+
+            print(f"\n{cat.upper()}:")
+
+            print(f"  Accuracy: {metrics['accuracy']:.4f}")
+
+            print(f"  Precision: {metrics['precision']:.4f}")
+
+            print(f"  Recall: {metrics['recall']:.4f}")
+
+            print(f"  F1: {metrics['f1']:.4f}")
+
+  
+
+    print(f"\nTotal processing time: {end_time - start_time:.2f} seconds")
+
+  
+
+if __name__ == "__main__":
+
+    # 跨平台异步兼容
+
+    if os.name == 'nt':
+
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
+    asyncio.run(main())
 ```
 
 ## LlamaFactory训练配置文件
 ```yaml
 # 模型基础配置
 
-model_name_or_path: llava-hf/llava-1.5-7b-hf
+model_name_or_path: "./models/llava-1.5-7b-hf"
 
 trust_remote_code: true
 
@@ -151,6 +551,8 @@ dataset: csr_iter0  # 先用iter0训练，后续迭代更换为csr_iter1/csr_it
 cutoff_len: 1024
 
 preprocessing_num_workers: 1
+
+  
 
 # 训练类型
 
@@ -174,9 +576,9 @@ lora_dropout: 0.05
 
 output_dir: saves/llava-1.5-7b-csr-iter0
 
-per_device_train_batch_size: 1
+per_device_train_batch_size: 8
 
-gradient_accumulation_steps: 1
+gradient_accumulation_steps: 4
 
 learning_rate: 1e-7
 
@@ -190,11 +592,11 @@ bf16: true
 
 tf32: true
 
-gradient_checkpointing: true  # 大幅节省显存
+gradient_checkpointing: false
 
 flash_attn: fa2
 
-  
+deepspeed : './examples/deepspeed/ds_z2_config.json'
 
 # TensorBoard日志配置
 
@@ -211,13 +613,64 @@ report_to: tensorboard
 ## POPE评估结果
 
 ### 训练前
+Base Model Metrics:
+
+RANDOM:
+  Accuracy: 0.8723
+  Precision: 0.8802
+  Recall: 0.8620
+  F1: 0.8710
+
+POPULAR:
+  Accuracy: 0.8323
+  Precision: 0.8133
+  Recall: 0.8627
+  F1: 0.8373
+
+ADVERSARIAL:
+  Accuracy: 0.7663
+  Precision: 0.7238
+  Recall: 0.8613
+  F1: 0.7866
+
+OVERALL:
+  Accuracy: 0.8237
+  Precision: 0.8006
+  Recall: 0.8620
+  F1: 0.8302
 
 ### 训练后
+Trained Model Metrics:
+
+RANDOM:
+  Accuracy: 0.8743
+  Precision: 0.8833
+  Recall: 0.8627
+  F1: 0.8728
+
+POPULAR:
+  Accuracy: 0.8337
+  Precision: 0.8154
+  Recall: 0.8627
+  F1: 0.8384
+
+ADVERSARIAL:
+  Accuracy: 0.7687
+  Precision: 0.7269
+  Recall: 0.8607
+  F1: 0.7882
+
+OVERALL:
+  Accuracy: 0.8256
+  Precision: 0.8034
+  Recall: 0.8620
+  F1: 0.8317
+
 
 # 成功运行截图
 
 ## 数据处理
-
+![](assets/CSR任务/file-20260324164012497.png)
   
 
 ## 训练
@@ -226,18 +679,15 @@ report_to: tensorboard
 ## POPE评估
 
 ### VLLM成功部署
-	
+![](assets/CSR任务/file-20260324164054786.png)
   
 
 ### 成功请求
-
-  
-
-  
-
+![](assets/CSR任务/file-20260324164033456.png)
 # 遇到的困难以及解决方法
 
 - 1.flash-attn 在windows端和linux端需要找到对应的PyTorch和Python版本；
 - 2.数据集COCO国内服务器下载太慢，去租了一个国外的服务器；
 - 3.为了方便操作，配置了vscode SSH Remote 插件，但是安装不上.vscode_server在服务器，需要手动下载；
-- 4.用国外服务器scp 文件后有问题（具体来说是本地windows能跑，scp过去后跑不了，应该是服务器编码等因素，包括zip文件传过去也是有问题的，暂时方法是在服务器内下载）。
+- 4.用国外服务器scp 文件后有问题（具体来说是本地windows能跑，scp过去后跑不了，应该是服务器编码等因素，包括zip文件传过去也是有问题的，暂时方法是在服务器内下载）；
+- uv 配置vllm pytorch cuda flash-attn需要着重考虑，是一个费时间的点。
