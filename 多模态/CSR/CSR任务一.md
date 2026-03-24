@@ -263,83 +263,46 @@ if __name__ == "__main__":
     if os.name == 'nt':
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     asyncio.run(main())```
-
+``````
 ## LlamaFactory训练配置文件
 ```yaml
 # 模型基础配置
-
 model_name_or_path: "./models/llava-1.5-7b-hf"
-
 trust_remote_code: true
-
-template: llava  # 必须指定llava对话模板
-
-  
+template: llava  # 必须指定llava对话模板
 
 # 数据配置
-
-dataset: csr_iter0  # 先用iter0训练，后续迭代更换为csr_iter1/csr_iter2
-
+dataset: csr_iter0  # 先用iter0训练，后续迭代更换为csr_iter1/csr_iter2
 cutoff_len: 1024
-
-preprocessing_num_workers: 1
-
-  
+preprocessing_num_workers: 4
 
 # 训练类型
-
-stage: dpo  # DPO偏好优化
-
+stage: dpo  # DPO偏好优化
 do_train: true
-
-finetuning_type: lora  # LoRA微调，大幅节省显存
-
-lora_target: q_proj,v_proj,k_proj,o_proj,gate_proj,up_proj,down_proj  # 微调所有线性层，效果最优
-
+finetuning_type: lora  # LoRA微调，大幅节省显存
+lora_target: q_proj,v_proj,k_proj,o_proj,gate_proj,up_proj,down_proj  # 微调所有线性层，效果最优
 lora_rank: 128
-
 lora_alpha: 256
-
 lora_dropout: 0.05
 
-  
-
 # 训练超参数
-
 output_dir: saves/llava-1.5-7b-csr-iter0
-
 per_device_train_batch_size: 8
-
 gradient_accumulation_steps: 4
-
 learning_rate: 1e-7
-
 warmup_ratio: 0.03
-
 num_train_epochs: 1
-
 lr_scheduler_type: cosine
-
 bf16: true
-
 tf32: true
-
 gradient_checkpointing: false
-
 flash_attn: fa2
-
-deepspeed : './examples/deepspeed/ds_z2_config.json'
-
+deepspeed : examples/deepspeed/ds_z2_config.json
 # TensorBoard日志配置
-
 logging_steps: 1
-
 save_strategy: steps
-
 save_steps: 100
-
 save_total_limit: 1
-
 report_to: tensorboard
 ```
 ## POPE评估结果
