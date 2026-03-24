@@ -106,9 +106,9 @@ def transform_for_llama_factory(input_file_path, output_file_path):
 
 # ====================== 配置路径======================
 
-INPUT_JSON_PATH = "./LLaVA_1.5_7b_1iteration.json"
+INPUT_JSON_PATH = "./LLaVA_1.5_7b_2iteration.json"
 
-OUTPUT_JSON_PATH = "./Transformed_LLaVA_1.5_7b_1iteration.json"
+OUTPUT_JSON_PATH = "./Transformed_LLaVA_1.5_7b_2iteration.json"
 
   
 
@@ -126,7 +126,6 @@ if __name__ == "__main__":
 
         print(f"❌ 转换失败：{str(e)}")
 ```
-
 ## 评估代码
 ```python
 import asyncio
