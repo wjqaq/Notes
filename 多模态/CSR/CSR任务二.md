@@ -2,6 +2,7 @@
 
 
 ## CSR的数据集生成(用vllm部署模型 + openai 库调用)
+sample.py
 ```python
 from utils import *
 import torch
@@ -170,9 +171,16 @@ if __name__ == "__main__":
 
     eval_model(args)
 ```
+执行:
+```bash
 
-#### openAI
+```
+
 ## Qwen2-VL 的 Visual Contrastive Decoding(VCD)
 
 
 # 成功运行截图
+##### sample.py
+🚀 总进度: 448/12856 | 3.48% | 已用时: 299s | 预计剩余: 8280s
+
+
