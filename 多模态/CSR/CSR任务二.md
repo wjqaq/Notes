@@ -402,7 +402,7 @@ if __name__ == "__main__":
 
     eval_model(args)
 ```
-运行step2.sh
+执行脚本step2.sh
 ```sh
 NUM_PROCESSES=14
 NUM_MACHINES=1
@@ -423,12 +423,172 @@ nohup accelerate launch \
   --image_dir $IMAGE_DIR \
   --clip_model_path $CLIP_MODEL_PATH > score.log 2>&1 &
 ```
-检测
+检测数据质量：
+```python
+import os
+import pickle
+import json
+import numpy as np
+
+# 配置
+STEP2_PKL_DIR = "./outputs/score"
+DATA_JSON = "./data/CSR-Prompt-Dataset-12k.json"
+
+# 加载数据集
+with open(DATA_JSON, "r", encoding="utf-8") as f:
+    dataset = json.load(f)
+
+# 随机抽3个样本
+pkl_files = [f for f in os.listdir(STEP2_PKL_DIR) if f.endswith(".pkl")]
+sample_files = np.random.choice(pkl_files, 3, replace=False)
+
+for f in sample_files:
+    qid = int(f.split(".")[0])
+    print(f"\n=== 样本ID: {qid} ===")
+    print(f"原始问题: {dataset[qid-1]['input']}")
+    print(f"图片: COCO_train2014_{dataset[qid-1]['image']}")
+    
+    # 加载pkl
+    with open(os.path.join(STEP2_PKL_DIR, f), "rb") as f_pkl:
+        data = pickle.load(f_pkl)
+    root = data["tree"]
+    
+    print(f"\n根节点prompt: {root.text[:150]}...")
+    print("\nTop3生成结果（CLIP分数从高到低）:")
+    for i, child in enumerate(root.children[:3]):
+        new_text = child.text[len(root.text):].strip()
+        print(f"{i+1}. {new_text[:100]}...")
+        print(f"   CLIP分数: {child.clip_score:.2f} | Rank: {child.rank:.2f}")
+    print("-"*60)
+```
+construct.py:
+```python
+import os
+import re
+import json
+import argparse
+from utils import load_pickles, Rank_Node
+
+
+def dfs(node, path=[], cumulative_score=0, clip_alpha=0.8):
+    if node.rank is not None and node.clip_rank is not None:
+        cumulative_score += (1-clip_alpha)*node.rank + clip_alpha * node.clip_rank
+    current_path = path + [(node.text, cumulative_score)]
+    if node.is_final:
+        return [(current_path, cumulative_score)]
+    paths_scores = []
+
+    for child in node.children:
+        paths_scores.extend(dfs(child, current_path, cumulative_score, clip_alpha))
+    return paths_scores
+
+
+def process_data(args):
+    folder_path = args.folder_path
+    image_dir = args.image_dir
+    clip_alpha = args.clip_alpha
+    output_file = args.output_file
+    # 🔥 关键：加载CSR数据集，建立【顺序qid → 真实图片名】映射（匹配前两步）
+    with open(args.dataset_json, 'r', encoding='utf-8') as f:
+        dataset = json.load(f)
+    
+    index_to_image = {}
+    for idx, item in enumerate(dataset):
+        qid = idx + 1
+        index_to_image[qid] = item['image']  # 读取数据集里的真实图片ID
+
+    tree_list = load_pickles(folder_path)
+    data_list = []
+    data_list_with_score = []
+
+    for tree_dict in tree_list:
+        this_id_dict = {}
+        qid = tree_dict['qid']
+        tree = tree_dict['tree']
+
+        tree.calculate_ranks()
+
+        # 🔥 修复：从数据集取真实图片名，匹配前两步格式
+        img_suffix = index_to_image[qid]
+        img_full_name = f"COCO_train2014_{img_suffix}"
+
+        results = dfs(tree, clip_alpha=clip_alpha)
+        sorted_results = sorted(results, key=lambda x: x[1] / len(x[0]))
+        chosen_process = sorted_results[0][0]
+        rejected_process = sorted_results[-1][0]
+
+        the_input = chosen_process[0][0].strip()
+        pattern = r"USER:\s*<image>\s*"
+        replacement = "USER: <image>"
+
+        chosen = re.sub(pattern, replacement, chosen_process[-1][0])
+        rejected = re.sub(pattern, replacement, rejected_process[-1][0])
+        chosen = chosen[len(the_input):].strip()
+        rejected = rejected[len(the_input):].strip()
+
+        chosen_conv = [{'from': 'human', 'value': the_input}, {'from': 'gpt', 'value': chosen}]
+        rejected_conv = [{'from': 'human', 'value': the_input}, {'from': 'gpt', 'value': rejected}]
+
+        this_id_dict['id'] = qid
+        # 🔥 修复：图片路径100%匹配前两步
+        this_id_dict['image'] = os.path.join(image_dir, img_full_name)
+        this_id_dict['conversations'] = chosen_conv
+        this_id_dict['rejected_conversations'] = rejected_conv
+
+        data_list.append(this_id_dict)
+        data_list_with_score.append((this_id_dict, chosen_process[-1][1] - rejected_process[-1][1]))
+
+    # 自动创建输出目录
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
+    with open(output_file, mode='w', encoding='utf-8') as json_file:
+        json.dump(data_list, json_file, indent=4, ensure_ascii=False)
+    
+    print(f"✅ 最终数据集生成完成！共 {len(data_list)} 条样本，保存至：{output_file}")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--folder_path", type=str, required=True, help="Directory to save step2's .pkl results")
+    parser.add_argument("--image_dir", type=str, required=True, help="Directory containing images")
+    # 🔥 新增：传入数据集路径，匹配前两步
+    parser.add_argument("--dataset_json", type=str, default="./data/CSR-Prompt-Dataset-12k.json", help="Path to CSR dataset")
+    parser.add_argument("--clip_alpha", type=float, default=0.9, help="Alpha value for CLIP")
+    parser.add_argument("--output_file", type=str, required=True, help="Path to the output CSR JSON dataset")
+    args = parser.parse_args()
+
+    process_data(args)
+```
+执行脚本step3.sh
+```sh
+FOLDER_PATH="./outputs/score"
+IMAGE_DIR="./data/images"
+DATASET_JSON="./data/CSR-Prompt-Dataset-12k.json"
+CLIP_ALPHA=0.9
+OUTPUT_FILE="./CSR-datasets/my_CSR_dataset.json"
+
+# 创建输出目录
+mkdir -p CSR-datasets
+
+python construct.py \
+  --folder_path $FOLDER_PATH \
+  --image_dir $IMAGE_DIR \
+  --dataset_json $DATASET_JSON \
+  --clip_alpha $CLIP_ALPHA \
+  --output_file $OUTPUT_FILE
+```
 ## Qwen2-VL 的 Visual Contrastive Decoding(VCD)
 
 
 # 成功运行截图
 ##### sample.py
-🚀 总进度: 448/12856 | 3.48% | 已用时: 299s | 预计剩余: 8280s
+🚀 总进度: 12856/12856 | 100.00% | 已用时: 9023s | 预计剩余: 0s
+
+✅ ALL TASKS COMPLETED
+
+##### score.py
+
+
+
+
 
 
