@@ -1,8 +1,6 @@
 # 关键代码
-
-
 ## CSR的数据集生成(用vllm部署模型 + openai 库调用)
-sample.py
+##### sample.py
 ```python
 from utils import *
 import torch
@@ -171,11 +169,11 @@ if __name__ == "__main__":
 
     eval_model(args)
 ```
-执行:
+###### 执行:
 ```bash
 VLLM_WORKER_MULTIPROC_METHOD=spawn CUDA_VISIBLE_DEVICES=0 python sample_vllm.py
 ```
-检验数据质量：
+###### 检验数据质量：
 ```python
 import pickle
 import os
@@ -255,7 +253,7 @@ if __name__ == "__main__":
     show_best_sentences(root, top_k=5)
 
 ```
-score.py:
+##### score.py:
 ```python
 import os
 import json
@@ -402,7 +400,7 @@ if __name__ == "__main__":
 
     eval_model(args)
 ```
-执行脚本step2.sh
+###### 执行脚本step2.sh
 ```sh
 NUM_PROCESSES=14
 NUM_MACHINES=1
@@ -423,7 +421,7 @@ nohup accelerate launch \
   --image_dir $IMAGE_DIR \
   --clip_model_path $CLIP_MODEL_PATH > score.log 2>&1 &
 ```
-检测数据质量：
+###### 检测数据质量：
 ```python
 import os
 import pickle
@@ -461,7 +459,7 @@ for f in sample_files:
         print(f"   CLIP分数: {child.clip_score:.2f} | Rank: {child.rank:.2f}")
     print("-"*60)
 ```
-construct.py:
+##### construct.py:
 ```python
 import os
 import re
@@ -558,7 +556,7 @@ if __name__ == "__main__":
 
     process_data(args)
 ```
-执行脚本step3.sh
+###### 执行脚本step3.sh
 ```sh
 FOLDER_PATH="./outputs/score"
 IMAGE_DIR="./data/images"
@@ -586,9 +584,11 @@ python construct.py \
 ✅ ALL TASKS COMPLETED
 
 ##### score.py
+![](assets/CSR任务二/file-20260329185756442.png)
 
 
+##### construct.py
+nohup: ignoring input
 
-
-
+✅ 最终数据集生成完成！共 12856 条样本，保存至：./CSR-datasets/my_CSR_dataset.json
 
