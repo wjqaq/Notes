@@ -574,8 +574,6 @@ python construct.py \
   --clip_alpha $CLIP_ALPHA \
   --output_file $OUTPUT_FILE
 ```
-## Qwen2-VL 的 Visual Contrastive Decoding(VCD)
-
 
 # 成功运行截图
 ##### sample.py
@@ -592,3 +590,5 @@ nohup: ignoring input
 
 ✅ 最终数据集生成完成！共 12856 条样本，保存至：./CSR-datasets/my_CSR_dataset.json
 
+# 遇到的困难以及解决方法
+- vllm v1引擎移除了对beam search 相关参数的支持，官方提供相关参数的替代方法：[[RFC]: Deprecation of the `best_of` Sampling Parameter in vLLM V1 · Issue #13361 · vllm-project/vllm](https://github.com/vllm-project/vllm/issues/13361)
