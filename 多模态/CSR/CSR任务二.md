@@ -173,9 +173,88 @@ if __name__ == "__main__":
 ```
 执行:
 ```bash
+VLLM_WORKER_MULTIPROC_METHOD=spawn CUDA_VISIBLE_DEVICES=0 python sample_vllm.py
+```
+检验数据质量：
+```python
+# import pickle
+# import os
+
+# # 你要查看的pkl文件路径
+# PKL_PATH = "./outputs/sample_vllm/8000.pkl"
+
+# def load_pkl(path):
+#     with open(path, 'rb') as f:
+#         return pickle.load(f)
+
+# def show_all_nodes(node, indent=0, prefix="ROOT"):
+#     """
+#     递归打印整棵束搜索树的所有节点：
+#     层级、分数、是否完成、文本内容
+#     """
+#     space = "    " * indent
+#     mark = "[✅]" if node.is_final else "[🔄]"
+#     score = f"{node.score:.2f}"
+#     text = node.text.strip() if node.text else "(empty)"
+    
+#     print(f"{space}{prefix} {mark} 分数={score}")
+#     print(f"{space}    文本: {text[:150]}")  # 显示前150字符
+#     print(f"{space}    深度: {node.depth}")
+#     print(f"{space}    子节点数: {len(node.children)}")
+#     print("-" * 80)
+
+#     for idx, child in enumerate(node.children):
+#         show_all_nodes(child, indent+1, prefix=f"子节点{idx+1}")
+
+# def show_best_sentences(node, top_k=5):
+#     """
+#     输出分数最高的 TOP-K 完整句子
+#     """
+#     final_sentences = []
+
+#     def collect(node):
+#         if node.is_final:
+#             final_sentences.append((node.score, node.text.strip()))
+#         for c in node.children:
+#             collect(c)
+#     collect(node)
+
+#     # 按分数从高到低排序
+#     final_sentences.sort(reverse=True, key=lambda x: x[0])
+    
+#     print("\n" + "="*80)
+#     print(f"🔥 分数最高的前 {top_k} 个完整句子 🔥")
+#     print("="*80)
+    
+#     for i, (score, text) in enumerate(final_sentences[:top_k]):
+#         print(f"\n【第 {i+1} 名】")
+#         print(f"分数: {score:.2f}")
+#         print(f"句子: {text}")
+
+# if __name__ == "__main__":
+#     if not os.path.exists(PKL_PATH):
+#         print(f"文件不存在: {PKL_PATH}")
+#         exit(1)
+
+#     data = load_pkl(PKL_PATH)
+#     root = data["tree"]
+    
+#     print("\n" + "="*80)
+#     print("📄 PKL 文件完整信息")
+#     print("="*80)
+#     print(f"图片ID: {data['id']}")
+#     print(f"树根文本: {root.text[:100]}...")
+
+#     # 1. 显示整棵树
+#     print("\n" + "="*80)
+#     print("🌲 完整束搜索树结构")
+#     print("="*80)
+#     show_all_nodes(root)
+
+#     # 2. 显示最好的句子
+#     show_best_sentences(root, top_k=5)
 
 ```
-
 ## Qwen2-VL 的 Visual Contrastive Decoding(VCD)
 
 
