@@ -29,4 +29,6 @@ $$
 $$
 P_{vcd}(y|v,v',x) = softmax[(1+\alpha)logit_{\theta}(y|v,x) - \alpha logit_{\theta}(y|v',x)]
 $$
-其中$\alpha$越大，二者差异放大越明显，
+其中$\alpha$越大，二者差异放大越明显。
+
+##### 增加合理性约束
