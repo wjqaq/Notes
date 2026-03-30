@@ -10,12 +10,16 @@ $$
 p_{vcd}(y_t|v,v',x) = 0 \; if \; y_t \notin \mathcal{V}_{head}(y<_t)
 $$
 源文件：
-版本1：
+对比解码版本1：
 ```python
 	probs = nn.functional.softmax(next_token_logits, dim=-1)
 	cutoff = cd_beta * probs.max(dim=-1, keepdim=True).values
+	diffs = (1+cd_alpha)*next_token_logits - cd_alpha*next_token_logits_cd
+	cd_logits = diffs.masked_fill(next_token_logits < cutoff, -float("inf"))
 ```
-版本2：
+对比解码版本2：
 ```python
-            cutoff = torch.log(torch.tensor(cd_beta)) + next_token_logits.max(dim=-1, keepdim=True).values
+	cutoff = torch.log(torch.tensor(cd_beta)) + next_token_logits.max(dim=-1, keepdim=True).values
+	diffs = (1+cd_alpha)*next_token_logits - cd_alpha*next_token_logits_cd
+	cd_logits = diffs.masked_fill(next_token_logits < cutoff, -float("inf"))
 ```
