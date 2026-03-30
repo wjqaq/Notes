@@ -46,3 +46,7 @@ wget -c https://ghfast.top/https://github.com/Dao-AILab/flash-attention/releases
 ```bash
 uv pip install flash_attn-2.8.3+cu12torch2.9cxx11abiTRUE-cp312-cp312-linux_x86_64.whl 
 ```
+
+
+
+#### 工作流程
