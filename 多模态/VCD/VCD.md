@@ -34,5 +34,11 @@ $$
 ##### 增加合理性约束
 引入了基于原始图像输入输出分布执行度的自适应合理性约束：
 $$
-\mathcal{V}_{head}(y<_t) = \{ y_t \in \mathcal{V} : p_{\theta}(y_t|v,x,y<_t) \geq \beta  \}
+\mathcal{V}_{head}(y<_t) = \{ y_t \in \mathcal{V} : p_{\theta}(y_t|v,x,y<_t) \geq \beta  \max_{w}p_{\theta}(w|v,x,y<_t) \},
 $$
+$$
+p_{vcd}(y_t|v,v',x) = 0 \; if \; y_t \notin \mathcal{V}_{head}(y<_t)
+$$
+对于大模型的输出词表$\mathcal{V}$，通过$\beta$控制其下一个词分布的截断强度，$p_{vcd}$的输出必须输入该词表$\mathcal{V}$
+
+
