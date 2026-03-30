@@ -37,7 +37,7 @@ from vllm import LLM, SamplingParams
 from vllm.v1.sample.logits_processor import LogitsProcessor,BatchUpdate
 from transformers import AutoTokenizer
 
-# ====================== 1. 原论文 DDPM 噪声生成函数======================
+# ====================== 1. DDPM 噪声生成函数======================
 def add_diffusion_noise(image_tensor: torch.Tensor, noise_step: int = 999) -> torch.Tensor:
     """为图像添加DDPM扩散噪声，生成VCD对比用的失真图像"""
     num_steps = 1000
@@ -55,10 +55,9 @@ def add_diffusion_noise(image_tensor: torch.Tensor, noise_step: int = 999) -> to
 
 # ====================== 2. vLLM VCD 对比解码 Logits 处理器 ======================
 class VCDLogitsProcessor(LogitsProcessor):
-    # 🎯 关键修复：参数注解用【字符串】，和官方完全一致！不导入VllmConfig
     def __init__(
         self, 
-        vllm_config: "VllmConfig",  # 字符串注解，避免NameError
+        vllm_config: "VllmConfig",
         device: torch.device, 
         is_pin_memory: bool
     ) -> None:
@@ -70,7 +69,6 @@ class VCDLogitsProcessor(LogitsProcessor):
     def set_noisy_logits(self, noisy_logits):
         self.noisy_logits = noisy_logits
 
-    # 官方必须实现的核心方法
     def apply(self, logits: torch.Tensor) -> torch.Tensor:
         if self.noisy_logits is None:
             return logits
@@ -81,15 +79,13 @@ class VCDLogitsProcessor(LogitsProcessor):
         vcd_logits = vcd_logits.masked_fill(logits < cutoff, -float("inf"))
         return vcd_logits
 
-    # 官方必须实现
     def is_argmax_invariant(self) -> bool:
         return False
-
-    # 官方必须实现
+        
     def update_state(self, batch_update: "BatchUpdate | None") -> None:
         pass
 
-# ====================== 3. 原POPE评估器======================
+# ====================== 3. POPE评估器======================
 class PopeEvaluator:
     """Class for Evaluating MLLMs on POPE dataset."""
     def __init__(self, *args, **kwargs):
@@ -175,7 +171,6 @@ class Qwen2VL_VCD:
         self.use_vcd = False
         self.sampling_params.logits_processors = []
 
-    # ✅ 修复4：新增获取噪声图像logits的方法
     def get_noisy_image_logits(self, prompt: str, image_base64: str):
         """生成噪声图像并获取模型logits（VCD核心逻辑）"""
         messages = [
