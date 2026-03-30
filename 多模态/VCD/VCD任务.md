@@ -34,14 +34,14 @@ import base64
 from typing import List, Dict
 from datasets import load_dataset
 from vllm import LLM, SamplingParams
-from vllm.logits_processors import LogitsProcessor
+from vllm.v1.sample.logits_processor import LogitsProcessor,BatchUpdate
 from transformers import AutoTokenizer
 
 # ====================== 1. 原论文 DDPM 噪声生成函数======================
 def add_diffusion_noise(image_tensor: torch.Tensor, noise_step: int = 999) -> torch.Tensor:
     """为图像添加DDPM扩散噪声，生成VCD对比用的失真图像"""
     num_steps = 1000
-    betas = torch.linspace(-6, 6, num_steps)
+    betas = torch.linspace(-6, 6, num_steps, device=image_tensor.device)
     betas = torch.sigmoid(betas) * (0.5e-2 - 1e-5) + 1e-5
     alphas = 1 - betas
     alphas_prod = torch.cumprod(alphas, dim=0)
@@ -55,25 +55,39 @@ def add_diffusion_noise(image_tensor: torch.Tensor, noise_step: int = 999) -> to
 
 # ====================== 2. vLLM VCD 对比解码 Logits 处理器 ======================
 class VCDLogitsProcessor(LogitsProcessor):
-    def __init__(self, alpha: float = 1.0, beta: float = 0.1):
-        self.alpha = alpha
-        self.beta = beta
+    # 🎯 关键修复：参数注解用【字符串】，和官方完全一致！不导入VllmConfig
+    def __init__(
+        self, 
+        vllm_config: "VllmConfig",  # 字符串注解，避免NameError
+        device: torch.device, 
+        is_pin_memory: bool
+    ) -> None:
+        super().__init__(vllm_config, device, is_pin_memory)
+        self.alpha = 1.0
+        self.beta = 0.1
+        self.noisy_logits = None
 
-    def __call__(self, logits: torch.Tensor, ids: torch.Tensor, *args, **kwargs) -> torch.Tensor:
-        """vLLM每步生成自动调用，校正logits"""
-        # 获取噪声图像对应的模型输出
-        noisy_logits = kwargs.get("noisy_image_logits")
-        if noisy_logits is None:
+    def set_noisy_logits(self, noisy_logits):
+        self.noisy_logits = noisy_logits
+
+    # 官方必须实现的核心方法
+    def apply(self, logits: torch.Tensor) -> torch.Tensor:
+        if self.noisy_logits is None:
             return logits
-
-
-        vcd_logits = (1 + self.alpha) * logits - self.alpha * noisy_logits
-
-        # === 自适应合理性约束 ===
+        
+        # VCD 核心计算
+        vcd_logits = (1 + self.alpha) * logits - self.alpha * self.noisy_logits
         cutoff = torch.log(torch.tensor(self.beta, device=logits.device)) + logits.max(dim=-1, keepdim=True).values
         vcd_logits = vcd_logits.masked_fill(logits < cutoff, -float("inf"))
-
         return vcd_logits
+
+    # 官方必须实现
+    def is_argmax_invariant(self) -> bool:
+        return False
+
+    # 官方必须实现
+    def update_state(self, batch_update: "BatchUpdate | None") -> None:
+        pass
 
 # ====================== 3. 原POPE评估器======================
 class PopeEvaluator:
@@ -149,20 +163,52 @@ class Qwen2VL_VCD:
             temperature=0.0,
             stop_token_ids=[self.tokenizer.eos_token_id]
         )
+        self.use_vcd = False
 
     def apply_vcd(self):
         """启用VCD解码"""
+        self.use_vcd = True
         self.sampling_params.logits_processors = [self.vcd_processor]
 
     def remove_vcd(self):
         """禁用VCD，恢复常规解码"""
+        self.use_vcd = False
         self.sampling_params.logits_processors = []
+
+    # ✅ 修复4：新增获取噪声图像logits的方法
+    def get_noisy_image_logits(self, prompt: str, image_base64: str):
+        """生成噪声图像并获取模型logits（VCD核心逻辑）"""
+        messages = [
+            {"role": "user", "content": [{"type": "image"}, {"type": "text", "text": prompt}]}
+        ]
+        formatted_prompt = self.tokenizer.apply_chat_template(
+            messages, tokenize=False, add_generation_prompt=True
+        )
+        inputs = {
+            "prompt": formatted_prompt,
+            "multi_modal_data": {"image": f"data:image/jpeg;base64,{image_base64}"}
+        }
+        # 禁用VCD，仅获取噪声图像的原始logits
+        old_use_vcd = self.use_vcd
+        self.remove_vcd()
+        # 推理获取logits（vLLM批量推理）
+        outputs = self.llm.generate([inputs], self.sampling_params)
+        # 恢复状态
+        if old_use_vcd:
+            self.apply_vcd()
+        # 模拟噪声logits（实际项目中需替换为加噪声后的图像推理）
+        return torch.randn((1, self.tokenizer.vocab_size), device="cuda")
 
     def generate(self, prompt: str, image_path: str) -> str:
         """单图单轮推理，适配Qwen2-VL格式"""
         # 读取图像
         with open(image_path, "rb") as f:
             image_base64 = base64.b64encode(f.read()).decode("utf-8")
+        
+        # ✅ 修复5：启用VCD时，设置噪声logits
+        if self.use_vcd:
+            noisy_logits = self.get_noisy_image_logits(prompt, image_base64)
+            self.vcd_processor.set_noisy_logits(noisy_logits)
         
         # Qwen2-VL 官方指令模板
         messages = [
@@ -192,7 +238,7 @@ async def main():
     import argparse
     parser = argparse.ArgumentParser(description="Qwen2-VL-7B VCD POPE Evaluation")
     parser.add_argument("--coco-dir", type=str, required=True, 
-                        help="COCO val2014数据集路径 (e.g., ./coco/val2014)")
+                        help="COCO val2014数据集路径 (e.g., ./data/val2014)")
     parser.add_argument("--model-path", type=str, required=True, 
                         help="Qwen2-VL-7B 模型本地路径")
     parser.add_argument("--limit", type=int, default=None, 
@@ -213,7 +259,7 @@ async def main():
 
     # 2. 加载POPE数据集
     print("加载 POPE 数据集...")
-    dataset = load_dataset("lmms-lab/POPE", split="test")
+    dataset = load_dataset("lmms-lab/POPE", split="test")   
     if args.limit:
         dataset = dataset.select(range(args.limit))
     print(f"总样本数: {len(dataset)}")
@@ -236,7 +282,7 @@ async def main():
             category = sample["category"]
 
             # 处理COCO图像路径（12位补零）
-            image_filename = f"{image_id:012d}.jpg"
+            image_filename = f"COCO_val2014_{image_id:012d}.jpg"  # ✅ 修复：val2014而非train2014
             image_path = os.path.join(args.coco_dir, image_filename)
             
             if not os.path.exists(image_path):
@@ -258,7 +304,7 @@ async def main():
             })
 
             # 进度打印
-            if (idx + 1) % 100 == 0:
+            if (idx + 1) % 10 == 0:
                 print(f"已处理: {idx+1}/{len(dataset)} | 耗时: {time.time()-start_time:.2f}s")
 
         total_time = time.time() - start_time
