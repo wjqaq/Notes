@@ -22,5 +22,11 @@ $$
 - 训练数据固有的统计偏差。
 
 #### 视觉对比解码（Visual Contrastive Decoding）
-
-
+模型生成两种分布：
+- 基于原始图像的视觉输入$v$的分布；
+- 基于对$v$添加的预设失真后的$v'$的分布。
+然后利用这两种分布差异计算新的对比概率分布:
+$$
+P_{vcd}(y|v,v',x) = softmax[(1+\alpha)logit_{\theta}(y|v,x) - \alpha logit_{\theta}(y|v',x)]
+$$
+其中$\alpha$越大，二者差异放大越明显，
