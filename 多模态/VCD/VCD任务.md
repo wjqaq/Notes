@@ -356,3 +356,231 @@ if __name__ == "__main__":
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     asyncio.run(main())
 ```
+
+
+
+```python
+import argparse
+import torch
+import os
+import json
+import numpy as np
+from tqdm import tqdm
+from PIL import Image
+from transformers import set_seed
+import warnings
+warnings.filterwarnings("ignore")
+
+# ===================== 官方规范导入 =====================
+from vllm import LLM, SamplingParams
+from vllm.config import VllmConfig
+from vllm.v1.sample.logits_processor.interface import (
+    LogitsProcessor,
+    BatchUpdate,
+    MoveDirectionality
+)
+
+# ===================== 扩散加噪函数（不变） =====================
+def add_diffusion_noise(image_tensor: torch.Tensor, noise_step: int) -> torch.Tensor:
+    num_steps = 1000
+    betas = torch.linspace(-6, 6, num_steps)
+    betas = torch.sigmoid(betas) * (0.5e-2 - 1e-5) + 1e-5
+    alphas = 1 - betas
+    alphas_prod = torch.cumprod(alphas, dim=0)
+    alphas_bar_sqrt = torch.sqrt(alphas_prod)
+    one_minus_alphas_bar_sqrt = torch.sqrt(1 - alphas_prod)
+
+    def q_x(x_0, t):
+        noise = torch.randn_like(x_0)
+        alphas_t = alphas_bar_sqrt[t].to(x_0.device)
+        alphas_1_m_t = one_minus_alphas_bar_sqrt[t].to(x_0.device)
+        return alphas_t * x_0 + alphas_1_m_t * noise
+
+    return q_x(image_tensor, noise_step)
+
+# ===================== 🔥 官方规范 VCD LogitsProcessor =====================
+class VCDLogitsProcessor(LogitsProcessor):
+    def __init__(self, vllm_config: VllmConfig, device: torch.device, is_pin_memory: bool):
+        """官方强制要求的构造函数签名"""
+        self.device = device
+        self.req_config = {}  # key: batch_index, value: (alpha, beta)
+
+    def is_argmax_invariant(self) -> bool:
+        """VCD会改变最大值，必须返回False"""
+        return False
+
+    def update_state(self, batch_update: BatchUpdate | None) -> None:
+        """官方强制：处理批次增删改"""
+        if batch_update is None:
+            return
+
+        # 1. 移除结束的请求
+        for idx in batch_update.removed:
+            self.req_config.pop(idx, None)
+
+        # 2. 添加新请求（从extra_args获取VCD参数）
+        for idx, params, _, _ in batch_update.added:
+            if params.extra_args and "cd_alpha" in params.extra_args:
+                alpha = params.extra_args["cd_alpha"]
+                beta = params.extra_args["cd_beta"]
+                self.req_config[idx] = (alpha, beta)
+            else:
+                self.req_config.pop(idx, None)
+
+        # 3. 处理移动/交换
+        for src_idx, dst_idx, direction in batch_update.moved:
+            src_val = self.req_config.pop(src_idx, None)
+            dst_val = self.req_config.pop(dst_idx, None)
+
+            if src_val is not None:
+                self.req_config[dst_idx] = src_val
+            if direction == MoveDirectionality.SWAP and dst_val is not None:
+                self.req_config[src_idx] = dst_val
+
+    def apply(self, logits: torch.Tensor) -> torch.Tensor:
+        """官方强制：批量处理logits，执行VCD"""
+        if not self.req_config:
+            return logits
+
+        # batch格式：[源1, cd1, 源2, cd2, ...]
+        src_indices = list(range(0, logits.shape[0], 2))  # 偶数位=源
+        cd_indices = list(range(1, logits.shape[0], 2))   # 奇数位=对比
+
+        # 只处理有VCD配置的成对请求
+        for src_idx, cd_idx in zip(src_indices, cd_indices):
+            if src_idx in self.req_config:
+                alpha, beta = self.req_config[src_idx]
+
+                # 你的原版VCD公式
+                src_logits = logits[src_idx:src_idx+1]
+                cd_logits = logits[cd_idx:cd_idx+1]
+
+                cutoff = torch.log(torch.tensor(beta, device=src_logits.device)) + src_logits.max(dim=-1, keepdim=True).values
+                corrected = (1 + alpha) * src_logits - alpha * cd_logits
+                corrected = corrected.masked_fill(src_logits < cutoff, -float('inf'))
+
+                # 写回源请求的logits
+                logits[src_idx:src_idx+1] = corrected
+
+        return logits
+
+# ===================== POPE 评估函数（不变） =====================
+def evaluate_pope(gt_path, pred_path):
+    gt_data = [json.loads(line) for line in open(gt_path, "r", encoding="utf-8")]
+    pred_data = [json.loads(line) for line in open(pred_path, "r", encoding="utf-8")]
+    
+    pred_map = {item["question_id"]: item["answer"] for item in pred_data}
+
+    tp = tn = fp = fn = 0
+    for gt in gt_data:
+        qid = gt["question_id"]
+        gt_label = gt["label"].lower().strip()
+        pred_label = pred_map.get(qid, "").strip()
+
+        if gt_label == "yes":
+            tp += 1 if "yes" in pred_label else 0
+            fn += 0 if "yes" in pred_label else 1
+        else:
+            tn += 1 if "no" in pred_label else 0
+            fp += 0 if "no" in pred_label else 1
+
+    total = tp + tn + fp + fn
+    accuracy = (tp + tn) / total if total > 0 else 0.0
+    precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
+    recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
+    f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0.0
+
+    print("\n" + "="*60)
+    print("📊 POPE 评估结果 (Qwen2-VL + VCD + vLLM v1)")
+    print("="*60)
+    print(f"准确率 (Accuracy):\t{accuracy:.4f}")
+    print(f"精确率 (Precision):\t{precision:.4f}")
+    print(f"召回率 (Recall):   \t{recall:.4f}")
+    print(f"F1分数 (F1 Score):\t{f1:.4f}")
+    print(f"真阳性/真阴性/假阳性/假阴性: {tp}/{tn}/{fp}/{fn}")
+    print("="*60)
+
+# ===================== 主函数（官方规范调用） =====================
+def main():
+    parser = argparse.ArgumentParser()
+    # 路径
+    parser.add_argument("--model-path", default="./models/Qwen2-VL-7B-Instruct-AWQ")
+    parser.add_argument("--image-folder", default="./data/val2014")
+    parser.add_argument("--question-file", default="./data/POPE/coco_pope_popular.json")
+    parser.add_argument("--answers-file", default="./output/pope_vcd_result.jsonl")
+    # VCD
+    parser.add_argument("--use-vcd", action="store_true", default=True)
+    parser.add_argument("--cd-alpha", type=float, default=1.0)
+    parser.add_argument("--cd-beta", type=float, default=0.1)
+    parser.add_argument("--noise-step", type=int, default=500)
+    # 推理
+    parser.add_argument("--batch-size", type=int, default=2)
+    args = parser.parse_args()
+
+    os.makedirs(os.path.dirname(args.answers_file), exist_ok=True)
+
+    # ===================== 🔥 官方规范：初始化时传入处理器 =====================
+    llm = LLM(
+        model=args.model_path,
+        quantization="awq_marlin",
+        trust_remote_code=True,
+        tensor_parallel_size=1,
+        max_model_len=1024,
+        enforce_eager=True,
+        # ✅ 关键：在这里注册自定义LogitsProcessor
+        logits_processors=[VCDLogitsProcessor] if args.use_vcd else [],
+    )
+
+    # ===================== 采样参数（通过extra_args传VCD参数） =====================
+    sampling_params = SamplingParams(
+        temperature=0.0,
+        max_tokens=10,
+        skip_special_tokens=True,
+        logprobs=1,
+        # ✅ 关键：用extra_args传递VCD参数
+        extra_args={"cd_alpha": args.cd_alpha, "cd_beta": args.cd_beta} if args.use_vcd else {}
+    )
+
+    # 加载数据
+    with open(args.question_file, "r", encoding="utf-8") as f:
+        questions = [json.loads(line) for line in f]
+
+    results = []
+    for i in tqdm(range(0, len(questions), args.batch_size)):
+        batch = questions[i:i+args.batch_size]
+        requests = []
+
+        for q in batch:
+            img_path = os.path.join(args.image_folder, q["image"])
+            prompt = f"<img>{img_path}</img>{q['text']} Answer with yes or no."
+
+            # 1. 原图（源输入）
+            img = Image.open(img_path).convert("RGB")
+            requests.append({"prompt": prompt, "multi_modal_data": {"image": img}})
+
+            # 2. 加噪图（对比输入）
+            if args.use_vcd:
+                img_tensor = torch.from_numpy(np.array(img)).permute(2,0,1).float() / 255.0
+                noisy_tensor = add_diffusion_noise(img_tensor, args.noise_step)
+                noisy_img = Image.fromarray((noisy_tensor.permute(1,2,0)*255).byte().numpy())
+                requests.append({"prompt": prompt, "multi_modal_data": {"image": noisy_img}})
+
+        # 推理
+        outputs = llm.generate(requests, sampling_params, use_tqdm=False)
+
+        # 提取结果（只取原图输出）
+        for j, q in enumerate(batch):
+            idx = j * 2 if args.use_vcd else j
+            ans = outputs[idx].outputs[0].text.strip().lower()
+            results.append({"question_id": q["question_id"], "answer": ans})
+
+    # 保存
+    with open(args.answers_file, "w", encoding="utf-8") as f:
+        for item in results:
+            f.write(json.dumps(item, ensure_ascii=False) + "\n")
+
+    evaluate_pope(args.question_file, args.answers_file)
+
+if __name__ == "__main__":
+    main()
+```
