@@ -584,3 +584,221 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+
+
+```python
+import argparse
+import torch
+import os
+import json
+import numpy as np
+from tqdm import tqdm
+from PIL import Image
+from transformers import set_seed
+import warnings
+warnings.filterwarnings("ignore")
+
+# ===================== 官方规范导入 =====================
+from vllm import LLM, SamplingParams
+from vllm.config import VllmConfig
+from vllm.v1.sample.logits_processor.interface import (
+    LogitsProcessor,
+    BatchUpdate,
+    MoveDirectionality
+)
+
+# ===================== 扩散加噪函数（不变） =====================
+def add_diffusion_noise(image_tensor: torch.Tensor, noise_step: int) -> torch.Tensor:
+    num_steps = 1000
+    betas = torch.linspace(-6, 6, num_steps)
+    betas = torch.sigmoid(betas) * (0.5e-2 - 1e-5) + 1e-5
+    alphas = 1 - betas
+    alphas_prod = torch.cumprod(alphas, dim=0)
+    alphas_bar_sqrt = torch.sqrt(alphas_prod)
+    one_minus_alphas_bar_sqrt = torch.sqrt(1 - alphas_prod)
+
+    def q_x(x_0, t):
+        noise = torch.randn_like(x_0)
+        alphas_t = alphas_bar_sqrt[t].to(x_0.device)
+        alphas_1_m_t = one_minus_alphas_bar_sqrt[t].to(x_0.device)
+        return alphas_t * x_0 + alphas_1_m_t * noise
+
+    return q_x(image_tensor, noise_step)
+
+# ===================== 🔥 vLLM V1 官方规范 VCD 处理器 =====================
+class VCDLogitsProcessor(LogitsProcessor):
+    def __init__(self, vllm_config: VllmConfig, device: torch.device, is_pin_memory: bool):
+        self.device = device
+        self.req_config = {}
+
+    def is_argmax_invariant(self) -> bool:
+        return False
+
+    def update_state(self, batch_update: BatchUpdate | None) -> None:
+        if batch_update is None:
+            return
+
+        for idx in batch_update.removed:
+            self.req_config.pop(idx, None)
+
+        for idx, params, _, _ in batch_update.added:
+            if params.extra_args and "cd_alpha" in params.extra_args:
+                self.req_config[idx] = (params.extra_args["cd_alpha"], params.extra_args["cd_beta"])
+            else:
+                self.req_config.pop(idx, None)
+
+        for src_idx, dst_idx, direction in batch_update.moved:
+            src_val = self.req_config.pop(src_idx, None)
+            dst_val = self.req_config.pop(dst_idx, None)
+            if src_val is not None:
+                self.req_config[dst_idx] = src_val
+            if direction == MoveDirectionality.SWAP and dst_val is not None:
+                self.req_config[src_idx] = dst_val
+
+    def apply(self, logits: torch.Tensor) -> torch.Tensor:
+        if not self.req_config:
+            return logits
+
+        src_indices = range(0, logits.shape[0], 2)
+        cd_indices = range(1, logits.shape[0], 2)
+
+        for src_idx, cd_idx in zip(src_indices, cd_indices):
+            if src_idx in self.req_config:
+                alpha, beta = self.req_config[src_idx]
+                src_logits = logits[src_idx:src_idx+1]
+                cd_logits = logits[cd_idx:cd_idx+1]
+
+                cutoff = torch.log(torch.tensor(beta, device=self.device)) + src_logits.max(dim=-1, keepdim=True).values
+                corrected = (1 + alpha) * src_logits - alpha * cd_logits
+                corrected = corrected.masked_fill(src_logits < cutoff, -float('inf'))
+                logits[src_idx:src_idx+1] = corrected
+
+        return logits
+
+# ===================== POPE 评估函数（不变） =====================
+def evaluate_pope(gt_path, pred_path):
+    gt_data = [json.loads(line) for line in open(gt_path, "r", encoding="utf-8")]
+    pred_data = [json.loads(line) for line in open(pred_path, "r", encoding="utf-8")]
+    
+    pred_map = {item["question_id"]: item["answer"] for item in pred_data}
+
+    tp = tn = fp = fn = 0
+    for gt in gt_data:
+        qid = gt["question_id"]
+        gt_label = gt["label"].lower().strip()
+        pred_label = pred_map.get(qid, "").strip()
+
+        if gt_label == "yes":
+            tp += 1 if "yes" in pred_label else 0
+            fn += 0 if "yes" in pred_label else 1
+        else:
+            tn += 1 if "no" in pred_label else 0
+            fp += 0 if "no" in pred_label else 1
+
+    total = tp + tn + fp + fn
+    accuracy = (tp + tn) / total if total > 0 else 0.0
+    precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
+    recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
+    f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0.0
+
+    print("\n" + "="*60)
+    print("📊 POPE 评估结果 (Qwen2-VL + VCD + vLLM v1)")
+    print("="*60)
+    print(f"准确率 (Accuracy):\t{accuracy:.4f}")
+    print(f"精确率 (Precision):\t{precision:.4f}")
+    print(f"召回率 (Recall):   \t{recall:.4f}")
+    print(f"F1分数 (F1 Score):\t{f1:.4f}")
+    print(f"真阳性/真阴性/假阳性/假阴性: {tp}/{tn}/{fp}/{fn}")
+    print("="*60)
+
+# ===================== 主函数 =====================
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--model-path", default="./models/Qwen2-VL-7B-Instruct-AWQ")
+    parser.add_argument("--image-folder", default="./data/val2014")
+    parser.add_argument("--question-file", default="./data/POPE/coco_pope_popular.json")
+    parser.add_argument("--answers-file", default="./output/pope_vcd_result.jsonl")
+    parser.add_argument("--use-vcd", action="store_true", default=True)
+    parser.add_argument("--cd-alpha", type=float, default=1.0)
+    parser.add_argument("--cd-beta", type=float, default=0.1)
+    parser.add_argument("--noise-step", type=int, default=500)
+    parser.add_argument("--batch-size", type=int, default=1)
+    args = parser.parse_args()
+
+    set_seed(42)
+    os.makedirs(os.path.dirname(args.answers_file), exist_ok=True)
+
+    # 🔥 官方规范：初始化注册VCD处理器
+    llm = LLM(
+        model=args.model_path,
+        quantization="awq_marlin",
+        trust_remote_code=True,
+        tensor_parallel_size=1,
+        max_model_len=1024,
+        enforce_eager=True,
+        logits_processors=[VCDLogitsProcessor] if args.use_vcd else [],
+    )
+
+    # 采样参数
+    sampling_params = SamplingParams(
+        temperature=0.0,
+        max_tokens=5,
+        skip_special_tokens=True,
+        extra_args={"cd_alpha": args.cd_alpha, "cd_beta": args.cd_beta} if args.use_vcd else {}
+    )
+
+    # 加载数据
+    with open(args.question_file, "r", encoding="utf-8") as f:
+        questions = [json.loads(line) for line in f]
+
+    results = []
+    for i in tqdm(range(0, len(questions), args.batch_size)):
+        batch = questions[i:i+args.batch_size]
+        requests = []
+
+        for q in batch:
+            img_path = os.path.join(args.image_folder, q["image"])
+            # ✅【核心修复】Qwen2-VL + vLLM 官方多模态Prompt格式（唯一正确写法）
+            prompt = f"<|vision_start|><|image_pad|><|vision_end|>{q['text']} Answer with yes or no."
+
+            # 1. 原图
+            img = Image.open(img_path).convert("RGB")
+            requests.append({
+                "prompt": prompt,
+                "multi_modal_data": {"image": img}
+            })
+
+            # 2. 加噪图
+            if args.use_vcd:
+                img_tensor = torch.from_numpy(np.array(img)).permute(2,0,1).float() / 255.0
+                noisy_tensor = add_diffusion_noise(img_tensor, args.noise_step)
+                noisy_img = Image.fromarray((noisy_tensor.permute(1,2,0)*255).byte().numpy())
+                requests.append({
+                    "prompt": prompt,
+                    "multi_modal_data": {"image": noisy_img}
+                })
+
+        # 推理
+        outputs = llm.generate(requests, sampling_params, use_tqdm=False)
+
+        # 提取结果
+        for j, q in enumerate(batch):
+            idx = j * 2 if args.use_vcd else j
+            ans = outputs[idx].outputs[0].text.strip().lower()
+            results.append({
+                "question_id": q["question_id"],
+                "image": q["image"],
+                "answer": ans
+            })
+
+    # 保存结果
+    with open(args.answers_file, "w", encoding="utf-8") as f:
+        for item in results:
+            f.write(json.dumps(item, ensure_ascii=False) + "\n")
+
+    evaluate_pope(args.question_file, args.answers_file)
+
+if __name__ == "__main__":
+    main()
+```
