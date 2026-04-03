@@ -7,4 +7,5 @@ IEEE ICME 2025
 - 风格一致数据增强；（通过GPT-4重写样本达到风格一致的数据增强）
 - 最后该数据集用于后续的HA-DPO模型训练；
 #### 方法
-多模态幻觉感知DPO （MultiModal 
+##### 多模态幻觉感知DPO （MultiModal Hallucination-Aware DPO）
+
