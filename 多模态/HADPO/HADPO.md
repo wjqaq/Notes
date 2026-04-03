@@ -19,3 +19,4 @@ $$
 $$
 \hat r (x_T,x_{I},y) = \beta \; log \frac{\pi_{\theta}(y|[x_{T},x_{I}])}{\pi_{ref}(y|[x_{T},x_{I}])}
 $$
+- 最大化奖励边际$\hat r(x_{T},x_{I},y_{pos}) - \hat r(x_{T},x_{I},y_{neg})$，有效发大了$y_{pos}$的对数似然，缩小了$y_{neg}$的对数似。
