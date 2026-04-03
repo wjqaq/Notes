@@ -30,3 +30,7 @@ L = L_{dpo} + \lambda L_{aux}
 $$
 用$\lambda$平衡偏好学习损失和辅助语言建模损失。
 
+#### 分析
+#### 为什么要风格一致
+![](assets/HADPO/file-20260403130237702.png)
+- 首先LVLM
