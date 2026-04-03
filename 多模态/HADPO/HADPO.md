@@ -12,4 +12,5 @@ $$
 L_{dpo}(\pi_{\theta};\pi_{ref}) = -E(x_{T},x_{I},y_{pos},y_{neg})\sim D[log \; \sigma(\beta \;log \frac{\pi_{\theta}(y_{pos}|[x_{T},x_{I}])}{\pi_{ref}(y_{pos}|[x_{T},x_{I}])}) - \beta \;log \frac{\pi_{\theta}(y_{neg}|[x_{T},x_{I}])}{\pi_{ref}(y_{neg}|[x_{T},x_{I}])})]
 $$
 
-- 其中$x_{$
+- 其中$x_{T}\;x_{I}$表示文本和图像提示；
+- 
