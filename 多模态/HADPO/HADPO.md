@@ -9,6 +9,6 @@ IEEE ICME 2025
 #### 方法
 ##### 多模态幻觉感知DPO （MultiModal Hallucination-Aware DPO）
 $$
-L_{dpo}(\pi_{\theta};\pi_{ref}) = -E(x_{T},x_{I},y_{pos},y_{neg})\sim D[log \sigma]
+L_{dpo}(\pi_{\theta};\pi_{ref}) = -E(x_{T},x_{I},y_{pos},y_{neg})\sim D[log \; \sigma(\beta \;log \frac{\pi_{\theta}(y_{pos}|[x_{T},x_{I}])}{})]
 $$
 
