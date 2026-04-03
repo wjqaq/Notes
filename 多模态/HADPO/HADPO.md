@@ -57,5 +57,5 @@ $$
 - **SHR评估**：SHR 评估使用了来自 VG 数据集的 200 张图像。在评估期间，模型需要为这 200 张图像提供详细的描述。然后，SHR 测量这些描述中幻觉句子的比例。GPT-4 通过比较模型输出与 VG 注释及人类注释的事实信息来确定一个句子是否为幻觉。
 ##### 结果
 ![](assets/HADPO/file-20260403140027834.png)
-![](assets/HADPO/file-20260403140041450.png)
-![](assets/HADPO/file-20260403140154620.png)
+![](assets/HADPO/file-20260403140041450.png#pic_center)
+![](assets/HADPO/file-20260403140154620.png#pic_center)
