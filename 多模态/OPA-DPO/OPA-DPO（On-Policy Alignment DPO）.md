@@ -9,5 +9,8 @@ CVPR 2025
 
 传统的DPO是离线[Offline RL（离线强化学习）](../相关概念.md#Offline%20RL（离线强化学习）)异策略[Off-Policy（异策略）](../相关概念.md#Off-Policy（异策略）)，其行为策略和目标策略的数据集分布往往是偏离的。
 
-
+#### 分类
+![](assets/OPA-DPO（On-Policy%20Alignment%20DPO）/file-20260407102808518.png)
+DPO解决LVLM幻觉问题分为三类：
+- 
 #### 方法
