@@ -59,10 +59,13 @@ DPO训练：
 - 语言纠正（Language Corrections）：
 	构建了从GPT-4V标记的幻觉分数的映射，以建立更新权重 $W_{hal}(S_{hal})$。然后，幻觉加权对数策略定义为 $\log \pi^{hw}(y|x,m)=\sum_{i}^{L}W_{hal}(S_{hal}^{i})\log \pi(y_{i}|x,m,y_{<i})$。
 	以此建立语言修正偏好对：
-	
+	$$\mathcal{L}_{LC}=-\mathbb{E}_{(y_{GT},y_{Rev},y_{Gen},x,m)\sim\mathcal{D}}[\log \sigma(\beta \log\frac{\pi_{\theta}(y_{GT}|x,m)}{\pi_{OPA}(y_{GT}|x,m)}-\beta \log\frac{\pi_{\theta}(y_{Gen}|x,m)}{\pi_{OPA}(y_{Gen}|x,m)}) + \log \sigma(\beta \log\frac{\pi_{\theta}^{hw}(y_{Rev}|x,m)}{\pi_{OPA}^{hw}(y_{Rev}|x,m)}-\beta \log\frac{\pi_{\theta}^{hw}(y_{Gen}|x,m)}{\pi_{OPA}^{hw}(y_{Gen}|x,m)})]$$
 - 图像聚焦机制 (Image Focus Mechanism)：
 	创建了从GPT-4V分类结果 $S_{img}$ 的映射来确定更新权重 $W_{img}(S_{img})$。图像加权对数策略被描述为 $\log \pi^{iw}(y|x,m)=\sum_{i}^{L}W_{img}(S_{img}^{i})\log \pi(y_{i}|x,m,y_{<i})$。
 	以此建立图像聚焦偏好对：$$\mathcal{L}_{IF}=-\mathbb{E}_{(y_{GT},y_{Rev},x,m,m^{\prime})\sim\mathcal{D}}[\log \sigma(\beta \log\frac{\pi_{\theta}(y_{GT}|x,m)}{\pi_{OPA}(y_{GT}|x,m)}-\beta \log\frac{\pi_{\theta}(y_{GT}|x,m^{\prime})}{\pi_{OPA}(y_{GT}|x,m^{\prime})}) + \log \sigma(\beta \log\frac{\pi_{\theta}^{iw}(y_{Rev}|x,m)}{\pi_{OPA}^{iw}(y_{Rev}|x,m)} - \beta \log\frac{\pi_{\theta}^{iw}(y_{Rev}|x,m^{\prime})}{\pi_{OPA}^{iw}(y_{Rev}|x,m^{\prime})})]$$
-- 
+- 锚定偏好（Anchored Preference)：
+	采用两个锚点来约束首选响应的概率不至于下降太多：
+	$$\mathcal{L}_{Anc}=-\mathbb{E}_{(y_{GT},y_{Rev},x,m)\sim\mathcal{D}}[\log \sigma(\beta \log\frac{\pi_{\theta}(y_{GT}|x,m)}{\pi_{OPA}(y_{GT}|x,m)}-\delta) + \log \sigma(\beta \log\frac{\pi_{\theta}(y_{Rev}|x,m)}{\pi_{OPA}(y_{Rev}|x,m)}-\delta)]$$
+结合以上公式，我们得到OPA-DPO的最终损失函数：
 
-
+$$\mathcal{L}_{OPA-DPO}=\mathcal{L}_{LC}+\gamma_{1}\mathcal{L}_{IF}+\gamma_{2}\mathcal{L}_{Anc}$$
