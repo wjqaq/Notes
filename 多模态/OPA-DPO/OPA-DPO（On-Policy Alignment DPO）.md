@@ -1,4 +1,6 @@
 CVPR 2025
+
+传统的DPO是离线[Offline RL（离线强化学习）](../相关概念.md#Offline%20RL（离线强化学习）)异策略[Off-Policy（异策略）](../相关概念.md#Off-Policy（异策略）)，其行为策略和目标策略的数据集分布往往是偏离的。
 #### 问题
 ![](assets/OPA-DPO（On-Policy%20Alignment%20DPO）/file-20260403170657832.png)
 
@@ -7,7 +9,6 @@ CVPR 2025
 - 图b，说明了OPA-DPO用少量数据达到最低幻觉率，说明，把数据变成“同策略”后，模型的学习效率会大幅提升；
 - 图c：只做DPO或OPA效果提升没OPA-DPO要好。
 
-传统的DPO是离线[Offline RL（离线强化学习）](../相关概念.md#Offline%20RL（离线强化学习）)异策略[Off-Policy（异策略）](../相关概念.md#Off-Policy（异策略）)，其行为策略和目标策略的数据集分布往往是偏离的。
 
 #### 分类
 ![](assets/OPA-DPO（On-Policy%20Alignment%20DPO）/file-20260407102808518.png)
