@@ -40,5 +40,6 @@ DPO解决LVLM幻觉问题分为三类：
 因此提出OPA-DPO。
 #### 方法
 ![](assets/OPA-DPO（On-Policy%20Alignment%20DPO）/file-20260407164710077.png)
-
+1. 将Prompt + images，给原始模型生成$y_{Gen}$
+2. 将Prompt + images + $y_{Gen}$+$y_{GT}$（正确答案）给GPT-4V，让专家去修改
 
