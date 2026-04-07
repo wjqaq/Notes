@@ -28,4 +28,6 @@ DPO解决LVLM幻觉问题分为三类：
 ![](assets/OPA-DPO（On-Policy%20Alignment%20DPO）/file-20260407130359577.png)
 $$\mathbb{D}_{KL}[P||Q]:=\sum_{y\in\mathcal{Y}}P(y)\log\frac{P(y)}{Q(y)}$$
 给定一个提示 $x$ 和图像 $m$，假设存在一个响应 $y$ 使得 $\pi_{\theta}(y|x,m)>0$，而 $\pi_{ref}(y|x,m)\rightarrow 0$，则两个策略之间的KL散度将变为 $\mathbb{D}_{KL}[\pi_{\theta}(\cdot|x,m)||\pi_{ref}(\cdot|x,m)]\rightarrow \infty$。
-由图a左可以看出对于专家模型给出的最右边的完美回答，参考模型（初始模型）学不会，
+- 由图a左可以看出如果专家给出了一个完美的回复 $y$，但这个回复落在了 $\mathcal{Y}_{global} \setminus \mathcal{Y}_{ref}$ 中。这意味着在初始模型的认知里，这句话太陌生了，生成它的概率极低，即 $\pi_{ref}(y) \rightarrow 0$ ；
+- 此时，如果我们强行要求更新后的模型去学习并输出这句话，即要求 $\pi_{\theta}(y) > 0$ ；
+- 在代入 KL 散度公式时，分母 $\pi_{ref}(y)$ 趋近于 $0$，而分子 $\pi_{\theta}(y)$ 大于 $0$。这会导致对数内部的除法结果趋近于无穷大，最终使得整个 KL 散度惩罚 $\mathbb{D}_{KL} \rightarrow \infty$ 。
