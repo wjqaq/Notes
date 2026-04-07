@@ -25,3 +25,7 @@ DPO解决LVLM幻觉问题分为三类：
 - $\mathcal{Y}_{global}$：**全局采样空间**。代表语言模型理论上能组合出的所有可能的文本回复（无论好坏、无论逻辑通不通）。
 - $\mathcal{Y}_{ref}$：**参考测量支持集**。模型在初始状态下（即 $\pi_{ref}$）有能力生成的回复，换句话说，就是初始模型生成概率大于 $0$ 的回复集合。
 - $\mathcal{Y}_{\theta}$：**更新策略支持集**。我们希望通过 DPO 训练后，模型 ($\pi_{\theta}$) 能够生成的回复集合。
+![](assets/OPA-DPO（On-Policy%20Alignment%20DPO）/file-20260407130359577.png)
+$$\mathbb{D}_{KL}[P||Q]:=\sum_{y\in\mathcal{Y}}P(y)\log\frac{P(y)}{Q(y)}$$
+给定一个提示 $x$ 和图像 $m$，假设存在一个响应 $y$ 使得 $\pi_{\theta}(y|x,m)>0$，而 $\pi_{ref}(y|x,m)\rightarrow 0$，则两个策略之间的KL散度将变为 $\mathbb{D}_{KL}[\pi_{\theta}(\cdot|x,m)||\pi_{ref}(\cdot|x,m)]\rightarrow \infty$。
+由图a左可以看出对于最右边的完美回答，
