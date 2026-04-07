@@ -40,6 +40,8 @@ DPO解决LVLM幻觉问题分为三类：
 因此提出OPA-DPO。
 #### 方法
 ![](assets/OPA-DPO（On-Policy%20Alignment%20DPO）/file-20260407164710077.png)
-1. 将Prompt + images，给原始模型生成$y_{Gen}$
-2. 将Prompt + images + $y_{Gen}$+$y_{GT}$（正确答案）给GPT-4V，让专家去修改
+1. 将Prompt + images，给原始模型生成$y_{Gen}$；
+2. 将Prompt + images + $y_{Gen}$+$y_{GT}$（正确答案）给GPT-4V，让专家去修改有幻觉的回复，得到$y_{Rev}$，但$y_{Rev}$是带有专家风格的；
+3. 在正式做 DPO 之前，先用正确答案（$y_{GT}$）和修改后的答案（$y_{Rev}$）对初始模型进行一次简单的 LoRA-SFT（有监督微调），此时，原本属于“离策略”的优质答案，全部变成了模型自己也能顺畅说出来的“同策略 (On-policy)”数据。
+
 
