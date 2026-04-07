@@ -39,5 +39,6 @@ DPO解决LVLM幻觉问题分为三类：
 
 因此提出OPA-DPO。
 #### 方法
+![](assets/OPA-DPO（On-Policy%20Alignment%20DPO）/file-20260407164710077.png)
 
 
