@@ -31,3 +31,5 @@ $$\mathbb{D}_{KL}[P||Q]:=\sum_{y\in\mathcal{Y}}P(y)\log\frac{P(y)}{Q(y)}$$
 - 由图a左可以看出如果专家给出了一个完美的回复 $y$，但这个回复落在了 $\mathcal{Y}_{global} \setminus \mathcal{Y}_{ref}$ 中。这意味着在初始模型的认知里，这句话太陌生了，生成它的概率极低，即 $\pi_{ref}(y) \rightarrow 0$ ；
 - 此时，如果我们强行要求更新后的模型去学习并输出这句话，即要求 $\pi_{\theta}(y) > 0$ ；
 - 在代入 KL 散度公式时，分母 $\pi_{ref}(y)$ 趋近于 $0$，而分子 $\pi_{\theta}(y)$ 大于 $0$。这会导致对数内部的除法结果趋近于无穷大，最终使得整个 KL 散度惩罚 $\mathbb{D}_{KL} \rightarrow \infty$ 。
+由此推导出：
+$\mathcal{Y}_{\theta} \subseteq \mathcal{Y}_{ref} \subseteq \mathcal{Y}_{global}$ 。**只要是初始模型 $\pi_{ref}$ 绝对说不出的话，无论答案多好，更新后的模型 $\pi_{\theta}$ 也绝对说不出。**
