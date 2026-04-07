@@ -83,3 +83,8 @@ $$\mathcal{L}_{OPA-DPO}=\mathcal{L}_{LC}+\gamma_{1}\mathcal{L}_{IF}+\gamma_{2}\m
 如果不使用OPA框架，其性能几乎与未考虑同策略数据的传统算法相同。引入OPA操作使幻觉率降低了近50%。
 ![](assets/OPA-DPO（On-Policy%20Alignment%20DPO）/file-20260407210310932.png)
 对损失函数三个组件的消融。如果去掉图像聚焦机制（IF）或锚定偏好（Anc），模型倾向于在生成长文本时重复最后的话语并无法输出EOS Token。三个组件结合时，该问题完全解决。
+
+##### 推理效果
+![](assets/OPA-DPO（On-Policy%20Alignment%20DPO）/file-20260407210622339.png)
+同一提示和图像下不同模型的定性回应示例。幻觉部分用红色标注，推理有缺陷用蓝色标注，缺失细节用黄色标注。这个例子说明了一个常见案例;更多例子可见附录。
+
