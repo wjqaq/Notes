@@ -76,4 +76,6 @@ $$\mathcal{L}_{OPA-DPO}=\mathcal{L}_{LC}+\gamma_{1}\mathcal{L}_{IF}+\gamma_{2}\m
 ##### 结果
 ![](assets/OPA-DPO（On-Policy%20Alignment%20DPO）/file-20260407205819396.png)
 ![](assets/OPA-DPO（On-Policy%20Alignment%20DPO）/file-20260407210005212.png)
-可以看出仅训练600条数据，幻觉指标也超过了大部分基准模型
+可以看出仅训练600条数据，幻觉指标也超过了大部分基准模型。
+
+##### 消融
