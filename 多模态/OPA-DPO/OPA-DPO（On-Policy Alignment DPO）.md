@@ -40,6 +40,7 @@ DPO解决LVLM幻觉问题分为三类：
 因此提出OPA-DPO。
 #### 方法
 ![](assets/OPA-DPO（On-Policy%20Alignment%20DPO）/file-20260407164710077.png)
+数据集构建：
 1. 将Prompt + images，给原始模型生成$y_{Gen}$；
 2. 将Prompt + images + $y_{Gen}$+$y_{GT}$（正确答案）给GPT-4V，让专家去修改有幻觉的回复，得到$y_{Rev}$，但$y_{Rev}$是带有专家风格的；
 	专家做的事：
@@ -54,6 +55,10 @@ DPO解决LVLM幻觉问题分为三类：
 		看着“清晰原图”生成的答案 > 看着“被马赛克破坏的图”生成的同款答案。
 	- 锚定偏好（Anchor）：
 		约束首选回复（$y_{GT}$ 和 $y_{Rev}$）的概率下降。
-
+DPO训练：
+- 图像聚焦机制 (Image Focus Mechanism)：
+	创建了从GPT-4V分类结果 $S_{img}$ 的映射来确定更新权重 $W_{img}(S_{img})$。图像加权对数策略被描述为 $\log \pi^{iw}(y|x,m)=\sum_{i}^{L}W_{img}(S_{img}^{i})\log \pi(y_{i}|x,m,y_{<i})$。
+	以此建立图像聚焦偏好对：$$\mathcal{L}_{IF}=-\mathbb{E}_{(y_{GT},y_{Rev},x,m,m^{\prime})\sim\mathcal{D}}[\log \sigma(\beta \log\frac{\pi_{\theta}(y_{GT}|x,m)}{\pi_{OPA}(y_{GT}|x,m)}-\beta \log\frac{\pi_{\theta}(y_{GT}|x,m^{\prime})}{\pi_{OPA}(y_{GT}|x,m^{\prime})}) + \log \sigma(\beta \log\frac{\pi_{\theta}^{iw}(y_{Rev}|x,m)}{\pi_{OPA}^{iw}(y_{Rev}|x,m)} - \beta \log\frac{\pi_{\theta}^{iw}(y_{Rev}|x,m^{\prime})}{\pi_{OPA}^{iw}(y_{Rev}|x,m^{\prime})})]$$
+- 
 
 
