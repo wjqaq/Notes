@@ -28,4 +28,4 @@ DPO解决LVLM幻觉问题分为三类：
 ![](assets/OPA-DPO（On-Policy%20Alignment%20DPO）/file-20260407130359577.png)
 $$\mathbb{D}_{KL}[P||Q]:=\sum_{y\in\mathcal{Y}}P(y)\log\frac{P(y)}{Q(y)}$$
 给定一个提示 $x$ 和图像 $m$，假设存在一个响应 $y$ 使得 $\pi_{\theta}(y|x,m)>0$，而 $\pi_{ref}(y|x,m)\rightarrow 0$，则两个策略之间的KL散度将变为 $\mathbb{D}_{KL}[\pi_{\theta}(\cdot|x,m)||\pi_{ref}(\cdot|x,m)]\rightarrow \infty$。
-由图a左可以看出对于最右边的完美回答，
+由图a左可以看出对于专家模型给出的最右边的完美回答，参考模型（初始模型）学不会，
