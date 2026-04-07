@@ -73,3 +73,5 @@ $$\mathcal{L}_{OPA-DPO}=\mathcal{L}_{LC}+\gamma_{1}\mathcal{L}_{IF}+\gamma_{2}\m
 #### 实验
 ![](assets/OPA-DPO（On-Policy%20Alignment%20DPO）/file-20260407205550070.png)
 为了证明离策略的首选响应无法通过DPO有效学习，我们将不同模型在200个显著修改的响应上的Token平均对数概率进行了可视化。在没有OPA的情况下进行DPO训练后，分布显示出可忽略不计的变化；而在我们的OPA-DPO下观察到了显著增加。
+##### 结果
+![](assets/OPA-DPO（On-Policy%20Alignment%20DPO）/file-20260407205819396.png)
