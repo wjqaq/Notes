@@ -108,3 +108,4 @@ $$
 同return的区别：
 - Return是单个trajectory的Reward和；
 - State Value是多个trajectory的Reward分别的和的均值。
+##### Bellman 公式
