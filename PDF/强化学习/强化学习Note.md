@@ -34,3 +34,4 @@ $s_1$采用行为$a_2$后到达各种状态的概率，其总和为1
 
 $$s_1 \xrightarrow[a_2]{r=0} s_2 \xrightarrow[a_3]{r=0} s_5 \xrightarrow[a_3]{r=0} s_8 \xrightarrow[a_2]{r=1} s_9
 $$
+- Return：沿着一个trajectory的所有奖励加起来：$return = 0 + 0 + 0 + 1 = 1$
