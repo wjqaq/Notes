@@ -29,3 +29,7 @@ $s_1$采用行为$a_2$后到达各种状态的概率，其总和为1
 - Trajectories：轨迹是一条状态动作奖励链
 > ([Book-all-in-one](PDF/强化学习/Book-all-in-one.pdf#page=21&selection=297,0,301,30&color=note))
 > A trajectory is a state-action-reward chain
+![](assets/强化学习Note/file-20260411112213644.png#pig_center))
+
+$$s_1 \xrightarrow[a_2]{r=0} s_2 \xrightarrow[a_3]{r=0} s_5 \xrightarrow[a_3]{r=0} s_8 \xrightarrow[a_2]{r=1} s_9
+$$
