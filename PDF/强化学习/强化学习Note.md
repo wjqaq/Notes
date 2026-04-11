@@ -20,4 +20,6 @@ p (s_i|s_1,a_2)
 $$
 $s_1$采用行为$a_2$后到达各种状态的概率，其总和为1
 ![](assets/强化学习Note/file-20260411110940538.png)
-- Policy：策略告诉智能体在每种状态采用的策略，用$\pi {$
+- Policy：策略告诉智能体在每种状态采用的策略，如，告诉智能体$\pi(a_i|s1)$在$s_1$的状态下，采取$a_i$的概率是多少。
+> ([Book-all-in-one](PDF/强化学习/Book-all-in-one.pdf#page=17&selection=351,0,357,25&color=note))
+> A policy tells the agent which actions to take at every state. 
