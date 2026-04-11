@@ -127,3 +127,7 @@ $$
 \end{equation*}
 
 $$
+##### 从bellman公式求解state value
+- 直接求逆：
+$$v _ { \pi } = ( I - \gamma P _ { \pi } ) ^ { - 1 } r _ { \pi } .$$
+- 迭代求解：
