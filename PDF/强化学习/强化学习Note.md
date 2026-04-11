@@ -143,3 +143,8 @@ $$v _ { k } \rightarrow v _ { \pi } = ( I - \gamma P _ { \pi } ) ^ { - 1 } r _ {
 ##### Action value
 $$q _ { \pi } ( s , a ) \doteq \mathbb { E } [ G _ { t } | S _ { t } = s , A _ { t } = a ] .$$
 其和State value关系：
+$$
+\begin{equation*}
+\underbrace{\mathbb{E}[G_{t}|S_{t} = s]}_{v_{\pi}(s)} = \sum_{a \in \mathcal{A}} \underbrace{\mathbb{E}[G_{t}|S_{t} = s, A_{t} = a]}_{q_{\pi}(s,a)} \pi(a|s).
+\end{equation*}
+$$
