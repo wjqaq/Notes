@@ -121,3 +121,9 @@ $$
 v_{\pi} = r_{\pi} + \gamma P_{\pi}v_{\pi}
 $$
 展开（以只由四个状态为例）：
+$$
+\begin{equation*}
+\underbrace{\begin{bmatrix}v_{\pi}(s_{1})\\v_{\pi}(s_{2})\\v_{\pi}(s_{3})\\v_{\pi}(s_{4})\end{bmatrix}}_{v_{\pi}} = \underbrace{\begin{bmatrix}r_{\pi}(s_{1})\\r_{\pi}(s_{2})\\r_{\pi}(s_{3})\\r_{\pi}(s_{4})\end{bmatrix}}_{r_{\pi}} + \gamma\underbrace{\begin{bmatrix}p_{\pi}(s_{1}|s_{1}) & p_{\pi}(s_{2}|s_{1}) & p_{\pi}(s_{3}|s_{1}) & p_{\pi}(s_{4}|s_{1}) \\ p_{\pi}(s_{1}|s_{2}) & p_{\pi}(s_{2}|s_{2}) & p_{\pi}(s_{3}|s_{2}) & p_{\pi}(s_{4}|s_{2}) \\ p_{\pi}(s_{1}|s_{3}) & p_{\pi}(s_{2}|s_{3}) & p_{\pi}(s_{3}|s_{3}) & p_{\pi}(s_{4}|s_{3}) \\ p_{\pi}(s_{1}|s_{4}) & p_{\pi}(s_{2}|s_{4}) & p_{\pi}(s_{3}|s_{4}) & p_{\pi}(s_{4}|s_{4})\end{bmatrix}}_{P_{\pi}}\underbrace{\begin{bmatrix}v_{\pi}(s_{1})\\v_{\pi}(s_{2})\\v_{\pi}(s_{3})\\v_{\pi}(s_{4})\end{bmatrix}}_{v_{\pi}}
+\end{equation*}
+
+$$
