@@ -38,3 +38,9 @@ $$
 > ([Book-all-in-one](PDF/强化学习/Book-all-in-one.pdf#page=21&selection=360,0,365,10&color=note))
 > The return of this trajectory is defined as the sum of all the rewards collected along the trajectory
 
+由于当链无限长时回报会接近无穷，因此需要引入折扣回报：
+- Discounted Return：折扣奖励之和。
+$discounted \; return = r_1 + \gamma r_2 + \gamma^2 r_3 + \cdots$
+其中$\gamma \in (0,1)$ 称为折扣率 
+> ([Book-all-in-one](PDF/强化学习/Book-all-in-one.pdf#page=22&selection=238,38,239,19&color=note))
+> In particular, the discounted return is the sum of the discounted rewards:
