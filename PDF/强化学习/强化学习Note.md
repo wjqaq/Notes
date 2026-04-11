@@ -50,3 +50,23 @@ $discounted \; return = r_1 + \gamma r_2 + \gamma^2 r_3 + \cdots$
 将episode tasks 转化为 countinuing tasks：
 - 策略1：将终点标记位特殊状态，让agent一致在终点位置“原地踏步”;
 - 策略2：将终点状态当做一般状态，agent可能会跳出终点位置。
+#### Markov decision processes(MDP)
+> ([Book-all-in-one](PDF/强化学习/Book-all-in-one.pdf#page=24&selection=6,0,6,25&color=note))
+> Markov decision processes
+
+- Sets：
+	- State space：$\mathcal{S}$
+	- Action space：$\mathcal{A}(s)$其中$s \in \mathcal{S}$
+	- Reward Set：$\mathcal{R}(s,a)$，其中$(s,a)$是状态行为对
+- Model：
+	- State transition probability：$p(s'|s,a)$
+	- Reward probability：$p(r|s,a)$
+- Policy：$\pi(a|s)$
+- Markov property：
+$$
+\begin{aligned}
+p(s_{t+1}|s_{t},a_{t},s_{t-1},a_{t-1},\cdots,s_0,a_0) = p(s_{t+1}|s_{t},a_{t})
+\\
+p(r_{t+1}|s_{t},a_{t},s_{t-1},a_{t-1},\cdots,s_0,a_0) = p(r_{t+1}|s_{t},a_{t})
+\end{aligned}
+$$
