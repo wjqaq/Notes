@@ -140,3 +140,4 @@ $$v _ { k } \rightarrow v _ { \pi } = ( I - \gamma P _ { \pi } ) ^ { - 1 } r _ {
 > > Illustrative examples
 > 
 
+##### Action value
