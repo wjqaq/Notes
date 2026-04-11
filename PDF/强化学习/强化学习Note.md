@@ -26,3 +26,6 @@ $s_1$采用行为$a_2$后到达各种状态的概率，其总和为1
 - Reward：智能体执行一个行为到达一个状态时，会得到一个奖励值，正值为鼓励，负值为惩罚，即为$r(s,a)$ ，当然也可以反过来，正值为惩罚，负值为鼓励。
 > ([Book-all-in-one](PDF/强化学习/Book-all-in-one.pdf#page=20&selection=9,0,25,73&color=note))
 > The reward is a function of the state s and action a. Hence, it is also denoted as r(s, a). Its value can be a positive or negative real number or zero. 
+- Trajectories：轨迹是一条状态动作奖励链
+> ([Book-all-in-one](PDF/强化学习/Book-all-in-one.pdf#page=21&selection=297,0,301,30&color=note))
+> A trajectory is a state-action-reward chain
