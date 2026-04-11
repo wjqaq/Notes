@@ -166,3 +166,7 @@ v(s) &= \max_{\pi(s) \in \Pi(s)} \sum_{a \in \mathcal{A}} \pi(a|s) \left( \sum_{
 
 $$
 矩阵写作：
+$$
+v = \max_{\pi \in \Pi}(r_{\pi} + \gamma P_{\pi}v),
+
+$$
