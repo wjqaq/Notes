@@ -95,3 +95,9 @@ $$
 \end{equation*}
 $$
 写作：$v = r + \gamma Pv$
+
+State Value：
+$$v_{\pi}(s) \doteq \mathbb{E}[G_t \mid S_t = s]
+
+$$
+其中
