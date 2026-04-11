@@ -170,3 +170,4 @@ $$
 v = \max_{\pi \in \Pi}(r_{\pi} + \gamma P_{\pi}v),
 
 $$
+其中，$\pi$是选取最大的$q(s,a)$的action value
