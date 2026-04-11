@@ -116,3 +116,8 @@ v_\pi(s) &= \mathbb{E}[R_{t+1}|S_t=s] + \gamma \mathbb{E}[G_{t+1}|S_t=s], \\
 &= \sum_{a \in \mathcal{A}} \pi(a|s) \left[ \sum_{r \in \mathcal{R}} p(r|s, a)r + \gamma \sum_{s' \in \mathcal{S}} p(s'|s, a)v_\pi(s') \right], \quad \text{for all } s \in \mathcal{S}.
 \end{aligned}
 $$
+写成向量形式：
+$$
+v_{\pi} = r_{\pi} + \gamma P_{\pi}v_{\pi}
+$$
+展开（以只由四个状态为例）：
