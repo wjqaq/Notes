@@ -105,3 +105,6 @@ $$
 G_t \doteq R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + \dots,
 
 $$
+同return的区别：
+- Return是单个trajectory的Reward和；
+- State Value是多个trajectory的Reward分别的和的均值。
