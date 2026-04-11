@@ -72,3 +72,19 @@ p(r_{t+1}|s_{t},a_{t},s_{t-1},a_{t-1},\cdots,s_0,a_0) = p(r_{t+1}|s_{t},a_{t})
 $$
 
 #### Bellman Equation
+##### How to calculate returns
+![](assets/强化学习Note/file-20260411134246723.png)
+$$
+\begin{aligned}
+v1 = r1 + \gamma r_2 + \gamma^{2}r3 + \cdots \\ 
+v2 = r2 + \gamma r_3 + \gamma^{2}r4 + \cdots \\
+
+\end{aligned}
+$$
+可以转换为：
+$$
+\begin{aligned}
+v_1 = r_1 + \gamma v_2 \\
+v_2 = r_2 + \gamma v_3 
+\end{aligned}
+$$
