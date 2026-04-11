@@ -149,4 +149,5 @@ $$
 \end{equation*}
 $$
 化简为：
-$v _ { \pi } ( s ) = \sum _ { a \in { \mathcal { A } } } \pi ( a | s ) q _ { \pi } ( s , a ) .$
+$$v _ { \pi } ( s ) = \sum _ { a \in { \mathcal { A } } } \pi ( a | s ) q _ { \pi } ( s , a ) .$$
+
