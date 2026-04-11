@@ -44,3 +44,5 @@ $discounted \; return = r_1 + \gamma r_2 + \gamma^2 r_3 + \cdots$
 其中$\gamma \in (0,1)$ 称为折扣率 
 > ([Book-all-in-one](PDF/强化学习/Book-all-in-one.pdf#page=22&selection=238,38,239,19&color=note))
 > In particular, the discounted return is the sum of the discounted rewards:
+- episode（trial）：智能体在遵循策略与环境进行交互时，可能会在某些终止状态处停止。由此产生的轨迹被称为一个回合（或试验）。
+如果实验在终止状态停止，称为episode tasks；否者称为continuing tasks。
