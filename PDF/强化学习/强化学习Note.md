@@ -70,3 +70,5 @@ p(s_{t+1}|s_{t},a_{t},s_{t-1},a_{t-1},\cdots,s_0,a_0) = p(s_{t+1}|s_{t},a_{t})
 p(r_{t+1}|s_{t},a_{t},s_{t-1},a_{t-1},\cdots,s_0,a_0) = p(r_{t+1}|s_{t},a_{t})
 \end{aligned}
 $$
+
+#### Bellman Equation
