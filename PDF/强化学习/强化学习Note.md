@@ -13,3 +13,9 @@
 - Action Spaces：将所有动作放在一起，$\mathcal{A} = \{a_1,\cdots,a_5\}$。
 > ([Book-all-in-one](PDF/强化学习/Book-all-in-one.pdf#page=15&selection=94,37,111,1&color=note))
 > he set of all actions is called the action space, denoted as A = {a1, . . . , a5}.
+
+对于复杂样例，不能通过表格形式描述所有状态转移，此时引入条件概率进行描述：
+$$
+p (s_i|s_1,a_2)
+$$
+$s_1$采用行为$a_2$后到达各种状态的概率，其总和为1
