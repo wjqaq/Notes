@@ -133,3 +133,5 @@ $$v _ { \pi } = ( I - \gamma P _ { \pi } ) ^ { - 1 } r _ { \pi } .$$
 - 迭代求解：
 $$v _ { k + 1 } = r _ { \pi } + \gamma P _ { \pi } v _ { k } , \quad k = 0 , 1 , 2 , \ldots$$
 这个算法可以生成$\{v_0,v_1,v_2,\cdots\}$，其中$v_0 \in \mathbb{R}^n$是$v_{\pi}$的一个猜测初值，当$k \rightarrow \infty$ 时：
+$$v _ { k } \rightarrow v _ { \pi } = ( I - \gamma P _ { \pi } ) ^ { - 1 } r _ { \pi } , \quad { \mathrm { a s ~ } } k \rightarrow \infty .$$
+其收敛于$v_{pi}$
