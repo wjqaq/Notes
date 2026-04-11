@@ -88,3 +88,7 @@ v_1 = r_1 + \gamma v_2 \\
 v_2 = r_2 + \gamma v_3 
 \end{aligned}
 $$
+写作矩阵形式：
+$$
+​​​
+$$
