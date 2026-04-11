@@ -101,3 +101,7 @@ $$v_{\pi}(s) \doteq \mathbb{E}[G_t \mid S_t = s]
 
 $$
 其中
+$$
+G_t \doteq R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + \dots,
+
+$$
