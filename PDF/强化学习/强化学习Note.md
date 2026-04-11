@@ -148,3 +148,5 @@ $$
 \underbrace{\mathbb{E}[G_{t}|S_{t} = s]}_{v_{\pi}(s)} = \sum_{a \in \mathcal{A}} \underbrace{\mathbb{E}[G_{t}|S_{t} = s, A_{t} = a]}_{q_{\pi}(s,a)} \pi(a|s).
 \end{equation*}
 $$
+化简为：
+$v _ { \pi } ( s ) = \sum _ { a \in { \mathcal { A } } } \pi ( a | s ) q _ { \pi } ( s , a ) .$
