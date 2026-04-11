@@ -155,3 +155,7 @@ $$v _ { \pi } ( s ) = \sum _ { a \in { \mathcal { A } } } \pi ( a | s ) q _ { \p
 $$
 q_{\pi}(s, a) = \sum_{r \in \mathcal{R}} p(r|s, a)r + \gamma \sum_{s' \in \mathcal{S}} p(s'|s, a)v_{\pi}(s')
 $$
+##### BOE（Bellman optimality equation）
+$$
+
+$$
