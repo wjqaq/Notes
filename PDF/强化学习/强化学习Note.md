@@ -46,3 +46,7 @@ $discounted \; return = r_1 + \gamma r_2 + \gamma^2 r_3 + \cdots$
 > In particular, the discounted return is the sum of the discounted rewards:
 - episode（trial）：智能体在遵循策略与环境进行交互时，可能会在某些终止状态处停止。由此产生的轨迹被称为一个回合（或试验）。
 如果实验在终止状态停止，称为episode tasks；否者称为continuing tasks。
+
+将episode tasks 转化为 countinuing tasks：
+- 策略1：将终点标记位特殊状态，让agent一致在终点位置“原地踏步”;
+- 策略2：将终点状态当做一般状态，agent可能会跳出终点位置。
