@@ -109,3 +109,10 @@ $$
 - Return是单个trajectory的Reward和；
 - State Value是多个trajectory的Reward分别的和的均值。
 ##### Bellman 公式
+$$
+\begin{aligned}
+v_\pi(s) &= \mathbb{E}[R_{t+1}|S_t=s] + \gamma \mathbb{E}[G_{t+1}|S_t=s], \\
+&= \sum_{a \in \mathcal{A}} \underbrace{\pi(a|s) \sum_{r \in \mathcal{R}} p(r|s, a)r}_{\text{mean of immediate rewards}} + \gamma \sum_{a \in \mathcal{A}} \underbrace{\pi(a|s) \sum_{s' \in \mathcal{S}} p(s'|s, a)v_\pi(s')}_{\text{mean of future rewards}}\\
+&= \sum_{a \in \mathcal{A}} \pi(a|s) \left[ \sum_{r \in \mathcal{R}} p(r|s, a)r + \gamma \sum_{s' \in \mathcal{S}} p(s'|s, a)v_\pi(s') \right], \quad \text{for all } s \in \mathcal{S}.
+\end{aligned}
+$$
