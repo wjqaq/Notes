@@ -1,4 +1,4 @@
-#### 基础概念
+#### 1. 基础概念
 ![](assets/强化学习Note/file-20260411105133753.png)
 - State：智能体相对于环境的状态，$s_1,\cdots,s_9$ 代表状态，其中$s_i = \{x_i,y_i\}$ 。
 ([Book-all-in-one](PDF/强化学习/Book-all-in-one.pdf#page=15&selection=43,0,48,1&color=note))
@@ -73,9 +73,9 @@ p(r_{t+1}|s_{t},a_{t},s_{t-1},a_{t-1},\cdots,s_0,a_0) = p(r_{t+1}|s_{t},a_{t})
 \end{aligned}
 $$
 
-#### Bellman Equation
+#### 2. Bellman Equation
 ##### How to calculate returns
-![](assets/强化学习Note/file-20260411134246723.png)
+![](assets/强化学习Note/file-20260411134246723.png#pic_center)
 $$
 \begin{aligned}
 v1 = r1 + \gamma r_2 + \gamma^{2}r3 + \cdots \\ 
