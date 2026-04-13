@@ -220,3 +220,4 @@ $$q _ { \pi _ { k } } ( s , a ) = \mathbb { E } [ G _ { t } | S _ { t } = s , A 
 都必须被作为回合的起点充分探索。这在许多实际应用（如机器人控制）中是不可能实现的。此外，它的样本效率极低。
 ##### MC ε-Greedy
 不在使用纯贪心策略，强制策略以概率 $\epsilon$ 随机探索其他动作：
+$$ \pi ( a | s ) = \left\{ \begin{array} { c c } { { 1 - \frac { \epsilon } { | \mathcal { A } ( s ) | } ( | \mathcal { A } ( s ) | - 1 ) , } } & { { \mathrm { f o r ~ t h e ~ g r e e d y ~ a c t i o n , } } } \\ { { \frac { \epsilon } { | \mathcal { A } ( s ) | } , } } & { { \mathrm { f o r ~ t h e ~ o t h e r ~ } | \mathcal { A } ( s ) | - 1 \mathrm { ~ a c t i o n s , } } } \end{array} \right. $$
