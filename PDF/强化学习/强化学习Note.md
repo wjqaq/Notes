@@ -159,6 +159,9 @@ q_{\pi}(s, a) = \sum_{r \in \mathcal{R}} p(r|s, a)r + \gamma \sum_{s' \in \mathc
 $$
 
 #### 3. BOE（Bellman optimality equation）
+
+
+
 $$
 \begin{equation}
 \begin{split}
