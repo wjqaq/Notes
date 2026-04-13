@@ -227,3 +227,5 @@ $$
 
 $$
 其中$a _ { k } ^ { * } = \arg \operatorname* { m a x } _ { a } q _ { \pi _ { k } } ( s , a )$ 是当前最优动作。
+
+#### 6. Stochastic Approximation
