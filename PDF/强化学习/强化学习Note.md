@@ -236,4 +236,7 @@ $$w _ { k + 1 } = w _ { k } - { \frac { 1 } { k } } ( w _ { k } - x _ { k } )$$
 其中$w_k$是第$k$步估计值，这样就能逐步计算样本均值 
 
 ##### Robbins-Monro Algorithm
+求解$g(w) = 0$的根，但不需要知道函数g具体形式或其导数，主要要给定w时，观测到一个带有噪音的函数值$\tilde g(w,\eta)$ 。
+$$w _ { k + 1 } = w _ { k } - a _ { k } { \tilde { g } } ( w _ { k } , \eta _ { k } ) , \quad k = 1 , 2 , 3 , \ldots$$
+其中$a_k > 0$是步长，$\tilde g(w_k,\eta_k) = g(w_k) + \eta_k$是对真实梯度$g(w_k)$的有噪观测。
 
