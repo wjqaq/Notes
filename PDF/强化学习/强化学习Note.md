@@ -158,7 +158,7 @@ $$
 q_{\pi}(s, a) = \sum_{r \in \mathcal{R}} p(r|s, a)r + \gamma \sum_{s' \in \mathcal{S}} p(s'|s, a)v_{\pi}(s')
 $$
 
-##### BOE（Bellman optimality equation）
+#### 3. BOE（Bellman optimality equation）
 $$
 \begin{equation}
 \begin{split}
