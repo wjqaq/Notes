@@ -214,3 +214,6 @@ $$
 $$\mathrm { E } [ X ] \approx { \bar { x } } = { \frac { 1 } { n } } \sum _ { j = 1 } ^ { n } x _ { j } .$$
 大数定律保证：当样本数量足够大时，期望均值会收敛于真实期望。
 ##### MC Basic
+从(s,a)开始遵循策略$\pi_{k}$采样多个回合，用平均回报来近似动作值：
+$$q _ { \pi _ { k } } ( s , a ) = \mathbb { E } [ G _ { t } | S _ { t } = s , A _ { t } = a ] \approx { \frac { 1 } { n } } \sum _ { i = 1 } ^ { n } { g _ { \pi _ { k } } ^ { ( i ) } ( s , a ) } .$$
+
