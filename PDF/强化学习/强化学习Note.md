@@ -61,8 +61,8 @@ $discounted \; return = r_1 + \gamma r_2 + \gamma^2 r_3 + \cdots$
 	- Action space：$\mathcal{A}(s)$其中$s \in \mathcal{S}$
 	- Reward Set：$\mathcal{R}(s,a)$，其中$(s,a)$是状态行为对
 - Model：
-	- State transition probability：$p(s'|s,a)$
-	- Reward probability：$p(r|s,a)$
+	- State transition probability：$p(s'|s,a)$，表示在状态`s`采取动作`a`后，转移到状态$s'$的概率。
+	- Reward probability：$p(r|s,a)$，表示在状态`s`采取动作`a`后，获得奖励`r`的概率。
 - Policy：$\pi(a|s)$
 - Markov property：
 $$
