@@ -160,7 +160,7 @@ $$
 
 #### 3. BOE（Bellman optimality equation）
 
-最优策略$\pi^{*}$：如果一个策略$\pi^{*}$对所有状态$s \in \mathcal{S}$以及
+最优策略$\pi^{*}$：如果一个策略$\pi^{*}$对所有状态$s \in \mathcal{S}$以及其他任何策略$\pi$，都满足$v_{\pi^{*}}(s) \geq v_{\pi}(s)$，测
 
 $$
 \begin{equation}
