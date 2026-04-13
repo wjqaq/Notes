@@ -191,6 +191,11 @@ $$
 #####  Value Iteration
 - Policy update：基于上轮$v_k$，寻求最大化期望回报策略$\pi_{k+1}$
 $$
-\pi{k+1} = \
+\pi_{k+1} = \begin{aligned} argmax_{\pi}(r_{\pi} + \gamma P_{\pi}v_{k})\end{aligned}
 $$
-- 
+
+- value update：使用新策略$\pi_{k+1}$计算$v_{k+1}$
+$$
+v_{k+1} = r_{\pi_{k+1}} + \gamma P_{\pi_{k+1}}v_k
+$$
+
