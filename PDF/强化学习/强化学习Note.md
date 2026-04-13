@@ -178,4 +178,8 @@ $$
 v = \max_{\pi \in \Pi}(r_{\pi} + \gamma P_{\pi}v),
 
 $$
-其中，$\pi$是选取最大的$q(s,a)$的action value
+其中，$\pi$是选取最大的$q(s,a)$的action value。
+当且仅当策略将所有概率赋予具有最大q值的动作时等号成立：
+$$
+v(s) = 
+$$
