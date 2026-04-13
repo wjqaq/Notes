@@ -187,7 +187,7 @@ $$
 
 
 
-#### Value Iteration and Policy Iteration
+#### 4. Value Iteration and Policy Iteration
 #####  Value Iteration
 - Policy update：基于上轮$v_k$，寻求最大化期望回报策略$\pi_{k+1}$
 $$
@@ -207,3 +207,5 @@ $$
 $$
 \pi_{k+1} = \begin{aligned} arg \max_{\pi}(r_{\pi} + \gamma P_{\pi}v_{\pi_k})\end{aligned}
 $$
+
+#### 5. Monte Carlo Methods
