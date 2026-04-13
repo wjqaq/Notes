@@ -187,4 +187,10 @@ $$
 
 
 
-#### 
+#### Value Iteration and Policy Iteration
+#####  Value Iteration
+- Policy update：基于上轮$v_k$，寻求最大化期望回报策略$\pi_{k+1}$
+$$
+\pi{k+1} = \
+$$
+- 
