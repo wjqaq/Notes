@@ -21,6 +21,8 @@ $$
 $s_1$采用行为$a_2$后到达各种状态的概率，其总和为1
 ![](assets/强化学习Note/file-20260411110940538.png)
 - Policy：策略告诉智能体在每种状态采用的策略，如，告诉智能体$\pi(a_i|s1)$在$s_1$的状态下，采取$a_i$的概率是多少。
+	1. deterministic policy：确定性策略，即在某个状态总是采用某个动作；
+	2. Stochastic policy：随机性策略，在某个状态下选择的动作有概率不同；
 > ([Book-all-in-one](PDF/强化学习/Book-all-in-one.pdf#page=17&selection=351,0,357,25&color=note))
 > A policy tells the agent which actions to take at every state. 
 - Reward：智能体执行一个行为到达一个状态时，会得到一个奖励值，正值为鼓励，负值为惩罚，即为$r(s,a)$ ，当然也可以反过来，正值为惩罚，负值为鼓励。
