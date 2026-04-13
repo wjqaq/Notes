@@ -201,7 +201,7 @@ $$
 #### Policy Iteration
 - policy evaluation：计算当前策略$\pi_k$的真实状态值$v_{\pi_k}$：
 $$
-v_{\pi_k} = r_{\pi_k + \gamma P_{\pi_k}v_{\pi_k}}
+v_{\pi_k} = r_{\pi_k} + \gamma P_{\pi_k}v_{\pi_k}
 $$
 - policy improvement：基于计算出的精确状态$v_{\pi_k}$，生成新的策略$\pi_{k+1}$
 $$
