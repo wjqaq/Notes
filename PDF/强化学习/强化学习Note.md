@@ -160,7 +160,7 @@ $$
 
 #### 3. BOE（Bellman optimality equation）
 
-
+最优策略$\pi^{*}$：如果一个策略$\pi^{*}$对所有状态$s \in \mathcal{S}$以及
 
 $$
 \begin{equation}
