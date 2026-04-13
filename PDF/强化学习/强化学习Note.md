@@ -181,5 +181,7 @@ $$
 其中，$\pi$是选取最大的$q(s,a)$的action value。
 当且仅当策略将所有概率赋予具有最大q值的动作时等号成立：
 $$
-v(s) = \begin{aligned}
+v(s) = \begin{aligned} \max_{a \in \mathcal{A}}q(s,a) \end{aligned}
 $$
+这从数学上证明了：**最优策略必然是确定性的贪婪策略**，即在状态s下，以概率1选择动作值最大的动作$a^* = \arg\max_a q(s, a)$。
+
