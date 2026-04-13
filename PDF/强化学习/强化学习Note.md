@@ -98,7 +98,7 @@ $$
 $$
 写作：$v = r + \gamma Pv$
 
-State Value：
+State Value：当智能体遵循某个给定策略$\pi$时，从状态$s$能获得的期望回报（平均回报）
 $$v_{\pi}(s) \doteq \mathbb{E}[G_t \mid S_t = s]
 
 $$
