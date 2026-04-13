@@ -191,11 +191,20 @@ $$
 #####  Value Iteration
 - Policy update：基于上轮$v_k$，寻求最大化期望回报策略$\pi_{k+1}$
 $$
-\pi_{k+1} = \begin{aligned} argmax_{\pi}(r_{\pi} + \gamma P_{\pi}v_{k})\end{aligned}
+\pi_{k+1} = \begin{aligned} arg \max_{\pi}(r_{\pi} + \gamma P_{\pi}v_{k})\end{aligned}
 $$
 
 - value update：使用新策略$\pi_{k+1}$计算$v_{k+1}$
 $$
 v_{k+1} = r_{\pi_{k+1}} + \gamma P_{\pi_{k+1}}v_k
 $$
-
+#### Policy Iteration
+- policy evaluation：计算当前策略$\pi_k$的真实状态值$v_{\pi_k}$：
+$$
+v_{\pi_k} = r_{\pi_k + \gamma P_{\pi_k}v_{\pi_k}}
+$$
+- policy improvement：基于计算出的精确状态$v_{\pi_k}$，生成新的策略$\pi_{k+1}$
+:
+$$
+\pi_{k+1} = \begin{aligned} arg \max_{\pi}(r_{\pi} + \gamma P_{\pi}v_{\pi_k})\end{aligned}
+$$
