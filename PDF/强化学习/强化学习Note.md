@@ -228,9 +228,12 @@ $$
 $$
 其中$a _ { k } ^ { * } = \arg \operatorname* { m a x } _ { a } q _ { \pi _ { k } } ( s , a )$ 是当前最优动作。
 
-#### 6. Stochastic Approximation
+#### 6. Stochastic Approximation（随机迭代算法去解决找到优化问题都为SA）
 估计随机变量$X$期望的方法
 - 非增强方法：收集所有样本$\{x_i\}^{n}_{i=1}$后，一次性计算样本均值；
 - 增量方法：
 $$w _ { k + 1 } = w _ { k } - { \frac { 1 } { k } } ( w _ { k } - x _ { k } )$$
-其中$w_k$是第$k$步估计值，这样就能逐步计算样本均值
+其中$w_k$是第$k$步估计值，这样就能逐步计算样本均值 
+
+##### Robbins-Monro Algorithm
+
