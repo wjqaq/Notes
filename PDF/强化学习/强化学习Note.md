@@ -292,3 +292,8 @@ $$
 我们式子做一下标记：
 $$\underbrace { v _ { t + 1 } ( s _ { t } ) } _ { \text {new estimate } } = \underbrace { v _ { t } ( s _ { t } ) } _ { \text {current estimate } } - \alpha _ { t } ( s _ { t } ) \left[ \overbrace { v _ { t } ( s _ { t } ) - \underbrace { \left( r _ { t + 1 } + \gamma v _ { t } ( s _ { t + 1 } ) \right) } _ { \text {TD target } \bar { v } _ { t } } } ^ { \text {TD error }  \delta _ { t } } \right] ,
 $$
+其中：
+$$\bar{v}_t \doteq r_{t+1} + \gamma v_t(s_{t+1})
+$$
+这里的$\bar v_t$为TD target，$\delta_t$为TD error
+为什么叫target和error，因为$v_{t+1}(s_t) $
