@@ -289,3 +289,6 @@ v _ { t + 1 } ( s _ { t } ) & = v _ { t } ( s _ { t } ) - \alpha _ { t } ( s _ {
 v _ { t + 1 } ( s ) & = v _ { t } ( s ) , \quad \text { for all } s \neq s _ { t } ,
 \end{align*}
 $$
+我们式子做一下标记：
+$$\underbrace { v _ { t + 1 } ( s _ { t } ) } _ { \text {new estimate } } = \underbrace { v _ { t } ( s _ { t } ) } _ { \text {current estimate } } - \alpha _ { t } ( s _ { t } ) \left[ \underbrace { v _ { t } ( s _ { t } ) - \overbrace { \left( r _ { t + 1 } + \gamma v _ { t } ( s _ { t + 1 } ) \right) } ^ { \text {TD error } \delta _ { t } } } _ { \text {TD target } \bar { v } _ { t } } \right] ,
+$$
