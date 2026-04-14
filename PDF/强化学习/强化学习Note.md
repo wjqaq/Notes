@@ -322,5 +322,5 @@ q_{t+1}(s, a) &= q_t(s, a), \quad \text{for all } (s, a) \neq (s_t, a_t),
 $$
 其中:
 $$
-\mathbb{E}[q_t(s_{t+1},A)] = \begin{aligned} \end{ligned}
+\mathbb{E}[q_t(s_{t+1},A)] = \begin{aligned} \sum_{a}\pi_t(a|s_{t+1})q_t(s_{t+1},a) \end{aligned}
 $$
