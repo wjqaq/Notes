@@ -302,8 +302,10 @@ $$
 与蒙特卡洛方法对比：
 ![](assets/强化学习Note/file-20260414113536522.png)
 ##### Sarsa
+给定策略$\pi$，我们的目标是对动作价值进行估计，假设我们拥有按照策略$\pi$生成的若干经验样本：$(s_0,a_0,r_1,s_1,a_1,\cdots,s_t,a_t,r_{t+1},s_{t+1},a_{t+1}$我们可以采用下述Sarsa算法对动作价值进行采样：
 $$\begin{align*}
 q _ { t + 1 } ( s _ { t } , a _ { t } ) & = q _ { t } ( s _ { t } , a _ { t } ) - \alpha _ { t } ( s _ { t } , a _ { t } ) \left[ q _ { t } ( s _ { t } , a _ { t } ) - \left( r _ { t + 1 } + \gamma q _ { t } ( s _ { t + 1 } , a _ { t + 1 } ) \right) \right] , \\
 q _ { t + 1 } ( s , a ) & = q _ { t } ( s , a ) , \quad \text { for all } ( s , a ) \neq ( s _ { t } , a _ { t } ) ,
 \end{align*}
 $$
+此处$q_t(s_t,a_t)$是对$q_\pi(s_t,a_t)$的估计值。
