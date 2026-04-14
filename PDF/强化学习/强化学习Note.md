@@ -279,3 +279,5 @@ MBGD：一批小样本（1 < batch < 全部)
 $$
 w _ { k + 1 } = w _ { k } - \alpha _ { k } { \frac { 1 } { m } } \sum _ { j \in { \mathcal { I } } _ { k } } \nabla _ { w } f ( w _ { k } , x _ { j } ) ,
 $$
+MBGD batch == 1 时 == SGD，
+MBGD batch == n 时 ≠ BGD，≈ BGD，因为BGD是所有采用，MBGD是随机采样。
