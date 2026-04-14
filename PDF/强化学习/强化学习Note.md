@@ -326,6 +326,7 @@ $$
 $$
 和Sarsa的区别是TD targets不一样，一个是动作价值，一个是状态价值，该方法减少了随机性，因为由$\{s_t,a_t,r_{t+1},s_{t+1},a_{t+1}\}$减少到了$\{s_t,a_t,r_{t+1},s_{t+1}\}$ 
 ##### n-step Sarsa
-
+$$q_{t+1}(s_t, a_t) = q_t(s_t, a_t) - \alpha_t(s_t, a_t) \Big[ q_t(s_t, a_t) - (r_{t+1} + \gamma r_{t+2} + \cdots + \gamma^n q_t(s_{t+n}, a_{t+n})) \Big].
+$$
 
 ##### Q-learning
