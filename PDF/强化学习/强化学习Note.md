@@ -262,5 +262,12 @@ $$
 $$w _ { k + 1 } = w _ { k } - \alpha _ { k } \nabla _ { w } J ( w _ { k } ) = w _ { k } - \alpha _ { k } \mathbb { E } [ \nabla _ { w } f ( w _ { k } , X ) ] .$$
 真实情况，我们不知道数据的真实分布，需要拿到一批采样数据。
 BGD：采样完n次在计算：
+$$
+\begin{equation*}
+    \mathbb{E}[\nabla_w f(w_k, X)] \approx \frac{1}{n} \sum_{i=1}^n \nabla_w f(w_k, x_i).
+\end{equation*}
+$$
+$$
 
+$$
  
