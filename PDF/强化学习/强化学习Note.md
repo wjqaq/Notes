@@ -240,3 +240,20 @@ $$w _ { k + 1 } = w _ { k } - { \frac { 1 } { k } } ( w _ { k } - x _ { k } )$$
 $$w _ { k + 1 } = w _ { k } - a _ { k } { \tilde { g } } ( w _ { k } , \eta _ { k } ) , \quad k = 1 , 2 , 3 , \ldots$$
 其中$a_k > 0$是步长，$\tilde g(w_k,\eta_k) = g(w_k) + \eta_k$是对真实梯度$g(w_k)$的有噪观测。
 
+RM算法收敛条件：
+- 梯度条件：
+$$0 < c _ { 1 } \leq \nabla _ { w } g ( w ) \leq c _ { 2 }$$
+要求$g(w)$的梯度为正，且有界；
+- 步长条件：
+$$
+\sum_{k=1}^{\infty} a_{k}=\infty \text { 且 } \sum_{k=1}^{\infty} a_{k}^{2}<\infty
+$$
+左边条件保证步长不能衰弱太快，右边条件保证$a_k$收敛于0
+- 噪声条件：
+$$
+\mathbb{E}[\eta_k | \mathcal{H}_k] = 0 \text{ 且 } \mathbb{E}[\eta_k^2 | \mathcal{H}_k] < \infty
+$$
+左边条件保证噪声长期来看是中性的，不会引入系统性偏差。
+右边条件保证噪声的波动受限的，不会出现无限大极端干扰。
+
+##### 
