@@ -302,3 +302,8 @@ $$
 与蒙特卡洛方法对比：
 ![](assets/强化学习Note/file-20260414113536522.png)
 ##### Sarsa
+$$\begin{align*}
+q _ { t + 1 } ( s _ { t } , a _ { t } ) & = q _ { t } ( s _ { t } , a _ { t } ) - \alpha _ { t } ( s _ { t } , a _ { t } ) \left[ q _ { t } ( s _ { t } , a _ { t } ) - \left( r _ { t + 1 } + \gamma q _ { t } ( s _ { t + 1 } , a _ { t + 1 } ) \right) \right] , \\
+q _ { t + 1 } ( s , a ) & = q _ { t } ( s , a ) , \quad \text { for all } ( s , a ) \neq ( s _ { t } , a _ { t } ) ,
+\end{align*}
+$$
