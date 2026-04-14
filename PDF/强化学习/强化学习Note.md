@@ -283,3 +283,9 @@ MBGD batch == 1 时 == SGD，
 MBGD batch == n 时 ≠ BGD，≈ BGD，因为BGD是所有采用，MBGD是随机采样。
 
 #### 7. Temporal-Difference Learning
+给定策略$\pi$，我们的目标是估计$v_{\pi}(s)$对所有的状态空间，我们通过$\pi$采样得到$(s_0,r_1,s_1 ,\cdots, s_t,r_{t+1},s_{t+1})$，TD算法利用这些样本估计计算状态值：
+$$\begin{align*}
+v _ { t + 1 } ( s _ { t } ) & = v _ { t } ( s _ { t } ) - \alpha _ { t } ( s _ { t } ) \left[ v _ { t } ( s _ { t } ) - \left( r _ { t + 1 } + \gamma v _ { t } ( s _ { t + 1 } ) \right) \right] , \\
+v _ { t + 1 } ( s ) & = v _ { t } ( s ) , \quad \text { for all } s \neq s _ { t } ,
+\end{align*}
+$$
