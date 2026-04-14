@@ -315,4 +315,12 @@ $$
 
 ##### Expected Sarsa
 给定一个策略$\pi$其动作值可以通过Expected Sarsa来估计：
-$$q_{t+1}(s,a) = \begin{cases} q_t(s,a) - \alpha_t(s,a) \left[ q_t(s,a) - \left( r_{t+1} + \gamma \mathbb{E}\left[ q_t(s_{t+1}, A) \right] \right) \right], & (s,a) = (s_t,a_t) \\ q_t(s,a), & (s,a) \neq (s_t,a_t) \end{cases}$$
+$$\begin{align*}
+q_{t+1}(s_t, a_t) &= q_t(s_t, a_t) - \alpha_t(s_t, a_t) \Big[ q_t(s_t, a_t) - (r_{t+1} + \gamma \mathbb{E}[q_t(s_{t+1}, A)]) \Big], \\
+q_{t+1}(s, a) &= q_t(s, a), \quad \text{for all } (s, a) \neq (s_t, a_t),
+\end{align*}
+$$
+其中:
+$$
+\mathbb{E}[q_t(s_{t+1},A)] = \begin{aligned} \end{ligned}
+$$
