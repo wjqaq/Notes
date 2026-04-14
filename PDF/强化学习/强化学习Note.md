@@ -267,7 +267,6 @@ $$
     \mathbb{E}[\nabla_w f(w_k, X)] \approx \frac{1}{n} \sum_{i=1}^n \nabla_w f(w_k, x_i).
 \end{equation*}
 $$
-$$
-
-$$
+$$w _ { k + 1 } = w _ { k } - { \frac { \alpha _ { k } } { n } } \sum _ { i = 1 } ^ { n } \nabla _ { w } f ( w _ { k } , x _ { i } ) .$$
+现在让n = 1
  
