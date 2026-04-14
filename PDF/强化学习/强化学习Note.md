@@ -324,3 +324,4 @@ $$
 $$
 \mathbb{E}[q_t(s_{t+1},A)] = \begin{aligned} \sum_{a}\pi_t(a|s_{t+1})q_t(s_{t+1},a) \doteq v_t(s_{t+1}) \end{aligned}
 $$
+和Sarsa的区别是TD targets不一样，一个是动作价值，一个是状态价值，
