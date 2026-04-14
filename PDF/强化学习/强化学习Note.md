@@ -274,3 +274,8 @@ w _ { k + 1 } = w _ { k } - \alpha _ { k } \nabla _ { w } f ( w _ { k } , x _ { 
 $$
 
 SGD是特殊的RM算法，因此只要满足RM算法的条件，其一定收敛。
+
+MBGD：一批小样本（1 < batch < 全部)
+$$
+w _ { k + 1 } = w _ { k } - \alpha _ { k } { \frac { 1 } { m } } \sum _ { j \in { \mathcal { I } } _ { k } } \nabla _ { w } f ( w _ { k } , x _ { j } ) ,
+$$
