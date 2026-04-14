@@ -309,3 +309,6 @@ q _ { t + 1 } ( s , a ) & = q _ { t } ( s , a ) , \quad \text { for all } ( s , 
 \end{align*}
 $$
 此处$q_t(s_t,a_t)$是对$q_\pi(s_t,a_t)$的估计值。
+通过Sarsa找到最优策略：
+![](assets/强化学习Note/file-20260414131200175.png)
+注意这里只能找到特定位置的最优策略，而非所有位置的最优策略。
