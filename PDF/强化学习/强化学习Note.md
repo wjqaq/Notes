@@ -326,7 +326,12 @@ $$
 $$
 和Sarsa的区别是TD targets不一样，一个是动作价值，一个是状态价值，该方法减少了随机性，因为由$\{s_t,a_t,r_{t+1},s_{t+1},a_{t+1}\}$减少到了$\{s_t,a_t,r_{t+1},s_{t+1}\}$ 
 ##### n-step Sarsa
-$$q_{t+1}(s_t, a_t) = q_t(s_t, a_t) - \alpha_t(s_t, a_t) \Big[ q_t(s_t, a_t) - (r_{t+1} + \gamma r_{t+2} + \cdots + \gamma^n q_t(s_{t+n}, a_{t+n})) \Big].
+要实现的n步Sarsa算法，我们需要经验样本$(s_t, a_t, r_{t+1}, s_{t+1}, a_{t+1}, \dots, r_{t+n}, s_{t+n}, a_{t+n})$。由于$(r_{t+n}, s_{t+n}, a_{t+n})$在时刻$t$尚未采集，我们必须等到时刻$t+n$再更新$(s_t, a_t)$的动作价值函数：
+$$
+\begin{align*}
+q_{t+n}(s_t, a_t) = q_{t+n-1}(s_t, a_t) - \alpha_{t+n-1}(s_t, a_t) \Big[ q_{t+n-1}(s_t, a_t) - (r_{t+1} + \gamma r_{t+2} + \cdots + \gamma^n q_{t+n-1}(s_{t+n}, a_{t+n})) \Big],
+\end{align*}
+
 $$
 
 ##### Q-learning
