@@ -281,3 +281,5 @@ w _ { k + 1 } = w _ { k } - \alpha _ { k } { \frac { 1 } { m } } \sum _ { j \in 
 $$
 MBGD batch == 1 时 == SGD，
 MBGD batch == n 时 ≠ BGD，≈ BGD，因为BGD是所有采用，MBGD是随机采样。
+
+#### 7. Temporal-Difference Learning
