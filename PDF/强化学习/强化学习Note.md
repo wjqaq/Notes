@@ -296,4 +296,5 @@ $$
 $$\bar{v}_t \doteq r_{t+1} + \gamma v_t(s_{t+1})
 $$
 这里的$\bar v_t$为TD target，$\delta_t$为TD error
-为什么叫target和error，因为$v_{t+1}(s_t)$ 总是比$v_t(s_t)$更接近$\bar v_t$
+为什么叫target和error，因为$v_{t+1}(s_t)$ 总是比$v_t(s_t)$更接近$\bar v_t$，$\delta_t$能说明$v_t$
+和$v_{\pi}$之间的差距。
