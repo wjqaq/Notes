@@ -268,5 +268,9 @@ $$
 \end{equation*}
 $$
 $$w _ { k + 1 } = w _ { k } - { \frac { \alpha _ { k } } { n } } \sum _ { i = 1 } ^ { n } \nabla _ { w } f ( w _ { k } , x _ { i } ) .$$
-现在让n = 1
+现在让n = 1得到SGD算法：
+$$
+w _ { k + 1 } = w _ { k } - \alpha _ { k } \nabla _ { w } f ( w _ { k } , x _ { k } ) ,
+$$
+
  
