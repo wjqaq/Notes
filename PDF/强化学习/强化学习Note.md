@@ -314,3 +314,5 @@ $$
 注意这里只能找到特定位置的最优策略，而非所有位置的最优策略。
 
 ##### Expected Sarsa
+给定一个策略$\pi$其动作值可以通过Expected Sarsa来估计：
+$$q_{t+1}(s,a) = \begin{cases} q_t(s,a) - \alpha_t(s,a) \left[ q_t(s,a) - \left( r_{t+1} + \gamma \mathbb{E}\left[ q_t(s_{t+1}, A) \right] \right) \right], & (s,a) = (s_t,a_t) \\ q_t(s,a), & (s,a) \neq (s_t,a_t) \end{cases}$$
