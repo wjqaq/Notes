@@ -342,3 +342,4 @@ q_{t+1}(s, a) &= q_t(s, a), \quad \text{for all } (s, a) \neq (s_t, a_t),
 \end{aligned}
 \end{equation*}
 $$
+the TD target of Q-learning is  $r _ { t + 1 } + \gamma \operatorname* { m a x } _ { a } q _ { t } ( s _ { t + 1 } , a)$  此外，在给定$(s_t, a_t)$的情况下，Sarsa算法在每次迭代中都需要$(r_{t+1}, s_{t+1}, a_{t+1})$，而Q-learning仅需$(r_{t+1}, s_{t+1})$。
