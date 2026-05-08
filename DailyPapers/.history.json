@@ -28,5 +28,70 @@
     "id": "2602.00095",
     "date": "2026-05-08",
     "title": "SmolDocling: An ultra-compact vision-language model for end-to-end multi-modal document conversion"
+  },
+  {
+    "id": "2605.01766",
+    "date": "2026-05-08",
+    "title": "Mitigating Multimodal LLMs Hallucinations via Relevance Propagation at Inference Time"
+  },
+  {
+    "id": "2605.04641",
+    "date": "2026-05-08",
+    "title": "CAST: Mitigating Object Hallucination in Large Vision-Language Models via Caption-Guided Visual Attention Steering"
+  },
+  {
+    "id": "2605.01733",
+    "date": "2026-05-08",
+    "title": "GEASS: Training-Free Caption Steering for Hallucination Mitigation in Vision-Language Models"
+  },
+  {
+    "id": "2605.00323",
+    "date": "2026-05-08",
+    "title": "Online Self-Calibration Against Hallucination in Vision-Language Models"
+  },
+  {
+    "id": "2605.05045",
+    "date": "2026-05-08",
+    "title": "When Relations Break: Analyzing Relation Hallucination in Vision-Language Model Under Rotation and Noise"
+  },
+  {
+    "id": "2605.01428",
+    "date": "2026-05-08",
+    "title": "Hallucinations Undermine Trust; Metacognition is a Way Forward"
+  },
+  {
+    "id": "2605.03547",
+    "date": "2026-05-08",
+    "title": "Erase Persona, Forget Lore: Benchmarking Multimodal Copyright Unlearning in Large Vision Language Models"
+  },
+  {
+    "id": "2605.06096",
+    "date": "2026-05-08",
+    "title": "Uncovering Entity Identity Confusion in Multimodal Knowledge Editing"
+  },
+  {
+    "id": "2605.05938",
+    "date": "2026-05-08",
+    "title": "ICU-Bench: Benchmarking Continual Unlearning in Multimodal Large Language Models"
+  },
+  {
+    "id": "2605.02206",
+    "date": "2026-05-08",
+    "title": "Metric Unreliability in Multimodal Machine Unlearning: A Systematic Analysis and Principled Unified Score"
+  },
+  {
+    "id": "2605.05593",
+    "date": "2026-05-08",
+    "title": "Causal Probing for Internal Visual Representations in Multimodal Large Language Models"
+  },
+  {
+    "id": "2605.05953",
+    "date": "2026-05-08",
+    "title": "Hallucination as an Anomaly: Dynamic Intervention via Probabilistic Circuits"
+  },
+  {
+    "id": "2605.04128",
+    "date": "2026-05-08",
+    "title": "Awaking Spatial Intelligence in Unified Multimodal Understanding and Generation"
   }
 ]
