@@ -394,14 +394,14 @@ $$
 
 ### 数据集
 
-| 数据集 | 规模 | 特点 | 用途 |
-|--------|------|------|------|
-| [[POPE]] (MSCOCO) | 3000 样本 | 三种负采样策略（random/popular/adversarial） | 视觉幻觉评测 |
-| [[POPE]] (A-OKVQA) | 3000 样本 | 同上 | 视觉幻觉评测 |
-| [[CHAIR]] (MSCOCO Caption) | 500 张图像 | 对象级+句子级幻觉评估 | 描述幻觉评测 |
-| Audio Hallucination QA | 3000 样本 | 三策略负采样，声音事件二分类 | 音频幻觉评测 |
-| [[AIR-Bench]] | 19k+ 单选题 | Speech/Sound/Music 三域 | 音频理解评测 |
-| DCASE 2019 Task 4 | 100 样本 | 声音事件检测 | 音频 relevance 分析 |
+| 数据集                        | 规模       | 特点                                  | 用途              |
+| -------------------------- | -------- | ----------------------------------- | --------------- |
+| [[POPE]] (MSCOCO)          | 3000 样本  | 三种负采样策略（random/popular/adversarial） | 视觉幻觉评测          |
+| [[POPE]] (A-OKVQA)         | 3000 样本  | 同上                                  | 视觉幻觉评测          |
+| [[CHAIR]] (MSCOCO Caption) | 500 张图像  | 对象级+句子级幻觉评估                         | 描述幻觉评测          |
+| Audio Hallucination QA     | 3000 样本  | 三策略负采样，声音事件二分类                      | 音频幻觉评测          |
+| [[AIR-Bench]]              | 19k+ 单选题 | Speech/Sound/Music 三域               | 音频理解评测          |
+| DCASE 2019 Task 4          | 100 样本   | 声音事件检测                              | 音频 relevance 分析 |
 
 ### 实现细节
 
