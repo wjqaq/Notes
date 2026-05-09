@@ -1,5 +1,35 @@
 [
   {
+    "id": "2605.06460",
+    "date": "2026-05-09",
+    "title": "MINER: Mining Multimodal Internal Representation for Efficient Retrieval"
+  },
+  {
+    "id": "2605.06439",
+    "date": "2026-05-09",
+    "title": "From Review to Design: Ethical Multimodal Driver Monitoring Systems"
+  },
+  {
+    "id": "2605.06371",
+    "date": "2026-05-09",
+    "title": "Debiased Multimodal Personality Understanding through Dual Causal Intervention"
+  },
+  {
+    "id": "2605.06289",
+    "date": "2026-05-09",
+    "title": "Multimodal Deep Generative Model for Semi-Supervised Learning under Class Imbalance"
+  },
+  {
+    "id": "2605.06238",
+    "date": "2026-05-09",
+    "title": "Band Together: Untargeted Adversarial Training with Multimodal Coordination"
+  },
+  {
+    "id": "2605.05955",
+    "date": "2026-05-09",
+    "title": "TableVista: Benchmarking Multimodal Table Reasoning under Visual and Structural Complexity"
+  },
+  {
     "id": "2604.28123",
     "date": "2026-05-08",
     "title": "Beyond SFT-to-RL: Pre-alignment via Black-Box On-Policy Distillation for Multimodal RL"
