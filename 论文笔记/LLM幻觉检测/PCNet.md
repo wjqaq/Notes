@@ -1,11 +1,21 @@
 ---
 title: "Hallucination as an Anomaly: Dynamic Intervention via Probabilistic Circuits"
-method_name: "PCNet"
-authors: [Erik Nielsen, Elia Cunegatti, Marcus Vukojevic, Giovanni Iacca]
-year: 2026
+method_name: PCNet
+authors:
+  - Erik Nielsen
+  - Elia Cunegatti
+  - Marcus Vukojevic
+  - Giovanni Iacca
 venue: arXiv
-tags: [hallucination-detection, anomaly-detection, probabilistic-circuits, contrastive-decoding, density-estimation, representation-engineering]
+tags:
+  - hallucination-detection
+  - anomaly-detection
+  - probabilistic-circuits
+  - contrastive-decoding
+  - density-estimation
+  - representation-engineering
 zotero_collection: LLM幻觉检测
+year: 2026
 image_source: online
 arxiv_html: https://arxiv.org/html/2605.05953
 created: 2026-05-12
