@@ -17,6 +17,17 @@
 	否则其整体的注意力全局就比较一样，决策就偏向绝对。
 	这一步的决策对后续是否有幻觉有关键性作用。
 ```
+
+```PlainText
+之前 (V1-V3):
+  稳定性投票 → vote_counts → 直接用投票数做 gate weights
+                 ↑ k=1, 每个 channel 选 1 个 patch
+
+V4:
+  稳定性投票(k=7) → 池化选中的 patches → stability-pooled CLS proxy
+                  → cosine_sim(proxy, 每个patch) → gate weights
+                  ↑ 核心：用 LAST-ViT 的 "更好 CLS" 指导 gating
+```
 #### 数据集分布
 ##### LLaVA-Instruct-150K
 各个数据集分布：
