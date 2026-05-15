@@ -28,6 +28,7 @@ vision_cls_per_layer.png
 L15量化「物体匹配度」;
 L19根据问题类型做不同深度的语义推理;
 
+[L15+L16+L17] → "Yes, there is a spoon in the image."
 
 
 我想
