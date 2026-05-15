@@ -30,6 +30,8 @@ L19根据问题类型做不同深度的语义推理;
 
 [L15+L16+L17] → "Yes, there is a spoon in the image."
 
+[L15+L16+L17+L18+L19] → "Yes, a spoon is present in the image. It is placed next to the sandwich on the plate."
+
 
 我想
 ```python
