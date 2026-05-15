@@ -28,9 +28,11 @@ vision_cls_per_layer.png
 L15量化「物体匹配度」;
 L19根据问题类型做不同深度的语义推理;
 
-[L15+L16+L17] → "Yes, there is a spoon in the image."
-
-[L15+L16+L17+L18+L19] → "Yes, a spoon is present in the image. It is placed next to the sandwich on the plate."
+    [L16+L17] → "Yes, there is a spoon in the image, placed on the plate with the sandwich and salad."
+    [L16+L17+L18] → "Yes, there is a spoon in the image, which is placed on the plate with the sandwich and salad."
+    [L16+L17+L18+L19] → "Yes, there is a spoon in the image. It is placed on the plate with the sandwich and salad."
+    [L15+L16+L17] → "Yes, there is a spoon in the image."
+    [L15+L16+L17+L18+L19] → "Yes, a spoon is present in the image. It is placed next to the sandwich on the plate."
 
 
 我想
