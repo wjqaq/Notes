@@ -123,5 +123,155 @@
     "id": "2605.04128",
     "date": "2026-05-08",
     "title": "Awaking Spatial Intelligence in Unified Multimodal Understanding and Generation"
+  },
+  {
+    "id": "2605.14966",
+    "date": "2026-05-18",
+    "title": "MHSA: A Lightweight Framework for Mitigating Hallucinations via Steered Attention in LVLMs"
+  },
+  {
+    "id": "2605.14621",
+    "date": "2026-05-18",
+    "title": "Do We Really Need External Tools to Mitigate Hallucinations? SIRA: Shared-Prefix Internal Reconstruction of Attribution"
+  },
+  {
+    "id": "2605.14449",
+    "date": "2026-05-18",
+    "title": "When Answers Stray from Questions: Hallucination Detection via Question-Answer Orthogonal Decomposition"
+  },
+  {
+    "id": "2605.15868",
+    "date": "2026-05-18",
+    "title": "SOLAR: Self-supervised Joint Learning for Symmetric Multimodal Retrieval"
+  },
+  {
+    "id": "2605.15300",
+    "date": "2026-05-18",
+    "title": "Deep Pre-Alignment for VLMs"
+  },
+  {
+    "id": "2605.15071",
+    "date": "2026-05-18",
+    "title": "On the Cultural Anachronism and Temporal Reasoning in Vision Language Models"
+  },
+  {
+    "id": "2605.14876",
+    "date": "2026-05-18",
+    "title": "Unlocking Complex Visual Generation via Closed-Loop Verified Reasoning"
+  },
+  {
+    "id": "2605.14570",
+    "date": "2026-05-18",
+    "title": "Uncertainty Quantification for Large Language Diffusion Models"
+  },
+  {
+    "id": "2605.13772",
+    "date": "2026-05-18",
+    "title": "Where Does Reasoning Break? Step-Level Hallucination Detection via Hidden-State Transport Geometry"
+  },
+  {
+    "id": "2605.16171",
+    "date": "2026-05-18",
+    "title": "Res$^2$CLIP: Few-Shot Generalist Anomaly Detection with Residual-to-Residual Alignment"
+  },
+  {
+    "id": "2605.16090",
+    "date": "2026-05-18",
+    "title": "A Cross-Modal Prompt Injection Attack against Large Vision-Language Models with Image-Only Perturbation"
+  },
+  {
+    "id": "2605.15876",
+    "date": "2026-05-18",
+    "title": "Unlocking Dense Metric Depth Estimation in VLMs"
+  },
+  {
+    "id": "2605.15860",
+    "date": "2026-05-18",
+    "title": "On RGB-TIR Stereo Calibration under Extreme Resolution Asymmetry"
+  },
+  {
+    "id": "2605.15843",
+    "date": "2026-05-18",
+    "title": "WorldAct: Activating Monolithic 3D Worlds into Interactive-Ready Object-Centric Scenes"
+  },
+  {
+    "id": "2605.15792",
+    "date": "2026-05-18",
+    "title": "Reversing the Flow: Generation-to-Understanding Synergy in Large Multimodal Models"
+  },
+  {
+    "id": "2605.15735",
+    "date": "2026-05-18",
+    "title": "UAM: A Dual-Stream Perspective on Forgetting in VLA Training"
+  },
+  {
+    "id": "2605.15711",
+    "date": "2026-05-18",
+    "title": "EntropyScan: Towards Model-level Backdoor Detection in LVLMs via Visual Attention Entropy"
+  },
+  {
+    "id": "2605.15672",
+    "date": "2026-05-18",
+    "title": "VLMs Trace Without Tracking: Diagnosing Failures in Visual Path Following"
+  },
+  {
+    "id": "2605.15621",
+    "date": "2026-05-18",
+    "title": "LRCP: Low-Rank Compressibility Guided Visual Token Pruning for Efficient LVLMs"
+  },
+  {
+    "id": "2605.15615",
+    "date": "2026-05-18",
+    "title": "Neutral-Reference Prompting for Vision-Language Models"
+  },
+  {
+    "id": "2605.15298",
+    "date": "2026-05-18",
+    "title": "PhysBrain 1.0 Technical Report"
+  },
+  {
+    "id": "2605.15167",
+    "date": "2026-05-18",
+    "title": "Does Synthetic Layered Design Data Benefit Layered Design Decomposition?"
+  },
+  {
+    "id": "2605.15128",
+    "date": "2026-05-18",
+    "title": "MemEye: A Visual-Centric Evaluation Framework for Multimodal Agent Memory"
+  },
+  {
+    "id": "2605.14906",
+    "date": "2026-05-18",
+    "title": "MemLens: Benchmarking Multimodal Long-Term Memory in Large Vision-Language Models"
+  },
+  {
+    "id": "2605.14845",
+    "date": "2026-05-18",
+    "title": "Exploring Vision-Language Models for Online Signature Verification: A Zero-Shot Capability Study"
+  },
+  {
+    "id": "2605.16241",
+    "date": "2026-05-18",
+    "title": "Offline Semantic Guidance for Efficient Vision-Language-Action Policy Distillation"
+  },
+  {
+    "id": "2605.16179",
+    "date": "2026-05-18",
+    "title": "MAgSeg: Segmentation of Agricultural Landscapes in High-Resolution Satellite Imagery using Multimodal Large Language Models"
+  },
+  {
+    "id": "2605.16165",
+    "date": "2026-05-18",
+    "title": "Second-Order Multi-Level Variance Correction for Modality Competition in Multimodal Models"
+  },
+  {
+    "id": "2605.16127",
+    "date": "2026-05-18",
+    "title": "WeatherOcc3D: VLM-Assisted Adverse Weather Aware 3D Semantic Occupancy Prediction"
+  },
+  {
+    "id": "2605.16081",
+    "date": "2026-05-18",
+    "title": "MIND: Decoupling Model-Induced Label Noise via Latent Manifold Disentanglement"
   }
 ]
