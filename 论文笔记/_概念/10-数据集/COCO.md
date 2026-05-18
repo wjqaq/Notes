@@ -14,7 +14,9 @@ aliases: [ms-coco, mscoco, common objects in context]
 3. [[LaSt-ViT]] 在其 novel split 上测 [[Open-Vocabulary Detection]]
 
 ## 代表工作
-- [[LaSt-ViT]]: 提出 / 使用该概念的代表工作
+- [[LaSt-ViT]]: 在其 novel split 上测 [[Open-Vocabulary Detection]]
+- [[MHSA]]: POPE-COCO 和 COCO Caption 用于幻觉抑制评测
+- [[POPE]]: 基于 COCO 图像构建的二分类幻觉评测
 
 ## 相关概念
 - [[Open-Vocabulary Detection]]
