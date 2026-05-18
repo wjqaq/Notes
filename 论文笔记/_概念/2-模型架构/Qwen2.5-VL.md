@@ -15,5 +15,6 @@ Qwen2.5-VL 是阿里通义千问团队发布的大规模视觉语言模型，是
 4. 多模态融合呈现[[阶段化融合]]模式：早期注入视觉信息，中期整合，后期视觉证据已被吸收
 
 ## 代表工作
+- [[Qwen2.5-VL|Qwen2.5-VL Technical Report]]: 官方技术报告，提出 Window Attention + 绝对时间 MRoPE + 动态分辨率，4.1T tokens 预训练，72B 版本匹配 GPT-4o
 - [[SIRA]]: 使用 Qwen2.5-VL-7B 作为评估骨干，在 $b=14$ 处分叉最优
 - [[MHSA]]: 在 Qwen2.5-VL-7B 上验证注意力修正幻觉抑制，POPE-COCO F1=92.97
