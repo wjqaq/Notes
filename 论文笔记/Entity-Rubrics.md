@@ -6,7 +6,7 @@ year: 2026
 venue: arXiv
 tags: [image-editing, abstract-editing, benchmark, evaluation, entity-level, vlm, instruction-following, multimodality]
 zotero_collection: _待整理
-image_source: online
+image_source: mixed
 arxiv_html: https://arxiv.org/html/2605.14842
 created: 2026-05-18
 ---
@@ -164,25 +164,25 @@ $$
 
 ### Figure 1: 抽象图像编辑评估概览
 
-![Figure 1](https://arxiv.org/html/2605.14842v1/x1.png)
+![[Entity-Rubrics_fig1_overview.png]]
 
 **说明**: 给定上下文图像和抽象指令（如 "Infuse the scene with empathy and a deep bond with animals"），Entity-Rubrics 通过分解场景中的实体（人、公牛、人群），逐项评估编辑效果。绿色表示正向对齐，红色表示不必要的改变。
 
 ### Figure 2: 编辑意图分类法
 
-![Figure 2](https://arxiv.org/html/2605.14842v1/x2.png)
+![[Entity-Rubrics_fig2_taxonomy.png]]
 
 **说明**: 沿 Identification 和 Specificity 两个正交轴，将编辑意图分为 Explicit（一对一）、Implicit（一对一但需额外能力）、Abstract（一对多）三类。
 
 ### Figure 3: Entity-Rubrics 三阶段评估架构
 
-![Figure 3](https://arxiv.org/html/2605.14842v1/x3.png)
+![[Entity-Rubrics_fig3_framework.png]]
 
 **说明**: (A) 实体检测识别 Things/Stuff/Global 实体，(B) 实体排序分配预期变换并测量执行对齐，(C) 最终评分聚合所有发现。结果通过红绿标尺直接在图像上可视化。
 
 ### Figure 4: AbstractEdit 自动策展流水线
 
-![Figure 4](https://arxiv.org/html/2605.14842v1/x4.png)
+![[Entity-Rubrics_fig4_pipeline.png]]
 
 **说明**: (A) 从 OpenImages 获取上下文图像并结合类别和 Persona，(B) LLM 生成配对的抽象+显式指令，(C) 两种指令分别执行编辑产生对比图像。
 
@@ -227,7 +227,7 @@ $$
 
 ### Figure 7: 每种实体编辑动作的失败率
 
-![Figure 7](https://arxiv.org/html/2605.14842v1/x7.png)
+![[Entity-Rubrics_fig5_performance.png]]
 
 **说明**: Object Count 失败率最高（>30%），其次是 Perspective（Viewpoint/Position）和 Object Presence。Style-Transfer、Texture、Attribute State 等"表面"编辑相对可靠。
 
