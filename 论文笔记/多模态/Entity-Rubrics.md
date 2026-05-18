@@ -245,6 +245,22 @@ $$
 
 **表格说明**: Social 和 Physical 域各占训练集最大份额，反映抽象人际交互和物理推理的核心地位。
 
+### Figure 11: Persona-Driven Instruction Diversity / 角色驱动的指令多样性
+
+**说明**: 展示数据生成中使用的 Persona 特征空间（年龄、国家、职业、爱好等 10 个维度）以及领域和类别的指南文档。通过采样不同 Persona 作为独立变量，确保指令的语言风格、文化背景和创作动机高度多样化。
+
+### Figure 12: AbstractEdit Distribution of Categories / 类别分布
+
+**说明**: 展示测试集 470 个样本在 4 个域 12 个类别中的分布。Social 域（Culture 47、Socio-Economic 44、Role 37）和 Physical 域（POV/Composition 37、Season 34 等）占比最大；Emotional 域仅含 Mood/Emotion 类别 41 个样本，专注测试氛围解读能力。
+
+### Figure 13: Explicit vs Abstract Prompt Length / 显式 vs 抽象提示长度
+
+**说明**: 展示两种提示类型在各域的单词数分布。抽象指令平均约 10-11 词（限制 <15 词），显式指令显著更长：Social 域平均 209 词，Logical 域平均 143 词。长度差距量化了"语义鸿沟"——将简洁抽象概念转化为完整视觉步骤所需的信息量。
+
+### Figure 14: Distribution of Common Entities in Context Images / 上下文图像实体分布
+
+**说明**: 展示 AbstractEdit 中 1300 张上下文图像的语义分析。大多数图像含 2-12 种不同实体类型，峰值在 5 种。高频实体以人本中心（Clothing 254 次、Person 232 次、Human body 196 次）。实例数量分布显示大多数图像含 15-35 个边界框实例，峰值 16 个——刻意的高视觉密度引入真实场景干扰物。
+
 ---
 
 ## 实验
