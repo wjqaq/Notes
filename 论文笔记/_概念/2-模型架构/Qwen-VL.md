@@ -18,6 +18,7 @@ ViT (可学习绝对位置编码) → Cross-Attention Resampler → Qwen1 LLM
 4. 奠定了 Qwen 多模态系列的基础架构方向
 
 ## 代表工作
+- [[Qwen-VL|Qwen-VL (论文)]]: 第一代，本论文
 - [[Qwen2-VL]]: 第二代，架构大幅革新
 - [[Qwen2.5-VL]]: 第三代，增强细粒度感知
 
