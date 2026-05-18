@@ -17,6 +17,7 @@ generated_by: dailypaper-skills
 - [[论文笔记/多模态/QWen/MML/Qwen-VL|Qwen-VL]]
 - [[论文笔记/多模态/QWen/MML/Qwen2-VL|Qwen2-VL]]
 - [[论文笔记/多模态/QWen/MML/Qwen2.5-VL|Qwen2.5-VL]]
+- [[论文笔记/多模态/QWen/MML/Qwen3-Omni|Qwen3-Omni]]
 - [[论文笔记/多模态/QWen/MML/Qwen3-VL|Qwen3-VL]]
 
 ## 说明
