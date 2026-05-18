@@ -357,12 +357,12 @@ $$
 
 ### 训练超参数
 
-| 任务 | 模型 | lr_G | lr_D | λ_LVLM | λ_dg | λ_reg | Epochs | Batch |
-|------|------|------|------|---------|------|-------|--------|-------|
-| POPE | Qwen2.5-VL | 1e-4 | 1e-5 | 1.0 | 0.01 | 1e-4 | 1 | 16 |
-| POPE | LLaVA-v1.5 | 1e-4 | 1e-5 | 1.0 | 0.01 | 5e-4 | 1 | 8 |
-| POPE | InternVL2 | 1e-3 | 1e-4 | 1.0 | 0.01 | 1e-4 | 1 | 8 |
-| Caption | Qwen2.5-VL | 1e-3 | 1e-7 | 0.0 | 0.5 | 0.01 | 1 | 32 |
+| 任务      | 模型         | lr_G | lr_D | λ_LVLM | λ_dg | λ_reg | Epochs | Batch |
+| ------- | ---------- | ---- | ---- | ------ | ---- | ----- | ------ | ----- |
+| POPE    | Qwen2.5-VL | 1e-4 | 1e-5 | 1.0    | 0.01 | 1e-4  | 1      | 16    |
+| POPE    | LLaVA-v1.5 | 1e-4 | 1e-5 | 1.0    | 0.01 | 5e-4  | 1      | 8     |
+| POPE    | InternVL2  | 1e-3 | 1e-4 | 1.0    | 0.01 | 1e-4  | 1      | 8     |
+| Caption | Qwen2.5-VL | 1e-3 | 1e-7 | 0.0    | 0.5  | 0.01  | 1      | 32    |
 
 所有配置使用 weight decay=1e-4，1 epoch。训练数据 80/20 按 question ID 划分。Oversampling 策略：所有 hallucination 样本保留，non-hallucination 样本下采样至 hallucination 总数的一半。
 
