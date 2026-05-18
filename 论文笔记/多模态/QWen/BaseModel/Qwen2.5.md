@@ -6,7 +6,7 @@ year: 2025
 venue: arXiv (cs.CL)
 tags: [llm, large-language-model, pre-training, post-training, rlhf, open-weight, mixture-of-experts]
 zotero_collection: 多模态/QWen/BaseModel
-image_source: online
+image_source: local
 arxiv_html: https://arxiv.org/html/2412.15115
 created: 2025-01-03
 ---
@@ -187,19 +187,19 @@ RL 阶段仅在短指令上训练（原因：长上下文 RL 计算成本过高 
 
 ### Figure 1: Qwen 系列数据规模迭代
 
-![Qwen 系列数据规模迭代](https://arxiv.org/html/2412.15115v2/extracted/6118396/figures/scaling/fig1_data_scaling.png)
+![[Qwen2.5_fig1_data_scaling.png]]
 
 **说明**: Qwen1.5 (3T) -> Qwen2 (7T) -> Qwen2.5 (18T) tokens，数据规模扩展与 MMLU、MATH、MBPP、BBH 上性能持续提升的关系。强调规模 + 混合（mixture）在提升模型能力中的作用。
 
 ### Figure 2: Qwen2.5-Turbo 百万吨级通钥检索
 
-![Qwen2.5-Turbo Passkey Retrieval](https://arxiv.org/html/2412.15115v2/extracted/6118396/figures/longcontext/fig2_turbo_passkey.png)
+![[Qwen2.5_fig2_passkey_retrieval.png]]
 
 **说明**: Qwen2.5-Turbo 在 1M token 上下文长度的通钥检索任务中达到 100% 准确率，证明其从超长上下文中提取细节信息的卓越能力。
 
 ### Figure 3: 长上下文推理加速（TTFT）
 
-![推理加速对比](https://arxiv.org/html/2412.15115v2/extracted/6118396/figures/longcontext/fig3_ttft_speedup.png)
+![[Qwen2.5_fig3_ttft_speedup.png]]
 
 **说明**: 基于 [[Minference]] 的稀疏注意力使 Qwen2.5-Turbo 在 1M token 时注意力计算减少 12.5 倍，TTFT 加速 3.2-4.3 倍（Turbo）和 2.3-5.6 倍（7B）。
 
