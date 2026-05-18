@@ -15,6 +15,7 @@ aliases: [Qwen2.5-72B, Qwen2.5]
 4. 提供多种规模（0.5B 到 72B），Qwen2.5-VL-72B 使用 80 层 8192 维
 
 ## 代表工作
+- [[Qwen2.5]]: 完整技术报告，18T tokens 预训练，两阶段 RL (DPO+GRPO)
 - [[Qwen2.5-VL]]: LLM 组件基于 Qwen2.5-72B
 
 ## 相关概念
@@ -22,3 +23,4 @@ aliases: [Qwen2.5-72B, Qwen2.5]
 - [[LLM]]
 - [[SwiGLU]]
 - [[RMSNorm]]
+- [[GQA|分组查询注意力]]
