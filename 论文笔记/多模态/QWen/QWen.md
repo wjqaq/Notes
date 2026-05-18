@@ -10,7 +10,7 @@ generated_by: dailypaper-skills
 
 ## 子目录
 
-- [[论文笔记/多模态/QWen/MML/MML|MML]] · 2 篇笔记 · 1 个子目录
+- [[论文笔记/多模态/QWen/MML/MML|MML]] · 3 篇笔记 · 1 个子目录
 
 ## 说明
 
