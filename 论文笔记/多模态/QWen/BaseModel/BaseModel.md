@@ -15,6 +15,7 @@ generated_by: dailypaper-skills
 ## 当前目录笔记
 
 - [[论文笔记/多模态/QWen/BaseModel/Qwen2.5|Qwen2.5]]
+- [[论文笔记/多模态/QWen/BaseModel/Qwen2|Qwen2]]
 - [[论文笔记/多模态/QWen/BaseModel/Qwen3|Qwen3]]
 
 ## 说明

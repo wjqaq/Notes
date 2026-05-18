@@ -18,6 +18,7 @@ aliases: [Qwen2 LLM, Qwen2 系列]
 4. 支持 32K tokens 上下文窗口
 
 ## 代表工作
+- [[Qwen2 Technical Report]]: Qwen2 系列技术报告，含密集模型与 MoE 模型
 - [[Qwen2-VL]]: 以 Qwen2 为 LLM 骨干的多模态模型
 - [[Qwen2.5-VL]]: 升级到 [[Qwen2.5 LLM]]
 - [[Qwen3]]: 第三代纯语言模型
