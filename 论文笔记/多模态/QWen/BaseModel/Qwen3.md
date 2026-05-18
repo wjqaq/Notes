@@ -64,7 +64,7 @@ Qwen3 系列包含 6 个 [[Dense Model|Dense]] 模型（0.6B, 1.7B, 4B, 8B, 14B,
 **Dense 架构**（与 [[Qwen2.5]] 类似）:
 - **Attention**: [[Grouped Query Attention|GQA]]（Q/KV head ratio 因模型规模而异），引入 [[QK-Norm]] 稳定训练
 - **FFN**: [[SwiGLU]] 激活
-- **位置编码**: [[Rotary Position Embeddings|RoPE]]（长上下文阶段 ABF 将 base frequency 从 10k 提升到 1M）
+- **位置编码**: [[RoPE|Rotary Position Embeddings]]（长上下文阶段 ABF 将 base frequency 从 10k 提升到 1M）
 - **归一化**: [[RMSNorm]] with pre-normalization
 - **移除**: Qwen2 中的 QKV-bias
 - **Tokenizer**: byte-level [[Byte-Pair Encoding|BBPE]]，词汇量 151,669
