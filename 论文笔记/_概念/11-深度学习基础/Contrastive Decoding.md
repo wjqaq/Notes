@@ -32,6 +32,7 @@ $$
 - [[PCNet]]: PC-LDCD 用密度门控对比解码纠正幻觉
 - [[DoLa]]: 成熟层与早期层 logit 对比
 - [[ICD]]: 诱导幻觉对比解码
+- [[SIRA]]: 共享前缀内部归因重构，模型内对比解码
 - Li et al. (2023): Contrastive Decoding 基础框架
 
 ## 相关概念
