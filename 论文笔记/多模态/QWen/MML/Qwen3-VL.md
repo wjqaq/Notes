@@ -6,7 +6,7 @@ year: 2025
 venue: arXiv
 tags: [multimodal, vision-language-model, mixture-of-experts, chain-of-thought, spatial-understanding, video-understanding, document-understanding]
 zotero_collection: 多模态/QWen/MML
-image_source: online
+image_source: mixed
 arxiv_html: https://arxiv.org/html/2511.21631
 created: 2026-05-18
 ---
@@ -144,19 +144,19 @@ $$
 
 ### Figure 1: Qwen3-VL Framework Overview
 
-![Figure 1](https://arxiv.org/html/2511.21631v2/x1.png)
+![[Qwen3-VL_fig1_framework.png]]
 
 **说明**: Qwen3-VL 整体框架。Vision Encoder 处理动态原生分辨率视觉输入，通过 [[DeepStack]] 机制将多层 ViT 特征注入 LLM 各层。[[Interleaved MRoPE]] 编码多模态位置信息，文本时间戳标记视频时间结构。
 
 ### Figure 2: Multilingual OCR Performance
 
-![Figure 2](https://arxiv.org/html/2511.21631v2/x2.png)
+![[Qwen3-VL_fig2_ocr.png]]
 
 **说明**: 39种语言的 OCR 性能分布图。32/39 种语言超过 70% 准确率（实用可用阈值），展示了强大的多语言能力（vs [[Qwen2.5-VL]] 的 10 种语言）。
 
 ### Figure 3: Needle-in-a-Haystack Heatmap
 
-![Figure 3](https://arxiv.org/html/2511.21631v2/x3.png)
+![[Qwen3-VL_fig3_niah.png]]
 
 **说明**: Qwen3-VL-235B-A22B-Instruct 的视频 NIAH 测试热力图。在原生 256K 上下文（约30分钟视频）内达到 100% 准确率；通过 [[YaRN]] 外推到 1M tokens（约2小时视频）仍保持 99.5% 准确率。
 
