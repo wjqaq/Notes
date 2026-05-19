@@ -6,7 +6,7 @@ year: 2025
 venue: NeurIPS
 tags: [hallucination-mitigation, vlm-alignment, preference-optimization, curriculum-learning, data-curation, reward-gap]
 zotero_collection: LLM幻觉检测
-image_source: online
+image_source: online  <!-- arXiv HTML: https://arxiv.org/html/2411.17265 -->
 arxiv_html: https://arxiv.org/html/2411.17265
 created: 2026-05-19
 ---
