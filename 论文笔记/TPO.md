@@ -241,37 +241,43 @@ $$
 
 ### Figure 1: Visual Q&A Example / 视觉问答示例
 
-![[TPO_fig-029.png]]
+<!-- Figure 1: 见原论文 PDF Figure 1 — 可视化问答案例，token 级视觉锚定奖励热力图 -->
 
 **说明**: 一个视觉问答案例。上半部分为 ground truth 答案，下半部分为 LVLM 生成响应在 TPO 训练前后的对比。在每个框中，用颜色深浅可视化每个 token 的视觉锚定奖励。训练前模型错误声称"戴黑色眼镜"，训练后正确输出"未戴眼镜"。奖励分数有效反映了视觉锚定程度——颜色越深，token 对视觉信息依赖越强。
 
 ### Figure 2: TPO Pipeline Overview / TPO 流水线概览
 
-![[TPO_fig-031.png]]
+<!-- Figure 2: 见原论文 PDF Figure 2 — TPO 三步骤流水线概览 -->
 
 **说明**: TPO 的三大步骤：(1) 对图像添加噪声；(2) 计算自校准视觉锚定奖励（对比原图和加噪图下的 token logits 差异，通过 sigmoid 归一化和 margin $a$ 得到 $c_{y_i}$）；(3) Token Preference Optimization（将 token 级奖励融入 DPO 损失）。每个训练步结束后重新校准模型，为下一步生成新奖励。
 
 ### Figure 3: Attention Weights Comparison / 注意力权重对比
 
-![[TPO_fig-032.png]]
+<!-- Figure 3: 见原论文 PDF Figure 3 — TPO 训练前后注意力权重对比 -->
 
 **说明**: LLaVA 在 TPO 训练前后对图像 token 的注意力权重变化。蓝色部分为回答错误的 case（如 USB 被幻觉为其他物体），红色部分为回答正确的 case。TPO 训练后，响应 token 对图像的注意力权重显著增加，特别是对视觉锚定 token（如 "table"、"cord"）。
 
 ### Figure 4: Self-Calibration Convergence / 自校准收敛曲线
 
-![[TPO_fig-033.png]]
+<!-- Figure 4: 见原论文 PDF Figure 4 — 自校准奖励收敛曲线 -->
 
 **说明**: 正负样本的自校准奖励分数随训练步数的变化（每 10 步采样一个点）。正样本奖励 $(c_{y_i} \to 1.5)$ 逐步趋向最大值，负样本奖励 $(c_{y_i} \to 0.5)$ 逐步趋向最小值，展示了 TPO 的自校准效果——模型在训练中不断增强对视觉信息的关注。
 
 ### Figure 5: Ablation on Noise Steps and Parameter $\mathbf{a}$ / 消融实验曲线
 
-![[TPO_fig-035.png]]
+<!-- Figure 5: 见原论文 PDF Figure 5 — 噪声步数与参数 a 消融实验曲线 -->
 
 **说明**: (a) 噪声步数消融：最优步数为 500 步。0 步时仍优于 DPO（因图像编解码引入一定损失），250-999 步保持良好性能。(b) 参数 $a$ 消融：$a = [0, 0.5, 1]$ 均有效，$a = 0.5$ 综合最优，验证了 $s=0$ 时 $c=1$ 不引入额外奖励信号的设置合理。
 
 ### Figure 6: CHAIR Performance Comparison / CHAIR 指标对比
 
-![[TPO_fig-035.png]]
+<!-- Figure 5: 见原论文 PDF Figure 5 — 噪声步数与参数 a 消融实验曲线 -->
+
+**说明**: (a) 噪声步数消融；(b) 参数 $a$ 消融。500 步和 $a=0.5$ 综合最优。
+
+### Figure 6: CHAIR Performance Comparison / CHAIR 指标对比
+
+<!-- 见原论文 PDF Figure 6 — CHAIR 性能对比柱状图 -->
 
 **说明**: AMBER 基准中物体幻觉评估（CHAIR 指标）的结果对比。TPO 不仅在视觉问答中缓解幻觉，还能有效减少图像描述中的物体幻觉。图中用 $10 - \text{CHAIR}$ 表示以便直观比较（越高越好）。
 
