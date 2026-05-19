@@ -29,71 +29,306 @@
 
 针对这个设计提示词和整体架构。
 ```
-## v7 最终结果
 
+```python
+#!/usr/bin/env python3
+"""
+V9 GS: Logit-Space Bayesian Fusion
+Qwen 存在性检测 → logit 空间融合 → LLaVA 最终决策
+
+V7 核心问题:
+  1. 二值门控: present AND boxes>0 缺一不可，浪费 Qwen 判断
+  2. 对称惩罚: "不存在"惩罚与"存在"加权同力度 → FN↑
+  3. 固定系数: 无自适应，|diff|=0.1 和 8.0 用同一个 0.5
+
+V9 改进:
+  1. tanh 连续映射: logit_diff → [-1,1] 软置信度
+  2. 非对称设计: 负向 evidence 打折 50% → 保留 Recall
+  3. 自动饱和: |Q|→∞ 时 tanh→±1，防止 Qwen 覆盖 LLaVA
+  4. bbox 加分: 成功定位额外认可，但不强制要求
+"""
+
+import argparse, gc, io, json, math, os, re, random, time
+from pathlib import Path
+import numpy as np, pandas as pd, torch
+from PIL import Image
+from tqdm import tqdm
+from transformers import (
+    LlavaForConditionalGeneration, LlavaProcessor,
+    Qwen2_5_VLForConditionalGeneration, AutoProcessor,
+)
+
+PROJECT_ROOT = Path("/home/jay/Desktop/code/Project")
+V9_OUTPUT = Path("/home/jay/Desktop/code/Project/v9/outputs")
+LLAVA_PATH = str(PROJECT_ROOT / "models" / "llava-1.5-7b-hf")
+QWEN_PATH = str(PROJECT_ROOT / "models" / "Qwen2.5-VL-3B-Instruct")
+POPE_DIR = PROJECT_ROOT / "datas" / "POPE" / "Full"
+
+ALPHA = 0.4
+BETA_MAX = 3.0
+GAMMA_NEG = 0.5
+DELTA_BOX = 0.15
+
+
+def load_pope(split, n=None):
+    for pf in sorted(POPE_DIR.glob("*.parquet")):
+        if split in pf.name:
+            df = pd.read_parquet(pf)
+            return df.sample(n=min(n, len(df)), random_state=42) if n else df
+    return pd.DataFrame()
+
+
+def extract_object(question):
+    q = question.lower().rstrip("?").strip()
+    pats = [
+        r'(?:is|are) there (?:a |an |the |any )?(.+?) (?:in|on|at|near|shown|visible|on top of|sitting|standing|inside|within)',
+        r'(?:is|are) there (?:a |an |the )?(.+?)\?',
+        r'(?:is|are) there (?:a |an |the )?(.+?)$',
+        r'(?:does|do) the (?:image|photo|picture) (?:contain|have|show|depict) (?:a |an |the |any )?(.+?)\?',
+    ]
+    for pat in pats:
+        m = re.search(pat, q)
+        if m:
+            obj = m.group(1).strip().rstrip("?").rstrip(".").strip()
+            obj = re.sub(r'^(a|an|the|some|any)\s+', '', obj)
+            if 1 <= len(obj.split()) <= 5:
+                return obj
+    words = q.split()
+    if words[:2] == ["is", "there"]:
+        return " ".join(words[2:]).split("?")[0].strip()
+    return q[:60]
+
+
+def pil_from_parquet(img_data):
+    if isinstance(img_data, dict):
+        b = img_data.get("bytes")
+    elif isinstance(img_data, bytes):
+        b = img_data
+    else:
+        b = None
+    if b is not None:
+        return Image.open(io.BytesIO(b)).convert("RGB")
+    return None
+
+
+def metrics(df, preds):
+    ys = df["answer"].str.lower().str.strip().values
+    ps = [str(p).lower().strip() for p in preds]
+    tp = sum(1 for y, p in zip(ys, ps) if y == "yes" and p == "yes")
+    fp = sum(1 for y, p in zip(ys, ps) if y == "no" and p == "yes")
+    fn = sum(1 for y, p in zip(ys, ps) if y == "yes" and p == "no")
+    tn = sum(1 for y, p in zip(ys, ps) if y == "no" and p == "no")
+    n = len(ys)
+    return {
+        "accuracy": round((tp + tn) / n, 4) if n else 0,
+        "precision": round(tp / (tp + fp), 4) if (tp + fp) else 0,
+        "recall": round(tp / (tp + fn), 4) if (tp + fn) else 0,
+        "f1": round(2 * tp / (2 * tp + fp + fn), 4) if (tp + fp + fn) else 0,
+        "yes_ratio": round(sum(1 for p in ps if p == "yes") / n, 4),
+        "total": n, "tp": tp, "fp": fp, "fn": fn, "tn": tn,
+    }
+
+
+def run_qwen_presence(df, cache_path):
+    print(f"  [Qwen] {len(df)} samples...")
+    qwen = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+        QWEN_PATH, torch_dtype=torch.bfloat16, device_map="auto",
+        trust_remote_code=True).eval()
+    qwen_proc = AutoProcessor.from_pretrained(QWEN_PATH, trust_remote_code=True)
+    yid = qwen_proc.tokenizer.encode("Yes", add_special_tokens=False)[0]
+    nid = qwen_proc.tokenizer.encode("No", add_special_tokens=False)[0]
+
+    cache = []
+    t0 = time.time()
+    for pos, (_, row) in enumerate(tqdm(df.iterrows(), total=len(df), desc="  Qwen")):
+        entry = {"pos": pos, "present": False, "logit_diff": -999, "n_boxes": 0}
+        try:
+            image = pil_from_parquet(row.get("image"))
+            if image is None:
+                cache.append(entry); continue
+            obj = extract_object(row["question"])
+
+            prompt = f"Is there a {obj} in this image? Answer only Yes or No."
+            msgs = [{"role": "user", "content": [
+                {"type": "image", "image": image},
+                {"type": "text", "text": prompt}]}]
+            txt = qwen_proc.apply_chat_template(
+                msgs, tokenize=False, add_generation_prompt=True)
+            ins = qwen_proc(text=[txt], images=[image], return_tensors="pt")
+            ins = {k: v.to(qwen.device) for k, v in ins.items()}
+            with torch.no_grad():
+                out = qwen(**ins)
+            diff = out.logits[0, -1, yid].item() - out.logits[0, -1, nid].item()
+
+            g_prompt = (f"Detect {obj} in this image. Output JSON list with bbox_2d. "
+                        f"If not visible, output [].")
+            msgs2 = [{"role": "user", "content": [
+                {"type": "image", "image": image},
+                {"type": "text", "text": g_prompt}]}]
+            txt2 = qwen_proc.apply_chat_template(
+                msgs2, tokenize=False, add_generation_prompt=True)
+            ins2 = qwen_proc(text=[txt2], images=[image], return_tensors="pt")
+            ins2 = {k: v.to(qwen.device) for k, v in ins2.items()}
+            with torch.no_grad():
+                gen = qwen.generate(**ins2, max_new_tokens=256, do_sample=False)
+            out_ids = [o[len(i):] for i, o in zip(ins2["input_ids"], gen)]
+            raw = qwen_proc.batch_decode(
+                out_ids, skip_special_tokens=False)[0]
+            del ins, ins2, gen, out_ids
+
+            jb = re.findall(r'```json\s*(.*?)\s*```', raw, re.DOTALL)
+            if not jb:
+                jb = re.findall(r'\[\s*\{.*?\}\s*\]', raw, re.DOTALL)
+            n_boxes = 0
+            for blk in jb:
+                try:
+                    for it in json.loads(blk):
+                        if "bbox_2d" in it:
+                            n_boxes += 1
+                except json.JSONDecodeError:
+                    continue
+
+            entry = {"pos": pos, "present": diff > 0,
+                     "logit_diff": diff, "n_boxes": n_boxes}
+        except Exception as e:
+            entry["error"] = str(e)
+        cache.append(entry)
+
+    elapsed = time.time() - t0
+    del qwen
+    torch.cuda.empty_cache()
+    gc.collect()
+    print(f"  Qwen done: {elapsed:.0f}s "
+          f"(present={sum(1 for x in cache if x.get('present'))})")
+    os.makedirs(os.path.dirname(cache_path), exist_ok=True)
+    with open(cache_path, "w") as f:
+        json.dump(cache, f, indent=2)
+    return cache
+
+
+def v9_fuse(llava_yes_logit, llava_no_logit, qw):
+    llava_diff = llava_yes_logit - llava_no_logit
+    qw_diff = qw.get("logit_diff", 0)
+    qw_present = qw.get("present", False)
+    qw_boxes = qw.get("n_boxes", 0)
+
+    qw_evidence = math.tanh(qw_diff * ALPHA) * BETA_MAX
+
+    if qw_present and qw_boxes > 0:
+        qw_evidence += min(qw_boxes * DELTA_BOX, 0.6)
+
+    if qw_diff < 0:
+        qw_evidence *= GAMMA_NEG
+
+    fused = llava_diff + qw_evidence
+    return "yes" if fused > 0 else "no"
+
+
+def run_llava_fusion(df, qwen_cache):
+    print(f"  [LLaVA] {len(df)} samples (baseline + v9)...")
+    llava = LlavaForConditionalGeneration.from_pretrained(
+        LLAVA_PATH, torch_dtype=torch.float16, device_map="auto").eval()
+    llava_proc = LlavaProcessor.from_pretrained(LLAVA_PATH)
+    yid = llava_proc.tokenizer.encode("Yes", add_special_tokens=False)[0]
+    nid = llava_proc.tokenizer.encode("No", add_special_tokens=False)[0]
+
+    base_preds, gs_preds = [], []
+    t0 = time.time()
+    for pos, (_, row) in enumerate(tqdm(df.iterrows(), total=len(df), desc="  LLaVA")):
+        try:
+            image = pil_from_parquet(row.get("image"))
+            if image is None:
+                base_preds.append("yes"); gs_preds.append("yes"); continue
+            q = row["question"]
+            prompt = (
+                "<image>\nAnswer the question with a single word: Yes or No.\n"
+                f"Question: {q}\nAnswer:")
+            ins = llava_proc(text=prompt, images=image, return_tensors="pt")
+            ins = {k: v.to(llava.device) for k, v in ins.items()}
+            with torch.no_grad():
+                out = llava(**ins)
+            cy = out.logits[0, -1, yid].item()
+            cn = out.logits[0, -1, nid].item()
+            base_preds.append("yes" if cy > cn else "no")
+
+            qw = qwen_cache[pos] if pos < len(qwen_cache) else {}
+            gs_preds.append(v9_fuse(cy, cn, qw))
+        except Exception:
+            base_preds.append("yes")
+            gs_preds.append("yes")
+
+    elapsed = time.time() - t0
+    del llava
+    torch.cuda.empty_cache()
+    gc.collect()
+    print(f"  LLaVA done: {elapsed:.0f}s ({len(df)/elapsed:.1f} it/s)")
+    return metrics(df, base_preds), metrics(df, gs_preds)
+
+
+def main():
+    parser = argparse.ArgumentParser(description="V9 GS: Logit-Space Fusion")
+    parser.add_argument("--splits", type=str, default="random,popular,adversarial",
+                        help="Comma-separated splits")
+    parser.add_argument("--n", type=int, default=None,
+                        help="Limit samples per split (None=all)")
+    args = parser.parse_args()
+
+    random.seed(42)
+    np.random.seed(42)
+    torch.manual_seed(42)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(42)
+    os.makedirs(V9_OUTPUT, exist_ok=True)
+
+    splits = [s.strip() for s in args.splits.split(",")]
+    all_results = {}
+
+    for split in splits:
+        print(f"\n{'='*60}")
+        print(f"POPE/{split}  ({args.n or 'all'} samples)")
+        print(f"{'='*60}")
+
+        df = load_pope(split, args.n)
+
+        cache_p = os.path.join(V9_OUTPUT, f"qwencache_{split}.json")
+        if os.path.exists(cache_p):
+            with open(cache_p) as f:
+                qc = json.load(f)
+            print(f"  Qwen cache loaded: {cache_p}")
+        else:
+            qc = run_qwen_presence(df, cache_p)
+
+        base_m, gs_m = run_llava_fusion(df, qc)
+        all_results[split] = {"baseline": base_m, "v9_gs": gs_m}
+
+        print(f"\n  {'Metric':>12s}  {'Baseline':>12s}  "
+              f"{'V9 GS':>12s}  {'Δ':>8s}")
+        print(f"  {'-'*12}  {'-'*12}  {'-'*12}  {'-'*8}")
+        for k in ["accuracy", "precision", "recall", "f1", "yes_ratio"]:
+            d = gs_m[k] - base_m[k]
+            s = "+" if d >= 0 else ""
+            print(f"  {k:>12s}  {base_m[k]:12.4f}  "
+                  f"{gs_m[k]:12.4f}  {s}{d:+.4f}")
+        for k in ["tp", "fp", "fn", "tn"]:
+            d = gs_m[k] - base_m[k]
+            s = "+" if d >= 0 else ""
+            print(f"  {k:>12s}  {base_m[k]:12}  "
+                  f"{gs_m[k]:12}  {s}{d:+d}")
+
+    out_p = os.path.join(V9_OUTPUT, "results_v9.json")
+    with open(out_p, "w") as f:
+        json.dump(all_results, f, indent=2)
+    print(f"\nSaved: {out_p}")
+
+
+if __name__ == "__main__":
+    main()
 ```
-=================================================================
-         Method     random   popular   adversarial    vs_base
------------------------------------------------------------------
-  baseline           0.8683    0.8561      0.8328       -
-  vcd (v6)           0.8803    0.8621      0.8361    6×胜
-  ms_max (v3)        0.8874    0.8525      0.8075    2/3胜
-  gs (Qwen grounding) 0.8936    0.8905      0.8750    全部胜! ★
-  gs_dt (GS+DT融合)  0.8768    0.8768      0.8674    全部胜
-  dt (动态分块)       0.2889    0.2889      0.2889    失败 ✗
-=================================================================
-```
 
----
-
-## 全实验终极排行榜
-
-| Rank | 方法                      |   random   |  popular   | adversarial |      推理成本      | 来源  |
-| :--: | ----------------------- | :--------: | :--------: | :---------: | :------------: | :-: |
-|  🥇  | **GS (Qwen Grounding)** | **0.8936** | **0.8905** | **0.8750**  | Qwen+LLaVA 2模型 | v7  |
-|  🥈  | gs_dt (GS+DT)           |   0.8768   |   0.8768   |   0.8674    |   Qwen+LLaVA   | v7  |
-|  🥉  | ms_max (多尺度)            |   0.8874   |   0.8525   |   0.8075    |    LLaVA 6×    | v3  |
-|  4   | vcd_single (VCD)        |   0.8690   |   0.8524   |   0.8280    |    LLaVA 2×    | v6  |
-|  5   | baseline                |   0.8636   |   0.8495   |   0.8260    |    LLaVA 1×    |  -  |
-
-## 🏆 全量 GS 3000 样本 最终结果
-
-```
-         Split    baseline    VCD(α=0.5)      MS_max    GS(Qwen)       ΔGS
-  ------------  ----------  ------------  ----------  ----------  --------
-        random      0.8636        0.8690      0.8876      0.8777  ++0.0141
-       popular      0.8495        0.8524      0.8680      0.8678  ++0.0183
-   adversarial      0.8260        0.8280      0.8300      0.8521  ++0.0261
-```
-
-### 关键洞察
-
-| 指标                 |                      GS vs baseline                       | 意义          |
-| ------------------ | :-------------------------------------------------------: | ----------- |
-| **FP (假阳性/幻觉)**    | random **-44%** / popular **-37%** / adversarial **-37%** | 大幅减少乱说"yes" |
-| **FN (假阴性/漏检)**    |                      全 split **-6%**                      | 也减少了漏看的物体   |
-| **adversarial F1** |                     +2.61 → GS 完胜所有方法                     | 对抗性样本最好     |
-| **popular F1**     |                   +1.83 → 和 ms_max 几乎平手                   |             |
-| **random F1**      |                 +1.41 → 明显优于 baseline/VCD                 |             |
-- baseline 总体准确率 **85.8%**，总体 F1 **84.6%**
+- baseline 总体准确率 **85.8%**，总体 F1 **84.6%
 - v9_gs 总体准确率 **87.7%**，总体 F1 **86.6%**
 - v7_gs 总体准确率**87.69%**，总体 F1 **86.57%**
 - ms_max 总体准确率**86.43%**，总体F1 **86.12%**
-### 📊 最终对比
-
-| 方法       |   random   |  popular   | adversarial |  FP总计↓   | 特点                    |
-| -------- | :--------: | :--------: | :---------: | :------: | --------------------- |
-| **GS**   |   0.8777   |   0.8678   | **0.8521**  | **-110** | ✅ 全面稳定                |
-| ms_max   | **0.8876** | **0.8680** |   0.8300    |   +109   | random/popular强, adv弱 |
-| VCD      |   0.8690   |   0.8524   |   0.8280    |   +24    | 稳定小提升                 |
-| baseline |   0.8636   |   0.8495   |   0.8260    |    -     | 基准                    |
-
-### 结论
-
-**GS (Grounding-Supervised) 是唯一同时降低 FP 和 FN 的方法**——ms_max 虽然 Rec/FP 更好但 FP 大幅增加，这恰好是幻觉问题的核心。而 GS 把 Qwen 的检测能力注入 LLaVA，既减少误判也减少漏检，是推理时最安全、最有效的防幻觉策略。
-
-
-
 
 
 
