@@ -175,81 +175,61 @@ $$
 
 ### Figure 1: Topic-level Preference Rewriting 概览 + 数据效率
 
-<!-- 对应 PDF 第 2 页，展示了 TPR 的核心机制和与其他方法的数据效率对比 -->
-
-![[TPR_fig1_overview.png]]
+<!-- 对应 PDF 第 2 页，图片见 arXiv HTML https://arxiv.org/html/2411.17265 -->
 
 **说明**: (a) TPR 的核心流程：基于不同策略（Greedy/Curriculum）从 topic 候选池中选择性替换语义单元，构造 $y_w$ 和 $y_l$。(b) 数据效率对比：除人工标注 ([[RLHF-V]]) 外，TPR 在幻觉降低上取得最佳数据效率。
 
 ### Figure 2: Topic 级替代方案生成流程
 
-<!-- 对应 PDF 第 5 页，展示分解、聚类、重采样 -->
-
-![[TPR_fig2_topic_alternatives.png]]
+<!-- 对应 PDF 第 5 页，图片见 arXiv HTML https://arxiv.org/html/2411.17265 -->
 
 **说明**: 初始候选响应被分解为语义单元后，基于 [[文本一致性]] 和 [[Visual Correlation]] 聚类为不同 topic（天气、时间、风格等），再通过 intra-topic self-resampling 为每个 topic 生成多样化的替代候选。
 
 ### Figure 3: 选择性替换构造偏好对
 
-<!-- 对应 PDF 第 6 页 -->
-
-![[TPR_fig3_selective_replacement.png]]
+<!-- 对应 PDF 第 6 页，图片见 arXiv HTML https://arxiv.org/html/2411.17265 -->
 
 **说明**: 从排序后的 topic 候选池中，根据策略（Greedy/Curriculum）选择替代单元，通过 in-context rewriting 融入模板响应，生成 $(y_w, y_l)$ 偏好对。Greedy 用最高/最低分单元，Curriculum 逐步提高 $y_l$ 中单元得分。
 
 ### Figure 4: 质量对比与幻觉类型分析
 
-<!-- 对应 PDF 第 9 页，三个子图 -->
-
-![[TPR_fig4_quality_comparison.png]]
+<!-- 对应 PDF 第 9 页，图片见 arXiv HTML https://arxiv.org/html/2411.17265 -->
 
 **说明**: (a) 不同数据策划策略生成的响应与 GPT-4V "GroundTruth" 响应的 win-rate 比较，TPR 和 TPR-CL 均超过 50%。(b) GPT-4V 对 topic 替代方案的 informative/trustworthy 评分。(c) 外部 rewriter 引入的幻觉类型分布与模型自身 failure mode 分布存在显著差异。
 
 ### Figure 5: Visual Correlation 机制
 
-<!-- 对应 PDF 第 24 页 -->
-
-![[TPR_fig5_visual_correlation.png]]
+<!-- 对应 PDF 第 24 页，图片见 arXiv HTML https://arxiv.org/html/2411.17265 -->
 
 **说明**: CLIP 编码器提取文本和图像嵌入，计算相似度向量之间的 Pearson 相关系数。即使 "The time on the Big Ben is 10:30" 和 "The clock shows it is about 6:20" 文本语义相似，通过视觉相关性能将它们正确关联到同一 tower 的不同时间描述。
 
 ### Figure 6: Hard Mining 有效性分析
 
-<!-- 对应 PDF 第 25 页 -->
-
-![[TPR_fig6_hard_mining.png]]
+<!-- 对应 PDF 第 25 页，图片见 arXiv HTML https://arxiv.org/html/2411.17265 -->
 
 **说明**: 在 [[RefoMB]] 基准上按幻觉难度（Existence、Attributes、Quantities、Spatial Relations）分析 TPR-CL 的改进。对于 baseline [[LLaVA|LLaVA-1.5]] 表现最差的 "Quantities" (16.7%) 和 "Spatial Relations" (14.3%)，TPR-CL 额外带来 +20.8/+35.7 个百分点的提升。
 
 ### Figure 7: 成本效益分析
 
-<!-- 对应 PDF 第 25 页 -->
-
-![[TPR_fig7_cost_effectiveness.png]]
+<!-- 对应 PDF 第 25 页，图片见 arXiv HTML https://arxiv.org/html/2411.17265 -->
 
 **说明**: TPR 在最低成本下实现最陡峭的幻觉降低曲线。GPT-4V rewriting 方法成本约 $30+，TPR 仅需约 $10；[[RLAIF-V]] 的多轮迭代再生和重训练带来额外计算开销。
 
 ### Figure 8: 更大基座模型的扩展性
 
-<!-- 对应 PDF 第 25 页 -->
-
-![[TPR_fig8_larger_model.png]]
+<!-- 对应 PDF 第 25 页，图片见 arXiv HTML https://arxiv.org/html/2411.17265 -->
 
 **说明**: TPR-CL 应用于 7B/13B 模型在 2k~20k 数据规模上的表现，13B 模型在每个数据点都优于 7B，验证了 TPR 与模型规模的互补性。
 
 ### Figure 9: 定性结果 — Greedy vs Curriculum
 
-<!-- 对应 PDF 第 31 页 -->
-
-![[TPR_fig9_qualitative_greedy_vs_curriculum.png]]
+<!-- 对应 PDF 第 31 页，图片见 arXiv HTML https://arxiv.org/html/2411.17265 -->
 
 **说明**: 比较 TPR (Greedy) 和 TPR-CL (Curriculum) 在相同图像上生成的 preferred/rejected 响应。Greedy 的 rejected 响应包含明显幻觉（如 "paper plates"、"13 people"），Curriculum 的 rejected 响应包含更细微的幻觉（如 "bowl"、"toaster"、"several other skiers and snowboarders"）。
 
 ### Figure 10: 定性结果 — TPR vs LLaVA-1.5 vs LLaVA-NeXT-34B
 
-<!-- 对应 PDF 第 33-34 页 -->
-
-![[TPR_fig10_tpr_vs_baselines.png]]
+<!-- 对应 PDF 第 33-34 页，图片见 arXiv HTML https://arxiv.org/html/2411.17265 -->
 
 **说明**: TPR-7B 对齐后的模型在多个场景下生成比 LLaVA-1.5-7B 和更大 [[LLaVA-NeXT|LLaVA-NeXT-34B]] 更准确的描述，尤其在避免"无中生有"（如 traffic lights、handbag）方面表现突出。
 
