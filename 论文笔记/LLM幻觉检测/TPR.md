@@ -305,13 +305,13 @@ $$
 
 ### Table 7: Self-Labeling 和跨架构泛化
 
-| Model | ObjHal CH$_s$$\downarrow$ | ObjHal CH$_i$$\downarrow$ | MMHal Score$\uparrow$ | AMBER Hall.$\downarrow$ | POPE F1$\uparrow$ |
-|-------|------|------|------|------|------|
-| LLaVA-1.5-7B | 53.6 | 25.2 | 2.36 | 51.0 | 85.9 |
-| +TPR-SL | 5.8 | 3.0 | 2.67 | 44.8 | 86.1 |
-| Qwen-VL-2B | 42.4 | 36.3 | 2.85 | 47.9 | 86.5 |
-| +NaiveRLAIF | 36.5 | 31.7 | 2.81 | 49.0 | 87.0 |
-| +TPR-SL-2B | 19.5 | 13.7 | 2.98 | 43.8 | 87.1 |
+| Model        | ObjHal CH$_s$$\downarrow$ | ObjHal CH$_i$$\downarrow$ | MMHal Score$\uparrow$ | AMBER Hall.$\downarrow$ | POPE F1$\uparrow$ |
+| ------------ | ------------------------- | ------------------------- | --------------------- | ----------------------- | ----------------- |
+| LLaVA-1.5-7B | 53.6                      | 25.2                      | 2.36                  | 51.0                    | 85.9              |
+| +TPR-SL      | 5.8                       | 3.0                       | 2.67                  | 44.8                    | 86.1              |
+| Qwen-VL-2B   | 42.4                      | 36.3                      | 2.85                  | 47.9                    | 86.5              |
+| +NaiveRLAIF  | 36.5                      | 31.7                      | 2.81                  | 49.0                    | 87.0              |
+| +TPR-SL-2B   | 19.5                      | 13.7                      | 2.98                  | 43.8                    | 87.1              |
 
 **关键发现**: TPR-SL (使用参考模型自身作为 labeler) 仍能取得显著改进，验证了自我改进能力；TPR 范式在 [[Qwen-VL]] 架构上同样有效。
 
