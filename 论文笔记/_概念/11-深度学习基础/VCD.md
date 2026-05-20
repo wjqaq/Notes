@@ -17,9 +17,12 @@ Visual Contrastive Decoding，通过对比原始图像和加噪图像下的 logi
 ## 代表工作
 - (Leng et al., 2024): VCD 原始提出
 - [[MHSA]]: 与 VCD 对比——MHSA 仅在检测到幻觉时额外计算（+0.43x），VCD 固定双倍前向（+1x）
+- [[FLB]]: 指出 VCD 存在[[长程衰减]]问题，且需双倍推理时间
 
 ## 相关概念
 - [[多模态幻觉]]
 - [[ICD]]
 - [[LIME]]
 - [[MHSA]]
+- [[FLB]]
+- [[长程衰减]]

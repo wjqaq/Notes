@@ -15,7 +15,10 @@ Instruction Contrastive Decoding，通过对比有指令和无指令条件下的
 
 ## 代表工作
 - [[LIME]]: baseline 对比
+- [[FLB]]: 指出 ICD 存在[[长程衰减]]问题
 
 ## 相关概念
 - [[多模态幻觉]]
 - [[VCD]]
+- [[FLB]]
+- [[长程衰减]]
