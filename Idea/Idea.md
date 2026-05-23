@@ -644,6 +644,195 @@ if __name__ == "__main__":
   "n_samples": 2434
 }
 ```
+##### LoRA
+```json
+{
+  "overall": {
+    "accuracy": 0.7806,
+    "precision": 0.7916,
+    "recall": 0.7588,
+    "f1": 0.7749,
+    "yes_ratio": 0.4769,
+    "total": 1600,
+    "tp": 604,
+    "fp": 159,
+    "fn": 192,
+    "tn": 645
+  },
+  "by_category": {
+    "existence": {
+      "accuracy": 0.95,
+      "precision": 1.0,
+      "recall": 0.9,
+      "f1": 0.9474,
+      "yes_ratio": 0.45,
+      "total": 120,
+      "tp": 54,
+      "fp": 0,
+      "fn": 6,
+      "tn": 60
+    },
+    "code_reasoning": {
+      "accuracy": 0.5,
+      "precision": 0.5, 
+      "recall": 0.5,
+      "f1": 0.5,
+      "yes_ratio": 0.5,
+      "total": 40,
+      "tp": 10,
+      "fp": 10,
+      "fn": 10,
+      "tn": 10
+    },
+    "artwork": {
+      "accuracy": 0.74,
+      "precision": 0.7143,
+      "recall": 0.7732,
+      "f1": 0.7426,
+      "yes_ratio": 0.525,
+      "total": 200,
+      "tp": 75,
+      "fp": 30,
+      "fn": 22,
+      "tn": 73
+    },
+    "celebrity": {
+      "accuracy": 0.745,
+      "precision": 0.7069,
+      "recall": 0.8283,
+      "f1": 0.7628,
+      "yes_ratio": 0.58,
+      "total": 200,
+      "tp": 82,
+      "fp": 34,
+      "fn": 17,
+      "tn": 67
+    },
+    "numerical_calculation": {
+      "accuracy": 0.325,
+      "precision": 0.1111,
+      "recall": 0.05,
+      "f1": 0.069,
+      "yes_ratio": 0.225,
+      "total": 40,
+      "tp": 1,
+      "fp": 8,
+      "fn": 19,
+      "tn": 12
+    },
+    "text_translation": {
+      "accuracy": 0.5,
+      "precision": 0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "yes_ratio": 0.0,
+      "total": 40,
+      "tp": 0,
+      "fp": 0,
+      "fn": 20,
+      "tn": 20
+    },
+    "count": {
+      "accuracy": 0.7833,
+      "precision": 0.7429,
+      "recall": 0.8667,
+      "f1": 0.8,
+      "yes_ratio": 0.5833,
+      "total": 60,
+      "tp": 26,
+      "fp": 9,
+      "fn": 4,
+      "tn": 21
+    },
+    "color": {
+      "accuracy": 0.85,
+      "precision": 0.7692,
+      "recall": 1.0,
+      "f1": 0.8696,
+      "yes_ratio": 0.65,
+      "total": 60,
+      "tp": 30,
+      "fp": 9,
+      "fn": 0,
+      "tn": 21
+    },
+    "commonsense_reasoning": {
+      "accuracy": 0.7429,
+      "precision": 0.75,
+      "recall": 0.7286,
+      "f1": 0.7391,
+      "yes_ratio": 0.4857,
+      "total": 140,
+      "tp": 51,
+      "fp": 17,
+      "fn": 19,
+      "tn": 53
+    },
+    "position": {
+      "accuracy": 0.7333,
+      "precision": 0.675,
+      "recall": 0.9,
+      "f1": 0.7714,
+      "yes_ratio": 0.6667,
+      "total": 60,
+      "tp": 27,
+      "fp": 13,
+      "fn": 3,
+      "tn": 17
+    },
+    "OCR": {
+      "accuracy": 0.675,
+      "precision": 0.6207,
+      "recall": 0.9,
+      "f1": 0.7347,
+      "yes_ratio": 0.725,
+      "total": 40,
+      "tp": 18,
+      "fp": 11,
+      "fn": 2,
+      "tn": 9
+    },
+    "landmark": {
+      "accuracy": 0.905,
+      "precision": 0.9062,
+      "recall": 0.8969,
+      "f1": 0.9016,
+      "yes_ratio": 0.48,
+      "total": 200,
+      "tp": 87,
+      "fp": 9,
+      "fn": 10,
+      "tn": 94
+    },
+    "scene": {
+      "accuracy": 0.84,
+      "precision": 0.9221,
+      "recall": 0.732,
+      "f1": 0.8161,
+      "yes_ratio": 0.385,
+      "total": 200,
+      "tp": 71,
+      "fp": 6,
+      "fn": 26,
+      "tn": 97
+    },
+    "posters": {
+      "accuracy": 0.815,
+      "precision": 0.96,
+      "recall": 0.6792,
+      "f1": 0.7956,
+      "yes_ratio": 0.375,
+      "total": 200,
+      "tp": 72,
+      "fp": 3,
+      "fn": 34,
+      "tn": 91
+    }
+  },
+  "n_samples": 1600
+}
+```
+
 #### AMBER
 ##### BaseLine
 ```json
