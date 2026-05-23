@@ -342,6 +342,262 @@ if __name__ == "__main__":
     }
 
 
+#### POPE
+##### BaseLine
+```json
+{
+  "overall": {
+    "accuracy": 0.8643,
+    "precision": 0.8952,
+    "recall": 0.8253,
+    "f1": 0.8588,
+    "yes_ratio": 0.461,
+    "total": 9000,
+    "tp": 3714,
+    "fp": 435,
+    "fn": 786,
+    "tn": 4065
+  },
+  "by_split": {
+    "adversarial": {
+      "accuracy": 0.8343,
+      "precision": 0.8405,
+      "recall": 0.8253,
+      "f1": 0.8328,
+      "yes_ratio": 0.491,
+      "total": 3000,
+      "tp": 1238,
+      "fp": 235,
+      "fn": 262,
+      "tn": 1265
+    },
+    "popular": {
+      "accuracy": 0.868,
+      "precision": 0.9023,
+      "recall": 0.8253,
+      "f1": 0.8621,
+      "yes_ratio": 0.4573,
+      "total": 3000,
+      "tp": 1238,
+      "fp": 134,
+      "fn": 262,
+      "tn": 1366
+    },
+    "random": {
+      "accuracy": 0.8907,
+      "precision": 0.9494,
+      "recall": 0.8253,
+      "f1": 0.883,
+      "yes_ratio": 0.4347,
+      "total": 3000,
+      "tp": 1238,
+      "fp": 66,
+      "fn": 262,
+      "tn": 1434
+    }
+  },
+  "n_samples": 9000
+}
+```
+#### MME
+##### BaseLine
+```json
+{
+  "overall": {
+    "accuracy": 0.7905,
+    "precision": 0.7768,
+    "recall": 0.8151,
+    "f1": 0.7955,
+    "yes_ratio": 0.5247,
+    "total": 2434,
+    "tp": 992,
+    "fp": 285,
+    "fn": 225,
+    "tn": 932
+  },
+  "by_category": {
+    "existence": {
+      "accuracy": 0.9667,
+      "precision": 0.9667,
+      "recall": 0.9667,
+      "f1": 0.9667,
+      "yes_ratio": 0.5,
+      "total": 120,
+      "tp": 58,
+      "fp": 2,
+      "fn": 2,
+      "tn": 58
+    },
+    "code_reasoning": {
+      "accuracy": 0.525,
+      "precision": 0.5294,
+      "recall": 0.45,
+      "f1": 0.4865,
+      "yes_ratio": 0.425,
+      "total": 40,
+      "tp": 9,
+      "fp": 8,
+      "fn": 11,
+      "tn": 12
+    },
+    "artwork": {
+      "accuracy": 0.6975,
+      "precision": 0.6667,
+      "recall": 0.79,
+      "f1": 0.7231,
+      "yes_ratio": 0.5925,
+      "total": 400,
+      "tp": 158,
+      "fp": 79,
+      "fn": 42,
+      "tn": 121
+    },
+    "celebrity": {
+      "accuracy": 0.7559,
+      "precision": 0.7122,
+      "recall": 0.8588,
+      "f1": 0.7787,
+      "yes_ratio": 0.6029,
+      "total": 340,
+      "tp": 146,
+      "fp": 59,
+      "fn": 24,
+      "tn": 111
+    },
+    "numerical_calculation": {
+      "accuracy": 0.425,
+      "precision": 0.2857,
+      "recall": 0.1,
+      "f1": 0.1481,
+      "yes_ratio": 0.175,
+      "total": 40,
+      "tp": 2,
+      "fp": 5,
+      "fn": 18,
+      "tn": 15
+    },
+    "text_translation": {
+      "accuracy": 0.525,
+      "precision": 1.0,
+      "recall": 0.05,
+      "f1": 0.0952,
+      "yes_ratio": 0.025,
+      "total": 40,
+      "tp": 1,
+      "fp": 0,
+      "fn": 19,
+      "tn": 20
+    },
+    "count": {
+      "accuracy": 0.8167,
+      "precision": 0.8065,
+      "recall": 0.8333,
+      "f1": 0.8197,
+      "yes_ratio": 0.5167,
+      "total": 60,
+      "tp": 25,
+      "fp": 6,
+      "fn": 5,
+      "tn": 24
+    },
+    "color": {
+      "accuracy": 0.8333,
+      "precision": 0.7632,
+      "recall": 0.9667,
+      "f1": 0.8529,
+      "yes_ratio": 0.6333,
+      "total": 60,
+      "tp": 29,
+      "fp": 9,
+      "fn": 1,
+      "tn": 21
+    },
+    "commonsense_reasoning": {
+      "accuracy": 0.7143,
+      "precision": 0.6974,
+      "recall": 0.7571,
+      "f1": 0.726,
+      "yes_ratio": 0.5429,
+      "total": 140,
+      "tp": 53,
+      "fp": 23,
+      "fn": 17,
+      "tn": 47
+    },
+    "position": {
+      "accuracy": 0.6833,
+      "precision": 0.6279,
+      "recall": 0.9,
+      "f1": 0.7397,
+      "yes_ratio": 0.7167,
+      "total": 60,
+      "tp": 27,
+      "fp": 16,
+      "fn": 3,
+      "tn": 14
+    },
+    "OCR": {
+      "accuracy": 0.825,
+      "precision": 0.8095,
+      "recall": 0.85,
+      "f1": 0.8293,
+      "yes_ratio": 0.525,
+      "total": 40,
+      "tp": 17,
+      "fp": 4,
+      "fn": 3,
+      "tn": 16
+    },
+    "landmark": {
+      "accuracy": 0.8625,
+      "precision": 0.8008,
+      "recall": 0.965,
+      "f1": 0.8753,
+      "yes_ratio": 0.6025,
+      "total": 400,
+      "tp": 193,
+      "fp": 48,
+      "fn": 7,
+      "tn": 152
+    },
+    "scene": {
+      "accuracy": 0.8775,
+      "precision": 0.8953,
+      "recall": 0.855,
+      "f1": 0.8747,
+      "yes_ratio": 0.4775,
+      "total": 400,
+      "tp": 171,
+      "fp": 20,
+      "fn": 29,
+      "tn": 180
+    },
+    "posters": {
+      "accuracy": 0.8299,
+      "precision": 0.945,
+      "recall": 0.7007,
+      "f1": 0.8047,
+      "yes_ratio": 0.3707,
+      "total": 294,
+      "tp": 103,
+      "fp": 6,
+      "fn": 44,
+      "tn": 141
+    }
+  },
+  "n_samples": 2434
+}
+```
+#### AMBER
+##### BaseLine
+```json
+```
+##### 
+
+
+
+
+
 
 
 根据OPA-DPO，我们知道模型
