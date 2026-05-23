@@ -399,6 +399,62 @@ if __name__ == "__main__":
   "n_samples": 9000
 }
 ```
+##### LoRA
+```json
+{
+  "overall": {
+    "accuracy": 0.8758,
+    "precision": 0.9251,
+    "recall": 0.8178,
+    "f1": 0.8681,
+    "yes_ratio": 0.442,
+    "total": 9000,
+    "tp": 3680,
+    "fp": 298,
+    "fn": 820,
+    "tn": 4202
+  },
+  "by_split": {
+    "adversarial": {
+      "accuracy": 0.8537,
+      "precision": 0.8803,
+      "recall": 0.8187,
+      "f1": 0.8484,
+      "yes_ratio": 0.465,
+      "total": 3000,
+      "tp": 1228,
+      "fp": 167,
+      "fn": 272,
+      "tn": 1333
+    },
+    "popular": {
+      "accuracy": 0.8747,
+      "precision": 0.9232,
+      "recall": 0.8173,
+      "f1": 0.867,
+      "yes_ratio": 0.4427,
+      "total": 3000,
+      "tp": 1226,
+      "fp": 102,
+      "fn": 274,
+      "tn": 1398
+    },
+    "random": {
+      "accuracy": 0.899,
+      "precision": 0.9769,
+      "recall": 0.8173,
+      "f1": 0.89,
+      "yes_ratio": 0.4183,
+      "total": 3000,
+      "tp": 1226,
+      "fp": 29,
+      "fn": 274,
+      "tn": 1471
+    }
+  },
+  "n_samples": 9000
+}
+```
 #### MME
 ##### BaseLine
 ```json
