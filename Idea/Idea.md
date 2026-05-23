@@ -836,8 +836,34 @@ if __name__ == "__main__":
 #### AMBER
 ##### BaseLine
 ```json
+{
+  "generative": {
+    "metrics": {
+      "note": "full CHAIR requires COCO captions; this is a simplified version"
+    },
+    "n_samples": 1004
+  },
+  "discriminative": {
+    "metrics": {
+      "accuracy": 0.8062,
+      "precision": 0.7073,
+      "recall": 0.7137,
+      "f1": 0.7105,
+      "yes_ratio": 0.3362,
+      "total": 5000,
+      "tp": 1189,
+      "fp": 492,
+      "fn": 477,
+      "tn": 2842
+    },
+    "n_samples": 5000
+  }
+}
 ```
-##### 
+##### LoRA
+```json
+
+```
 
 
 
