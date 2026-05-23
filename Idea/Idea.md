@@ -862,7 +862,29 @@ if __name__ == "__main__":
 ```
 ##### LoRA
 ```json
-
+{
+  "generative": {
+    "metrics": {
+      "note": "full CHAIR requires COCO captions; this is a simplified version"
+    },
+    "n_samples": 1004
+  },
+  "discriminative": {
+    "metrics": {
+      "accuracy": 0.8292,
+      "precision": 0.7074,
+      "recall": 0.8313,
+      "f1": 0.7643,
+      "yes_ratio": 0.3916,
+      "total": 5000,
+      "tp": 1385,
+      "fp": 573,
+      "fn": 281,
+      "tn": 2761
+    },
+    "n_samples": 5000
+  }
+}
 ```
 
 
