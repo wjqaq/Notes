@@ -340,7 +340,31 @@ if __name__ == "__main__":
         "recall": 0.8984444444444445,
         "f1": 0.8499054025646416
     }
-
+```plaintext
+LLaVA-Instruct-150K 数据集
+        │
+        ▼
+① 数据预处理：构建偏好对
+   ├── RAM 模型 → 生成图像标签
+   ├── GroundingDINO → 开放词汇目标检测
+   ├── LLaVA 模型 → 生成初始响应
+   └── HallucinationLabeler → 标注幻觉，生成 (y_gt, y_gen, y_rev) 三元组
+        │
+        ▼
+② 第一阶段：OPA-SFT（监督微调）
+   └── 用 y_gt 和 y_rev 做正样本，LoRA 微调，2 epochs
+        │
+        ▼
+③ 预计算参考 log 概率
+   └── 加载 OPA-SFT 模型，对 6 种 (prompt, response, image) 组合预计算 log prob
+        │
+        ▼
+④ 第二阶段：Grounded DPO
+   └── 全新的 LoRA adapter，三部分损失联合优化，4 epochs
+        │
+        ▼
+⑤ 评估：POPE / AMBER / MME 三个数据集
+```
 
 #### POPE
 ##### BaseLine
