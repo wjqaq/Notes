@@ -41,6 +41,11 @@ LLaVA-Instruct-150K 数据集
 ⑤ 评估：POPE / AMBER / MME 三个数据集
 ```
 
+```text
+Phase 1: 增强检测器信任度 (DINO-X) → 获得可靠的 prompt-free 物体检测
+Phase 2: 教会模型"边指边说" (Thinking with Visual Primitives) → LLaVA 学会 grounding token
+Phase 3: 在策略偏好对齐 (OPA-DPO) → 用模型自己生成的幻觉做 DPO
+```
 #### POPE
 ##### BaseLine
 ```json
