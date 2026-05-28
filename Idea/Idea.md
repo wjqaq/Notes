@@ -21,7 +21,12 @@ prompt
 ```
 
 
-
+SFT数据集类型：
+1. coco_grounding
+2. coco_counting
+3. coco_relation
+4. vsr
+5. llava_qa
 
 
 
