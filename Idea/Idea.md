@@ -22,7 +22,9 @@ prompt
 
 
 SFT数据集类型：
-##### COCO
+##### COCO  Grounding
+
+
 
 
 
