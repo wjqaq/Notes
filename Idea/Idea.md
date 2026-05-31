@@ -15,7 +15,16 @@
 ## 1. 数据构建
 
 ### Grounding 数据集构建
-
+```json
+{
+  "id": "refcoco_train_000001",
+  "image": "coco/train2014/COCO_train2014_000000581857.jpg",
+  "conversations": [
+    {"from": "human", "value": "<image>\n请定位图中的碗。"},
+    {"from": "gpt", "value": "<|ref|>碗<|/ref|><|box|>[[731,1,999,273]]<|/box|><|point|>[[865,137]]<|/point|><|mask|>[RLE...]<|/mask|>"}
+  ]
+}
+```
 
 
 
