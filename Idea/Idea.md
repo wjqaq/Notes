@@ -13,12 +13,13 @@
 | \<mask\>  | 任意形状区域 | 重叠物体、细粒度物体    | **占位 token + 解码器监督**：`<mask>` 是触发 token，其隐藏状态被取出，送入轻量 mask decoder（如 SAM head），与 GT mask 计算 Dice + BCE 损失。**Mask 不在文本中生成**，而是通过视觉解码器输出。 |
 | \<point\> | 精确坐标   | 计数、轨迹、交点、空间关系 | **从 bbox 或 mask 计算得出**，不需要独立学习。训练时取 mask 重心或 bbox 中心，离散化为 `[[cx,cy]]` 作为文本生成目标。                                                         |
 |           |        |               |                                                                                                                                         |
-### 1. Binary Cross-Entropy Loss (BCE 损失)
+### 公式
+1. Binary Cross-Entropy Loss (BCE 损失)
 
 BCE 损失从**像素级别**独立评估分类的准确性，它会平等地惩罚每一个分类错误的像素。
 
 $$L_{BCE} = -\frac{1}{N} \sum_{i=1}^{N} \left[ y_i \log(p_i) + (1 - y_i) \log(1 - p_i) \right]$$
-### 2. Dice Loss (Dice 损失)
+2. Dice Loss (Dice 损失)
 
 Dice 损失基于 Dice 相似系数（Dice Coefficient），从**全局角度**评估预测掩码（Mask）与真实掩码之间的重叠度。它对前景和背景像素比例极度不平衡的情况非常鲁棒。
 $$L_{Dice} = 1 - \frac{2 \sum_{i=1}^{N} p_i y_i + \epsilon}{\sum_{i=1}^{N} p_i + \sum_{i=1}^{N} y_i + \epsilon}$$
